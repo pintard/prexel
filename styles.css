@@ -1,0 +1,272 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 90%;
+    text-decoration: none;
+    font-weight: 100;
+    list-style: none;
+    font-family: sans-serif;
+}
+
+button, input {
+    outline: none;
+    border: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+#toolbar {
+    width: 460px; /* use 420px */
+    height: 100%;
+    background: #20232A;
+    display: flex;
+    flex-direction: column;
+}
+
+#toolbar li {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+}
+
+#toolbar li:nth-child(4), #toolbar li:nth-child(5) {
+    justify-content: start;
+    margin-left: 20px;
+}
+
+#toolbar li:last-child {
+    justify-content: start;
+    margin-left: 20px;
+}
+
+.button {
+    color: #8093BE;
+    background: #303950;
+    font-size: 30px;
+    padding: 10px;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+.button.active {
+    color: #9aa6c4;
+    background: #4e5685;
+}
+.button.flash {
+    background: rgb(123, 172, 157);
+    color: white;
+}
+#fillall-button:active {
+    background: rgb(123, 172, 157);
+    color: white;
+}
+
+#save-button {
+    margin: 20px 0;
+    padding: 12px 30px;
+    font-size: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: rgb(88, 139, 124);
+    color: white;
+}
+
+#toolbar #header {
+    font-size: 20px;
+    font-weight: bold;
+    color: #dfa754;
+    background: inherit ;
+    padding: 20px 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    pointer-events: none;
+}
+
+#main-section {
+    width: 100%;
+    background: #202020;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#artboard {
+    /* display: none; */
+    position: relative;
+    width: 90%;
+    height: 85%;
+    z-index: 0;
+    cursor: none;
+}
+
+#artboard-bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid; /* grid TODO */
+    grid-template-columns: repeat(40, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    background: transparent;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    /* outline: 3px #c45b3b solid; */
+    z-index: 80;
+    overflow: hidden;
+}
+
+.crosshair {
+    position: absolute;
+    background-color: rgba(206, 29, 29, 0.76);
+    z-index: 99;
+}
+
+.crosshair-family.inactive {
+    display: none;
+}
+
+#crosshairH {
+    width: 100%;
+    height: 2px;
+    margin-top: -3px;
+    visibility: hidden;
+}
+
+#crosshairV {
+    height: 100%;
+    width: 2px;
+    margin-left: -2px;
+    visibility: hidden;
+}
+
+#reticle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-radius: 100%;
+    border: 2px solid rgba(206, 29, 29, 0.76);
+    z-index: 99;
+    margin-top: -2px;
+    margin-left: -1px;
+    visibility: hidden;
+}
+
+.ruler {
+    position: absolute;
+    background-color: rgba(91, 29, 206, 0.945);
+    z-index: 99;
+}
+
+.ruler.inactive {
+    display: none;
+}
+
+#rulerH {
+    width: 100%;
+    height: 2px;
+    top: calc(50% - (2px / 2));
+    left: 0;
+}
+
+#rulerV {
+    height: 100%;
+    width: 2px;
+    left: calc(50% - (2px / 2));
+    top: 0;
+}
+
+.cell {
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    z-index: 90;
+}
+
+.cell-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+}
+
+.cell-background.light {
+    background:#cbd6eb;
+}
+
+.cell-background.dark {
+    background: #b9b6cf;
+}
+
+.cell.beingclicked {
+    background: rgba(73, 125, 255, 0.712) !important;
+}
+
+.cell.selected {
+    background: rgba(37, 185, 57, 0.774) !important;
+}
+
+.cell.hover {
+    background: rgba(211, 15, 15, 0.822) !important;
+}
+
+/*
+.cell.is-drawing {
+    opacity: 0.7;
+}
+*/
+
+.dimension-group {
+    background: inherit;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    height: 40px;
+    width: 42%;
+    border-radius: 6px;
+    border: 2px solid #8093BE;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+label {
+    color: #8093BE;
+    background: inherit;
+    height: 100%;
+    padding: 8px 0;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.cell-field {
+    width: 100%;
+    height: 100%;
+    text-align: right;
+    font-size: 22px;
+    font-weight: bold;
+    background: inherit;
+    color: #b8c3e9;
+}

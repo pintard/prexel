@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Device metadata -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Search engine metadata -->
+    <meta name="description" content="pixel cursor paint application" />
+    <meta name="keywords" content="pixel cursor paint application" />
+    <meta name="robots" content="index, follow" />
+    <!-- Page scripts -->
+    <script type="module" src="./src/prexel.js"></script>
+    <script src="./src/utils/selection.min.js"></script>
+    <script src="https://kit.fontawesome.com/2bd9774852.js" crossorigin="anonymous"></script> <!-- TODO remove -->
+    <!-- Page stylesheets -->
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="./src/ColorPicker/styles.css" />
+    <title>Prexel</title>
+</head>
+
+<body>
+    <div id="main-section">
+        <div id="artboard">
+            <span class="ruler" id="rulerH"></span>
+            <span class="ruler" id="rulerV"></span>
+            <span class="crosshair-family crosshair" id="crosshairH"></span>
+            <span class="crosshair-family crosshair" id="crosshairV"></span>
+            <span class="crosshair-family" id="reticle"></span>
+            <div id="artboard-bg"></div>
+        </div>
+    </div>
+
+    <ul id="toolbar">
+        <li id="header">Prexel</li>
+
+        <li>
+            <button id="crosshair-button" class="button">
+                <i class="fas fa-crosshairs"></i>
+            </button>
+            <button id="draw-button" class="button">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button id="eraser-button" class="button">
+                <i class="fas fa-eraser"></i>
+            </button>
+            <button id="fillall-button" class="button">
+                <i class="fas fa-fill-drip"></i>
+            </button>
+        </li>
+
+        <li>
+            <div id="color-picker-area"></div>
+        </li>
+
+        <li>
+            <div class="dimension-group">
+                <label for="column-field">column</label>
+                <input id="column-field" class="cell-field" autocomplete="off" />
+            </div>
+        </li>
+
+        <li>
+            <div class="dimension-group">
+                <label for="row-field">row</label>
+                <input id="row-field" class="cell-field" autocomplete="off" />
+            </div>
+        </li>
+
+        <li>
+            <button id="save-button">save</button>
+        </li>
+    </ul>
+</body>
+
+</html>
