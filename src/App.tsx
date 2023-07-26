@@ -12,7 +12,7 @@ const App = () => {
   return (
     <ControlBarProvider>
       <div className="h-full w-full">
-        <div className="h-full w-full flex justify-center items-center relative p-4">
+        <div className="h-full w-full flex justify-center items-center relative">
           <Artboard />
           <ControlBar
             openClearModal={() => setIsClearModalOpen(true)}

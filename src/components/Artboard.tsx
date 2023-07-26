@@ -3,14 +3,12 @@ import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
 const Artboard = () => {
-  const { rows, cols } = useControlBarContext();
+  const { rows, cols, cellColors, setCellColors, color } =
+    useControlBarContext();
   const initialGrid: any[][] = Array.from(Array(rows), () =>
     Array(cols).fill(null)
   );
   const [grid, setGrid] = useState<any[][]>(initialGrid);
-
-  const [gridWidth, setGridWidth] = useState<number>(100);
-  const [gridHeight, setGridHeight] = useState<number>(100);
 
   useEffect(() => {
     const updatedGrid: any[][] = Array.from(Array(rows), () =>
@@ -19,23 +17,50 @@ const Artboard = () => {
     setGrid(updatedGrid);
   }, [rows, cols]);
 
-  useEffect(() => {
-    // TODO handle resize
-    const handleResize = () => {};
-    handleResize();
+  const handleCellClick = (id: string) => {
+    const [row, col] = id.split("-");
+    const oldColor: string | undefined = cellColors[id];
+    if (oldColor !== color) {
+      floodFill(+row, +col, oldColor, new Set());
+    }
+  };
 
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const floodFill = (
+    row: number,
+    col: number,
+    oldColor: string | undefined,
+    visited: Set<string>
+  ) => {
+    const id: string = `${row}-${col}`;
+
+    if (
+      row < 0 ||
+      row >= rows ||
+      col < 0 ||
+      col >= cols ||
+      cellColors[id] !== oldColor ||
+      visited.has(id)
+    ) {
+      return;
+    }
+
+    visited.add(id);
+
+    setCellColors((prevCellColors) => ({
+      ...prevCellColors,
+      [id]: color,
+    }));
+
+    floodFill(row - 1, col, oldColor, visited);
+    floodFill(row + 1, col, oldColor, visited);
+    floodFill(row, col - 1, oldColor, visited);
+    floodFill(row, col + 1, oldColor, visited);
+  };
 
   return (
     <div
-      className="grid"
+      className="grid w-full h-full"
       style={{
-        width: `${gridWidth}%`,
-        height: `${gridHeight}%`,
         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
       }}
@@ -45,9 +70,8 @@ const Artboard = () => {
           <GridCell
             key={`${rowIndex}-${colIndex}`}
             id={`${rowIndex}-${colIndex}`}
-            rowIndex={rowIndex}
-            colIndex={colIndex}
             isEven={(rowIndex + colIndex) % 2 === 0}
+            onClick={handleCellClick}
           />
         ))
       )}

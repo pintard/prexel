@@ -1,33 +1,6 @@
-const hexToXterm256 = (hexColor: string | undefined): number | null => {
-  if (!hexColor) {
-    return null;
-  }
-  const r: number = parseInt(hexColor.slice(1, 3), 16);
-  const g: number = parseInt(hexColor.slice(3, 5), 16);
-  const b: number = parseInt(hexColor.slice(5, 7), 16);
+import { hexToXterm256 } from "./colorUtils";
 
-  let minDistance: number = Number.MAX_SAFE_INTEGER;
-  let xtermColor: number = 0;
-
-  for (let i = 0; i < 256; i++) {
-    const xtermR: number = (i >> 5) * 40;
-    const xtermG: number = ((i >> 2) & 0x07) * 40;
-    const xtermB: number = (i & 0x03) * 85;
-
-    const distance: number = Math.sqrt(
-      (r - xtermR) ** 2 + (g - xtermG) ** 2 + (b - xtermB) ** 2
-    );
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      xtermColor = i;
-    }
-  }
-
-  return xtermColor;
-};
-
-const generateCuteFormat = (
+const generateCuteData = (
   cellColors: {
     [key: string]: string | undefined;
   },
@@ -59,6 +32,6 @@ export const getCuteCode = (
   rows: number,
   cols: number
 ): string => {
-  const rawCuteCode: string = generateCuteFormat(cellColors, rows, cols);
+  const rawCuteCode: string = generateCuteData(cellColors, rows, cols);
   return btoa(rawCuteCode);
 };

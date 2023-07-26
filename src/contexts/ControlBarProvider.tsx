@@ -23,8 +23,8 @@ export const ControlBarContext = createContext({
   >,
   swatchColors: {} as StringHash,
   setSwatchColors: (() => {}) as Dispatch<SetStateAction<StringHash>>,
-  cellColors: {} as StringHash | null,
-  setCellColors: (() => {}) as Dispatch<SetStateAction<StringHash | null>>,
+  cellColors: {} as StringHash,
+  setCellColors: (() => {}) as Dispatch<SetStateAction<StringHash>>,
 });
 
 interface ControlBarProviderProps {
@@ -46,7 +46,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
     null
   );
   const [swatchColors, setSwatchColors] = useState<StringHash>({});
-  const [cellColors, setCellColors] = useState<StringHash | null>({});
+  const [cellColors, setCellColors] = useState<StringHash>({});
 
   return (
     <ControlBarContext.Provider

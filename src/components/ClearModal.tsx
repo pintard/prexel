@@ -7,10 +7,10 @@ interface ClearModalProps {
 }
 
 const ClearModal = ({ isOpen, closeModal }: ClearModalProps) => {
-  const { setCellColors, cellColors } = useControlBarContext();
+  const { setCellColors } = useControlBarContext();
 
   const handleClear = () => {
-    setCellColors(null); // TODO HOW TO CLEAR?
+    setCellColors({});
     closeModal();
   };
 

@@ -1,6 +1,7 @@
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { isColorLight } from "../utils/colorUtils";
 
 interface ColorPickerProps {
   isActive: boolean;
@@ -109,7 +110,12 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
     // TODO need to throttle color change rate
   }, [color, isActive, id, setSwatchColors]);
 
-  // TODO change id text color to white black or zinc depending on the swatchColor
+  const textColor = swatchColor
+    ? isColorLight(swatchColor)
+      ? "text-black"
+      : "text-white"
+    : "text-zinc-400";
+
   return (
     <span
       className={`relative w-10 h-10 rounded bg-default-gray overflow-hidden select-none cursor-pointer border-solid border-2 ${
@@ -121,7 +127,7 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
         className="absolute w-full h-full"
         style={{ backgroundColor: swatchColor }}
       >
-        <span className="absolute bottom-1 right-2 text-zinc-400 text-xxs">
+        <span className={`absolute bottom-1 right-2 ${textColor} text-xxs`}>
           {id}
         </span>
       </span>

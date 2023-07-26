@@ -157,7 +157,8 @@ const IconButton = ({
   isActive,
   ...props
 }: IconButtonProps) => {
-  const neutralFG: string = "#8d8d8d";
+  const neutralFg: string = "#8d8d8d";
+  const activeFg: string = "#7d87e2";
 
   return (
     <button
@@ -166,7 +167,7 @@ const IconButton = ({
       } rounded-lg p-2.5 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 `}
       {...props}
     >
-      <Icon width={18} height={18} fill={neutralFG} />
+      <Icon width={18} height={18} fill={isActive ? activeFg : neutralFg} />
       <span className="absolute bottom-1 right-1 text-zinc-400 text-xxs">
         {option}
       </span>
