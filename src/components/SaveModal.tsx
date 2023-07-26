@@ -38,7 +38,7 @@ const SaveModal = ({ isOpen, closeModal }: ClearModalProps) => {
           <textarea
             ref={textareaRef}
             onClick={handleTextAreaClick}
-            className="mb-6 p-2 border-solid border-2 rounded-md resize-none"
+            className="mb-6 p-2 border-solid border-2 rounded-md resize-none focus:outline-blue-400"
             readOnly={true}
             name="cuteCode"
             id="cuteCode"
@@ -48,13 +48,14 @@ const SaveModal = ({ isOpen, closeModal }: ClearModalProps) => {
           ></textarea>
           <span>
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mr-4"
+              autoFocus={true}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mr-4 outline outline-2 focus:outline-blue-400"
               onClick={saveToFile}
             >
               Save
             </button>
             <button
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 outline outline-2 focus:outline-blue-400"
               onClick={closeModal}
             >
               Close

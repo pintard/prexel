@@ -88,7 +88,7 @@ const DimensionInput = ({
         onChange={handleOnChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="outline-none border-solid border-2 rounded-md p-2 w-8/12"
+        className="border-solid border-2 rounded-md p-2 w-8/12 outline-2 focus:outline-blue-400"
         {...props}
       />
     </div>

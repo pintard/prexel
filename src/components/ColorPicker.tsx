@@ -50,7 +50,7 @@ const ColorPicker = ({ isActive, setIsFocused }: ColorPickerProps) => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           prefixed={true}
-          className="outline-none border-solid border-2 rounded-md p-2 w-full"
+          className="border-solid border-2 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
         />
 
         <div className="w-full grid grid-rows-2 grid-cols-4 gap-4">

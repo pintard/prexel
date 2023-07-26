@@ -23,13 +23,14 @@ const ClearModal = ({ isOpen, closeModal }: ClearModalProps) => {
             You cannot retrieve your previous work!
           </p>
           <button
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mr-4"
+            autoFocus={true}
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mr-4 outline outline-2 focus:outline-blue-400"
             onClick={handleClear}
           >
             Clear
           </button>
           <button
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 outline outline-2 focus:outline-blue-400"
             onClick={closeModal}
           >
             Cancel
