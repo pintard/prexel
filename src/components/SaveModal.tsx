@@ -16,9 +16,9 @@ const SaveModal = ({ isOpen, closeModal }: ClearModalProps) => {
     setCuteCode(getCuteCode(cellColors, rows, cols));
   }, [cellColors, rows, cols]);
 
-  const copyToClipboard = () => {};
+  const copyToClipboard = () => {}; // TODO
 
-  const saveToFile = () => {
+  const saveToFile = () => { // TODO
     console.log("cuteCode", cuteCode);
     console.log("decodedCuteCode", atob(cuteCode));
   };
@@ -27,6 +27,7 @@ const SaveModal = ({ isOpen, closeModal }: ClearModalProps) => {
     if (textareaRef.current) {
       textareaRef.current.select();
     }
+    copyToClipboard();
   };
 
   if (isOpen) {
