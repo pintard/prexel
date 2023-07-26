@@ -5,12 +5,19 @@ import { ReactComponent as CompassIcon } from "../images/compass.svg";
 import { ReactComponent as EraserIcon } from "../images/eraser.svg";
 import { ReactComponent as PaintBucketIcon } from "../images/paint-bucket-alt.svg";
 import { ReactComponent as PalletIcon } from "../images/pallet.svg";
+import { ReactComponent as TrashIcon } from "../images/trash-can.svg";
+import { ReactComponent as DownloadIcon } from "../images/download.svg";
 import DimensionBox from "./DimensionBox";
 import ColorPicker from "./ColorPicker";
 
-const ControlBar = () => {
+interface ControlBarProps {
+  openClearModal: () => void;
+  openSaveModal: () => void;
+}
+
+const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
   const { activeControl, setActiveControl } = useControlBarContext();
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -70,13 +77,23 @@ const ControlBar = () => {
     setActiveControl(activeControl === "EraseControl" ? null : "EraseControl");
   };
 
+  const handleSaveControl = () => {
+    openSaveModal();
+    exitMode();
+  };
+
+  const handleClearControl = () => {
+    openClearModal();
+    exitMode();
+  };
+
   const exitMode = () => {
     setActiveControl(null);
   };
 
   return (
     <div className="absolute top-10 flex flex-col items-center">
-      <span className="p-1 h-14 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
+      <span className="p-1 h-12 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
         <IconButton
           option={1}
           isActive={activeControl === "DimensionControl"}
@@ -107,6 +124,9 @@ const ControlBar = () => {
           icon={EraserIcon}
           onClick={setEraseMode}
         />
+        <VerticalDivider />
+        <IconButton icon={TrashIcon} onClick={handleClearControl} />
+        <IconButton icon={DownloadIcon} onClick={handleSaveControl} />
       </span>
       <DimensionBox
         isActive={activeControl === "DimensionControl"}
@@ -120,9 +140,13 @@ const ControlBar = () => {
   );
 };
 
+const VerticalDivider = () => {
+  return <span className="h-3/5 w-px bg-slate-200"></span>;
+};
+
 interface IconButtonProps {
   option?: number;
-  isActive: boolean;
+  isActive?: boolean;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   onClick?: () => void;
 }
@@ -139,11 +163,11 @@ const IconButton = ({
     <button
       className={`relative ${
         isActive ? "bg-gray-100" : "bg-transparent"
-      } rounded-lg p-3 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 `}
+      } rounded-lg p-2.5 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 `}
       {...props}
     >
-      <Icon width={22} height={22} fill={neutralFG} />
-      <span className="absolute bottom-1 right-2 text-zinc-400 text-xxs">
+      <Icon width={18} height={18} fill={neutralFG} />
+      <span className="absolute bottom-1 right-1 text-zinc-400 text-xxs">
         {option}
       </span>
     </button>

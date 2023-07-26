@@ -20,6 +20,7 @@ const Artboard = () => {
   }, [rows, cols]);
 
   useEffect(() => {
+    // TODO handle resize
     const handleResize = () => {};
     handleResize();
 
@@ -43,6 +44,7 @@ const Artboard = () => {
         row.map((_, colIndex) => (
           <GridCell
             key={`${rowIndex}-${colIndex}`}
+            id={`${rowIndex}-${colIndex}`}
             rowIndex={rowIndex}
             colIndex={colIndex}
             isEven={(rowIndex + colIndex) % 2 === 0}

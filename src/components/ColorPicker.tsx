@@ -60,7 +60,7 @@ const ColorPicker = ({ isActive, setIsFocused }: ColorPickerProps) => {
               return (
                 <Swatch
                   key={i}
-                  swatchId={swatchId}
+                  id={swatchId}
                   isActive={activeSwatch === swatchId}
                   onClick={handleSwatchClick}
                 />
@@ -76,43 +76,54 @@ const ColorPicker = ({ isActive, setIsFocused }: ColorPickerProps) => {
 
 interface SwatchProps {
   onClick: (currentSwatch: string) => void;
-  swatchId: string;
+  id: string;
   isActive: boolean;
 }
 
-const Swatch = ({ onClick, swatchId, isActive }: SwatchProps) => {
-  const initialSwatchBg: string = "#f8f8f8";
+const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
   const { color, setColor, swatchColors, setSwatchColors } =
     useControlBarContext();
-  const [localSwatchColor, setLocalSwatchColor] = useState<string>(
-    swatchColors[swatchId] || initialSwatchBg
+
+  const [swatchColor, setSwatchColor] = useState<string | undefined>(
+    swatchColors[id] || undefined
   );
 
   const handleClick = () => {
-    onClick(swatchId);
+    if (!swatchColor) {
+      setSwatchColor(color);
+    } else {
+      setColor(swatchColor);
+    }
+    onClick(id);
   };
 
   useEffect(() => {
     if (isActive) {
-      setLocalSwatchColor(color);
+      setSwatchColor(color);
       setSwatchColors((prevSwatchColors) => ({
         ...prevSwatchColors,
-        [swatchId]: color,
+        [id]: color,
       }));
     }
-  }, [color, isActive, swatchId, setSwatchColors]);
 
-  // TODO change swatchId text color to white black or zinc depending on the localSwatchColor
+    // TODO need to throttle color change rate
+  }, [color, isActive, id, setSwatchColors]);
+
+  // TODO change id text color to white black or zinc depending on the swatchColor
   return (
     <span
-      className={`relative w-10 h-10 rounded cursor-pointer border-solid border-2 ${
-        isActive ? "border-indigo-600" : "border-transparent"
+      className={`relative w-10 h-10 rounded bg-default-gray overflow-hidden select-none cursor-pointer border-solid border-2 ${
+        isActive ? "border-blue-400" : ""
       }`}
-      style={{ backgroundColor: localSwatchColor }}
       onClick={handleClick}
     >
-      <span className="absolute bottom-1 right-2 text-zinc-400 text-xxs">
-        {swatchId}
+      <span
+        className="absolute w-full h-full"
+        style={{ backgroundColor: swatchColor }}
+      >
+        <span className="absolute bottom-1 right-2 text-zinc-400 text-xxs">
+          {id}
+        </span>
       </span>
     </span>
   );

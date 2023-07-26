@@ -12,6 +12,9 @@ module.exports = {
       fontSize: {
         xxs: "0.5rem",
       },
+      colors: {
+        "default-gray": "#f8f8f8",
+      },
     },
   },
   plugins: [],

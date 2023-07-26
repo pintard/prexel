@@ -6,6 +6,10 @@ import {
   SetStateAction,
 } from "react";
 
+interface StringHash {
+  [key: string]: string | undefined;
+}
+
 export const ControlBarContext = createContext({
   color: "",
   setColor: (() => {}) as Dispatch<SetStateAction<string>>,
@@ -17,10 +21,10 @@ export const ControlBarContext = createContext({
   setActiveControl: (() => {}) as Dispatch<
     SetStateAction<ActiveControl | null>
   >,
-  swatchColors: {} as { [key: string]: string },
-  setSwatchColors: (() => {}) as Dispatch<
-    SetStateAction<{ [key: string]: string }>
-  >,
+  swatchColors: {} as StringHash,
+  setSwatchColors: (() => {}) as Dispatch<SetStateAction<StringHash>>,
+  cellColors: {} as StringHash | null,
+  setCellColors: (() => {}) as Dispatch<SetStateAction<StringHash | null>>,
 });
 
 interface ControlBarProviderProps {
@@ -41,9 +45,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [activeControl, setActiveControl] = useState<ActiveControl | null>(
     null
   );
-  const [swatchColors, setSwatchColors] = useState<{ [key: string]: string }>(
-    {}
-  );
+  const [swatchColors, setSwatchColors] = useState<StringHash>({});
+  const [cellColors, setCellColors] = useState<StringHash | null>({});
 
   return (
     <ControlBarContext.Provider
@@ -58,6 +61,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
         setActiveControl,
         swatchColors,
         setSwatchColors,
+        cellColors,
+        setCellColors,
       }}
     >
       {children}
