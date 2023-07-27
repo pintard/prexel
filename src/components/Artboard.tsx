@@ -27,33 +27,10 @@ const Artboard = () => {
 
   const handleMouseUp = () => {
     setIsDragActivated(false);
-    // console.log("Up");
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setIsDragActivated(true);
-    // console.log("Down");
-    // console.log("Event", e.nativeEvent);
-    // console.log(
-    //   "Curr Targ",
-    //   e.currentTarget,
-    //   "w",
-    //   e.currentTarget.clientWidth,
-    //   "h",
-    //   e.currentTarget.clientHeight
-    // );
-
-    const cellWidth: number = e.currentTarget.clientWidth / cols;
-    const cellHeight: number = e.currentTarget.clientHeight / rows;
-    const row: number = Math.floor(e.nativeEvent.offsetY / cellHeight);
-    const col: number = Math.floor(e.nativeEvent.offsetX / cellWidth);
-
-    // console.log("cellWidth", cellWidth);
-    // console.log("cellHeight", cellHeight);
-    // console.log("offsetX", e.nativeEvent.offsetX);
-    // console.log("offsetY", e.nativeEvent.offsetY);
-    // console.log("row", row);
-    // console.log("col", col);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

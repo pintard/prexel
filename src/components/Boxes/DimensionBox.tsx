@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useControlBarContext } from "../hooks/useControlBarContext";
+import { useControlBarContext } from "../../hooks/useControlBarContext";
 
 interface DimensionBoxProps {
   isActive: boolean;

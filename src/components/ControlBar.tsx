@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useControlBarContext } from "../hooks/useControlBarContext";
-import { ReactComponent as BrushIcon } from "../images/brush-alt.svg";
-import { ReactComponent as CompassIcon } from "../images/compass.svg";
-import { ReactComponent as EraserIcon } from "../images/eraser.svg";
-import { ReactComponent as PaintBucketIcon } from "../images/paint-bucket-alt.svg";
-import { ReactComponent as PalletIcon } from "../images/pallet.svg";
-import { ReactComponent as TrashIcon } from "../images/trash-can.svg";
-import { ReactComponent as DownloadIcon } from "../images/download.svg";
-import DimensionBox from "./DimensionBox";
-import ColorPicker from "./ColorPicker";
+import {
+  BrushIcon,
+  CompassIcon,
+  EraserIcon,
+  PaintBucketIcon,
+  PalletIcon,
+  MenuIcon,
+  MoveIcon,
+} from "./Icons";
+import DimensionBox from "./Boxes/DimensionBox";
+import ColorPickerBox from "./Boxes/ColorPickerBox";
+import MenuBox from "./Boxes/MenuBox";
+import { ActiveControl } from "../contexts/ControlBarProvider";
 
-interface ControlBarProps {
-  openClearModal: () => void;
-  openSaveModal: () => void;
-}
-
-const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
+const ControlBar = () => {
   const {
     activeControl,
     setActiveControl,
@@ -25,6 +24,9 @@ const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
     swatchHotKeys,
   } = useControlBarContext();
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isMenuBoxOpen, setIsMenuBoxOpen] = useState(false);
+  const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState(false);
+  const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -32,22 +34,21 @@ const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
 
       switch (e.key) {
         case "1":
-          openDimensionBox();
+          setIsColorPickerBoxOpen(!isColorPickerBoxOpen);
           break;
         case "2":
-          openColorPickerBox();
+          toggleActiveControl("PaintControl");
           break;
         case "3":
-          setPaintMode();
+          toggleActiveControl("FillControl");
           break;
         case "4":
-          setFillMode();
-          break;
-        case "5":
-          setEraseMode();
+          toggleActiveControl("EraseControl");
           break;
         case "Escape":
-          exitMode();
+          setActiveControl(null);
+          setIsColorPickerBoxOpen(false);
+          setIsDimensionBoxOpen(false);
           break;
         default:
           if (swatchHotKeys.includes(e.key)) {
@@ -61,91 +62,68 @@ const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [isFocused, activeControl, swatchColors]);
+  }, [isFocused, activeControl, swatchColors, isColorPickerBoxOpen]);
 
-  const openDimensionBox = () => {
-    setActiveControl(
-      activeControl === "DimensionControl" ? null : "DimensionControl"
-    );
-  };
-
-  const openColorPickerBox = () => {
-    setActiveControl(
-      activeControl === "ColorPickControl" ? null : "ColorPickControl"
-    );
-  };
-
-  const setPaintMode = () => {
-    setActiveControl(activeControl === "PaintControl" ? null : "PaintControl");
-  };
-
-  const setFillMode = () => {
-    setActiveControl(activeControl === "FillControl" ? null : "FillControl");
-  };
-
-  const setEraseMode = () => {
-    setActiveControl(activeControl === "EraseControl" ? null : "EraseControl");
-  };
-
-  const handleSaveControl = () => {
-    openSaveModal();
-    exitMode();
-  };
-
-  const handleClearControl = () => {
-    openClearModal();
-    exitMode();
-  };
-
-  const exitMode = () => {
-    setActiveControl(null);
+  const toggleActiveControl = (control: ActiveControl) => {
+    setActiveControl(activeControl === control ? null : control);
   };
 
   return (
     <div className="absolute top-10 flex flex-col items-center">
       <span className="p-1 h-12 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
+        <ControlBarHandle icon={MoveIcon} />
+        <IconButton
+          isActive={isDimensionBoxOpen}
+          icon={CompassIcon}
+          onClick={() => setIsDimensionBoxOpen(!isDimensionBoxOpen)}
+        />
+        <VerticalDivider />
         <IconButton
           option={1}
-          isActive={activeControl === "DimensionControl"}
-          icon={CompassIcon}
-          onClick={openDimensionBox}
+          isActive={isColorPickerBoxOpen}
+          icon={PalletIcon}
+          onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
         />
         <IconButton
           option={2}
-          isActive={activeControl === "ColorPickControl"}
-          icon={PalletIcon}
-          onClick={openColorPickerBox}
+          isActive={activeControl === "PaintControl"}
+          icon={BrushIcon}
+          onClick={() => toggleActiveControl("PaintControl")}
         />
         <IconButton
           option={3}
-          isActive={activeControl === "PaintControl"}
-          icon={BrushIcon}
-          onClick={setPaintMode}
+          isActive={activeControl === "FillControl"}
+          icon={PaintBucketIcon}
+          onClick={() => toggleActiveControl("FillControl")}
         />
         <IconButton
           option={4}
-          isActive={activeControl === "FillControl"}
-          icon={PaintBucketIcon}
-          onClick={setFillMode}
-        />
-        <IconButton
-          option={5}
           isActive={activeControl === "EraseControl"}
           icon={EraserIcon}
-          onClick={setEraseMode}
+          onClick={() => toggleActiveControl("EraseControl")}
         />
         <VerticalDivider />
-        <IconButton icon={TrashIcon} onClick={handleClearControl} />
-        <IconButton icon={DownloadIcon} onClick={handleSaveControl} />
+        <IconButton
+          isActive={isMenuBoxOpen}
+          icon={MenuIcon}
+          onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
+        />
       </span>
-      <DimensionBox
-        isActive={activeControl === "DimensionControl"}
-        setIsFocused={setIsFocused}
-      />
-      <ColorPicker
-        isActive={activeControl === "ColorPickControl"}
-        setIsFocused={setIsFocused}
-      />
+
+      <div className="w-full flex flex-row gap-6 items-start justify-center">
+        <DimensionBox
+          isActive={isDimensionBoxOpen}
+          setIsFocused={setIsFocused}
+        />
+        <ColorPickerBox
+          isActive={isColorPickerBoxOpen}
+          setIsFocused={setIsFocused}
+        />
+        <MenuBox
+          isActive={isMenuBoxOpen}
+          closeMenuBox={() => setIsMenuBoxOpen(false)}
+        />
+      </div>
     </div>
   );
 };
@@ -153,6 +131,9 @@ const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
 const VerticalDivider = () => {
   return <span className="h-3/5 w-px bg-slate-200"></span>;
 };
+
+const neutralFg: string = "#8d8d8d";
+const activeFg: string = "#7d87e2";
 
 interface IconButtonProps {
   option?: number;
@@ -167,14 +148,11 @@ const IconButton = ({
   isActive,
   ...props
 }: IconButtonProps) => {
-  const neutralFg: string = "#8d8d8d";
-  const activeFg: string = "#7d87e2";
-
   return (
     <button
       className={`relative ${
         isActive ? "bg-gray-100" : "bg-transparent"
-      } rounded-lg p-2.5 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 `}
+      } rounded-lg p-2.5 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 select-none`}
       {...props}
     >
       <Icon width={18} height={18} fill={isActive ? activeFg : neutralFg} />
@@ -182,6 +160,38 @@ const IconButton = ({
         {option}
       </span>
     </button>
+  );
+};
+
+interface ControlBarHandleProps {
+  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+}
+
+const ControlBarHandle = ({ icon: Icon }: ControlBarHandleProps) => {
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  const handleMouseDown = () => {
+    setIsMouseDown(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseDown(false);
+  };
+
+  return (
+    <span
+      className="p-2.5 pr-0 cursor-grab"
+      style={{ cursor: isMouseDown ? "grabbing" : "grab" }}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Icon width={18} height={18} fill={isMouseDown ? activeFg : neutralFg} />
+    </span>
   );
 };
 

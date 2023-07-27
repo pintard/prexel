@@ -2,31 +2,21 @@ import React, { useState } from "react";
 import Artboard from "./components/Artboard";
 import ControlBar from "./components/ControlBar";
 import ControlBarProvider from "./contexts/ControlBarProvider";
-import ClearModal from "./components/ClearModal";
-import SaveModal from "./components/SaveModal";
+import ClearModal from "./components/Modals/ClearModal";
+import SaveModal from "./components/Modals/SaveModal";
+import UploadModal from "./components/Modals/UploadModal";
 
 const App = () => {
-  const [isClearModalOpen, setIsClearModalOpen] = useState<boolean>(false);
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
-
   return (
     <ControlBarProvider>
       <div className="h-full w-full">
         <div className="h-full w-full flex justify-center items-center relative">
           <Artboard />
-          <ControlBar
-            openClearModal={() => setIsClearModalOpen(true)}
-            openSaveModal={() => setIsSaveModalOpen(true)}
-          />
+          <ControlBar />
         </div>
-        <ClearModal
-          isOpen={isClearModalOpen}
-          closeModal={() => setIsClearModalOpen(false)}
-        />
-        <SaveModal
-          isOpen={isSaveModalOpen}
-          closeModal={() => setIsSaveModalOpen(false)}
-        />
+        <ClearModal />
+        <SaveModal />
+        <UploadModal />
       </div>
     </ControlBarProvider>
   );
