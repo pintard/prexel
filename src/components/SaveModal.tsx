@@ -16,18 +16,29 @@ const SaveModal = ({ isOpen, closeModal }: ClearModalProps) => {
     setCuteCode(getCuteCode(cellColors, rows, cols));
   }, [cellColors, rows, cols]);
 
-  const copyToClipboard = () => {}; // TODO
-
-  const saveToFile = () => { // TODO
-    console.log("cuteCode", cuteCode);
-    console.log("decodedCuteCode", atob(cuteCode));
+  const saveToFile = () => {
+    const blob: Blob = new Blob([cuteCode], { type: "text/plain" });
+    const anchor: HTMLAnchorElement = document.createElement("a");
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = `prexel-${new Date().toISOString()}.txt`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(anchor.href);
   };
 
   const handleTextAreaClick = () => {
     if (textareaRef.current) {
       textareaRef.current.select();
+      navigator.clipboard
+        .writeText(cuteCode)
+        .then(() => {
+          alert("Text copied to clipboard!");
+        })
+        .catch((error) => {
+          console.error("Failed to copy text: ", error);
+        });
     }
-    copyToClipboard();
   };
 
   if (isOpen) {

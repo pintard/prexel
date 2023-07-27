@@ -11,6 +11,7 @@ interface StringHash {
 }
 
 export const ControlBarContext = createContext({
+  swatchHotKeys: [""],
   color: "",
   setColor: (() => {}) as Dispatch<SetStateAction<string>>,
   rows: 0,
@@ -47,10 +48,21 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   );
   const [swatchColors, setSwatchColors] = useState<StringHash>({});
   const [cellColors, setCellColors] = useState<StringHash>({});
+  const swatchHotKeys: string[] = new Array<string>(
+    "q",
+    "w",
+    "e",
+    "r",
+    "a",
+    "s",
+    "d",
+    "f"
+  );
 
   return (
     <ControlBarContext.Provider
       value={{
+        swatchHotKeys,
         color,
         setColor,
         rows,

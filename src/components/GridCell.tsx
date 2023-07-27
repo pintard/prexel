@@ -7,11 +7,7 @@ interface GridCellProps {
   onClick: (id: string) => void;
 }
 
-const GridCell = ({
-  isEven,
-  id,
-  onClick,
-}: GridCellProps) => {
+const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   const { cellColors, color, activeControl, setCellColors } =
     useControlBarContext();
 

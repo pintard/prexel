@@ -16,7 +16,14 @@ interface ControlBarProps {
 }
 
 const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
-  const { activeControl, setActiveControl } = useControlBarContext();
+  const {
+    activeControl,
+    setActiveControl,
+    color,
+    setColor,
+    swatchColors,
+    swatchHotKeys,
+  } = useControlBarContext();
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   useEffect(() => {
@@ -43,6 +50,9 @@ const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
           exitMode();
           break;
         default:
+          if (swatchHotKeys.includes(e.key)) {
+            setColor(swatchColors[e.key] ?? color); // TODO going back to the color before, not the last
+          }
           break;
       }
     };
@@ -51,7 +61,7 @@ const ControlBar = ({ openClearModal, openSaveModal }: ControlBarProps) => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [isFocused, activeControl]);
+  }, [isFocused, activeControl, swatchColors]);
 
   const openDimensionBox = () => {
     setActiveControl(

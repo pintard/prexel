@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
 const Artboard = () => {
-  const { rows, cols, cellColors, setCellColors, color } =
+  const { rows, cols, cellColors, setCellColors, color, activeControl } =
     useControlBarContext();
   const initialGrid: any[][] = Array.from(Array(rows), () =>
     Array(cols).fill(null)
   );
   const [grid, setGrid] = useState<any[][]>(initialGrid);
+  const [isDragActivated, setIsDragActivated] = useState<boolean>(false);
 
   useEffect(() => {
     const updatedGrid: any[][] = Array.from(Array(rows), () =>
@@ -16,6 +17,70 @@ const Artboard = () => {
     );
     setGrid(updatedGrid);
   }, [rows, cols]);
+
+  useEffect(() => {
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragActivated]);
+
+  const handleMouseUp = () => {
+    setIsDragActivated(false);
+    // console.log("Up");
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setIsDragActivated(true);
+    // console.log("Down");
+    // console.log("Event", e.nativeEvent);
+    // console.log(
+    //   "Curr Targ",
+    //   e.currentTarget,
+    //   "w",
+    //   e.currentTarget.clientWidth,
+    //   "h",
+    //   e.currentTarget.clientHeight
+    // );
+
+    const cellWidth: number = e.currentTarget.clientWidth / cols;
+    const cellHeight: number = e.currentTarget.clientHeight / rows;
+    const row: number = Math.floor(e.nativeEvent.offsetY / cellHeight);
+    const col: number = Math.floor(e.nativeEvent.offsetX / cellWidth);
+
+    // console.log("cellWidth", cellWidth);
+    // console.log("cellHeight", cellHeight);
+    // console.log("offsetX", e.nativeEvent.offsetX);
+    // console.log("offsetY", e.nativeEvent.offsetY);
+    // console.log("row", row);
+    // console.log("col", col);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isDragActivated) {
+      const cellWidth: number = e.currentTarget.clientWidth / cols;
+      const cellHeight: number = e.currentTarget.clientHeight / rows;
+      const row: number = Math.floor(e.nativeEvent.offsetY / cellHeight);
+      const col: number = Math.floor(e.nativeEvent.offsetX / cellWidth);
+
+      const id: string = `${row}-${col}`;
+      console.log("Curr ID", id);
+
+      if (activeControl === "PaintControl") {
+        setCellColors((prevCellColors) => ({
+          ...prevCellColors,
+          [id]: color,
+        }));
+      }
+
+      if (activeControl === "EraseControl") {
+        setCellColors((prevCellColors) => ({
+          ...prevCellColors,
+          [id]: undefined,
+        }));
+      }
+    }
+  };
 
   const handleCellClick = (id: string) => {
     const [row, col] = id.split("-");
@@ -64,6 +129,8 @@ const Artboard = () => {
         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
       }}
+      onMouseDown={handleMouseDown}
+      // onMouseMove={handleMouseMove}
     >
       {grid.map((row, rowIndex) =>
         row.map((_, colIndex) => (

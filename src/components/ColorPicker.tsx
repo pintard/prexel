@@ -9,7 +9,7 @@ interface ColorPickerProps {
 }
 
 const ColorPicker = ({ isActive, setIsFocused }: ColorPickerProps) => {
-  const { color, setColor } = useControlBarContext();
+  const { color, setColor, swatchHotKeys } = useControlBarContext();
   const [activeSwatch, setActiveSwatch] = useState<string | null>(null);
   const colorPickerRef = useRef<HTMLSpanElement>(null);
 
@@ -54,19 +54,16 @@ const ColorPicker = ({ isActive, setIsFocused }: ColorPickerProps) => {
         />
 
         <div className="w-full grid grid-rows-2 grid-cols-4 gap-4">
-          {Array(8)
-            .fill(null)
-            .map((_, i) => {
-              const swatchId: string = String.fromCodePoint(97 + i);
-              return (
-                <Swatch
-                  key={i}
-                  id={swatchId}
-                  isActive={activeSwatch === swatchId}
-                  onClick={handleSwatchClick}
-                />
-              );
-            })}
+          {swatchHotKeys.map((swatchHotKeyId) => {
+            return (
+              <Swatch
+                key={swatchHotKeyId}
+                id={swatchHotKeyId}
+                isActive={activeSwatch === swatchHotKeyId}
+                onClick={handleSwatchClick}
+              />
+            );
+          })}
         </div>
       </span>
     );
@@ -106,7 +103,6 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
         [id]: color,
       }));
     }
-
     // TODO need to throttle color change rate
   }, [color, isActive, id, setSwatchColors]);
 
