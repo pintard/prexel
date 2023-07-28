@@ -6,9 +6,11 @@ import {
   SetStateAction,
 } from "react";
 
-interface StringHash {
+export interface StringHash {
   [key: string]: string | undefined;
 }
+
+export type ActiveControl = "PaintControl" | "FillControl" | "EraseControl";
 
 export const ControlBarContext = createContext({
   swatchHotKeys: [""],
@@ -33,8 +35,6 @@ export const ControlBarContext = createContext({
   isUploadModalOpen: false,
   setIsUploadModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
 });
-
-export type ActiveControl = "PaintControl" | "FillControl" | "EraseControl";
 
 interface ControlBarProviderProps {
   children: ReactNode;

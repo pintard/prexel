@@ -18,7 +18,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
 
   if (isActive) {
     return (
-      <span className="w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4">
+      <span className="z-20 w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4">
         <DimensionInput
           label="cols"
           placeholder="enter desired cols"

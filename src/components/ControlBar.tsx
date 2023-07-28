@@ -70,7 +70,7 @@ const ControlBar = () => {
 
   return (
     <div className="absolute top-10 flex flex-col items-center">
-      <span className="p-1 h-12 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
+      <span className="z-20 p-1 h-12 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
         <ControlBarHandle icon={MoveIcon} />
         <IconButton
           isActive={isDimensionBoxOpen}

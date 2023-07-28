@@ -45,7 +45,7 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   return (
     <span
       id={id}
-      className={`relative cursor-cell hover:!bg-red-100 active:!bg-red-200 ${
+      className={`relative z-10 select-none cursor-cell hover:!bg-red-100 active:!bg-red-200 ${
         isEven ? "bg-default-gray" : ""
       }`}
       onClick={handleClick}

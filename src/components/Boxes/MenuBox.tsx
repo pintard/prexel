@@ -28,7 +28,7 @@ const MenuBox = ({ isActive, closeMenuBox }: MenuBoxProps) => {
 
   if (isActive) {
     return (
-      <span className="w-44 bg-white rounded-lg shadow-cover">
+      <span className="z-20 w-44 bg-white rounded-lg shadow-cover">
         <ul className="w-full flex flex-col p-4 items-center">
           <MenuItem label="clear" icon={TrashIcon} onClick={handleClear} />
           <HorizontalDivider />

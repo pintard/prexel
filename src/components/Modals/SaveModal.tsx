@@ -16,7 +16,7 @@ const SaveModal = () => {
     const blob: Blob = new Blob([cuteCode], { type: "text/plain" });
     const anchor: HTMLAnchorElement = document.createElement("a");
     anchor.href = URL.createObjectURL(blob);
-    anchor.download = `prexel-${new Date().toISOString()}.txt`;
+    anchor.download = `prexel_${Math.floor(new Date().getTime() / 1000)}.txt`;
     document.body.appendChild(anchor);
     anchor.click();
     document.body.removeChild(anchor);
@@ -39,7 +39,7 @@ const SaveModal = () => {
 
   if (isSaveModalOpen) {
     return (
-      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-20">
+      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
         <div className="bg-white rounded-lg p-6 flex flex-col">
           <h2 className="text-2xl font-semibold mb-2">Save this prexel?</h2>
           <p className="mb-4">Save or copy a prexel code to your clipboard</p>
@@ -47,12 +47,12 @@ const SaveModal = () => {
             ref={textareaRef}
             onClick={handleTextAreaClick}
             className="mb-6 p-2 border-solid border-2 rounded-md resize-none focus:outline-blue-400"
-            readOnly={true}
             name="cuteCode"
             id="cuteCode"
             cols={30}
             rows={10}
             value={cuteCode}
+            readOnly={true}
           ></textarea>
           <span>
             <button

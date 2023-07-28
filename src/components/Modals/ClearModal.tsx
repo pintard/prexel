@@ -12,7 +12,7 @@ const ClearModal = () => {
 
   if (isClearModalOpen) {
     return (
-      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-20">
+      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
         <div className="bg-white rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-2">Clear artboard?</h2>
           <p className="text-gray-600 mb-4">

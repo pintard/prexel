@@ -40,7 +40,7 @@ const ColorPickerBox = ({ isActive, setIsFocused }: ColorPickerProps) => {
   if (isActive) {
     return (
       <span
-        className="w-64 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4 items-center"
+        className="z-20 w-64 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4 items-center"
         ref={colorPickerRef}
       >
         <HexColorPicker color={color} onChange={setColor} />
