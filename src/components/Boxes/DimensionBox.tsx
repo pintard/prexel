@@ -23,6 +23,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           label="cols"
           placeholder="enter desired cols"
           defaultValue={cols}
+          maxValue={100}
           updateValue={setCols}
           setIsFocused={setIsFocused}
         />
@@ -30,6 +31,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           label="rows"
           placeholder="enter desired rows"
           defaultValue={rows}
+          maxValue={30}
           updateValue={setRows}
           setIsFocused={setIsFocused}
         />
@@ -44,6 +46,7 @@ interface DimensionInputProps {
   label?: string;
   placeholder: string;
   defaultValue: number;
+  maxValue: number;
   updateValue: Dispatch<SetStateAction<number>>;
   setIsFocused: Dispatch<SetStateAction<boolean>>;
 }
@@ -51,6 +54,7 @@ interface DimensionInputProps {
 const DimensionInput = ({
   label,
   defaultValue,
+  maxValue,
   updateValue,
   setIsFocused,
   ...props
@@ -59,8 +63,9 @@ const DimensionInput = ({
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    updateValue(+e.target.value);
+    const newValue: number = Math.min(+e.target.value, maxValue);
+    setValue(newValue.toString());
+    updateValue(newValue);
   };
 
   useEffect(() => {
@@ -85,6 +90,7 @@ const DimensionInput = ({
         ref={ref}
         type="number"
         value={value}
+        max={maxValue}
         onChange={handleOnChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}

@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
@@ -20,42 +20,71 @@ const Artboard = () => {
 
   useEffect(() => {
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchend", handleTouchEnd);
+
     return () => {
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
   }, [isDragActivated]);
+
+  const handleMouseDown = () => {
+    setIsDragActivated(true);
+  };
 
   const handleMouseUp = () => {
     setIsDragActivated(false);
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setIsDragActivated(true);
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isDragActivated) {
+      const { clientX, clientY, currentTarget } = e.nativeEvent;
+      if (!(currentTarget instanceof HTMLDivElement)) return;
+
+      const rect: DOMRect = currentTarget.getBoundingClientRect();
+      const cellWidth: number = rect.width / cols;
+      const cellHeight: number = rect.height / rows;
+      const row: number = Math.floor((clientY - rect.top) / cellHeight);
+      const col: number = Math.floor((clientX - rect.left) / cellWidth);
+      const id: string = `${row}-${col}`;
+      handleStroke(id);
+    }
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setIsDragActivated(true);
+    handleTouchMove(e);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragActivated(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     if (isDragActivated) {
       const cellWidth: number = e.currentTarget.clientWidth / cols;
       const cellHeight: number = e.currentTarget.clientHeight / rows;
-      const row: number = Math.floor(e.nativeEvent.offsetY / cellHeight);
-      const col: number = Math.floor(e.nativeEvent.offsetX / cellWidth);
-
+      const touch = e.touches[0];
+      const row: number = Math.floor(touch.pageY / cellHeight);
+      const col: number = Math.floor(touch.pageX / cellWidth);
       const id: string = `${row}-${col}`;
-      console.log("Curr ID", id);
+      handleStroke(id);
+    }
+  };
 
-      if (activeControl === "PaintControl") {
-        setCellColors((prevCellColors) => ({
-          ...prevCellColors,
-          [id]: color,
-        }));
-      }
+  const handleStroke = (id: string) => {
+    if (activeControl === "PaintControl") {
+      setCellColors((prevCellColors) => ({
+        ...prevCellColors,
+        [id]: color,
+      }));
+    }
 
-      if (activeControl === "EraseControl") {
-        setCellColors((prevCellColors) => ({
-          ...prevCellColors,
-          [id]: undefined,
-        }));
-      }
+    if (activeControl === "EraseControl") {
+      setCellColors((prevCellColors) => ({
+        ...prevCellColors,
+        [id]: undefined,
+      }));
     }
   };
 
@@ -107,7 +136,9 @@ const Artboard = () => {
         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
       }}
       onMouseDown={handleMouseDown}
-      // onMouseMove={handleMouseMove}
+      onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
     >
       {grid.map((row, rowIndex) =>
         row.map((_, colIndex) => (

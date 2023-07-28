@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 import {
   BrushIcon,
-  CompassIcon,
   EraserIcon,
   PaintBucketIcon,
-  PalletIcon,
+  PaletteIcon,
   MenuIcon,
-  MoveIcon,
+  GripIcon,
 } from "./Icons";
 import DimensionBox from "./Boxes/DimensionBox";
 import ColorPickerBox from "./Boxes/ColorPickerBox";
 import MenuBox from "./Boxes/MenuBox";
 import { ActiveControl } from "../contexts/ControlBarProvider";
+import IconButton from "./IconButton";
 
 const ControlBar = () => {
   const {
@@ -23,10 +23,17 @@ const ControlBar = () => {
     swatchColors,
     swatchHotKeys,
   } = useControlBarContext();
+
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isMenuBoxOpen, setIsMenuBoxOpen] = useState(false);
   const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState(false);
   const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] = useState(false);
+  const [controlBarPosition, setControlBarPosition] = useState({
+    left: 0,
+    top: 0,
+  });
+
+  const controlBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -68,20 +75,42 @@ const ControlBar = () => {
     setActiveControl(activeControl === control ? null : control);
   };
 
+  // const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   const { clientX, clientY } = e;
+  //   const controlBarRect = e.currentTarget.getBoundingClientRect();
+  //   const offsetX = clientX - controlBarRect.left;
+  //   const offsetY = clientY - controlBarRect.top;
+  //   setControlBarPosition({ left: offsetX, top: offsetY });
+  // };
+
+  // const handleMouseUp = () => {};
+
+  const handleMouseMove = (offsetX: number, offsetY: number) => {
+    const pageWidth = document.documentElement.clientWidth;
+    const pageHeight = document.documentElement.clientHeight;
+    const maxLeft = pageWidth - controlBarRef.current!.clientWidth;
+    const maxTop = pageHeight - controlBarRef.current!.clientHeight;
+    setControlBarPosition({
+      left: Math.max(0, Math.min(offsetX, maxLeft)),
+      top: Math.max(0, Math.min(offsetY, maxTop)),
+    });
+  };
+
   return (
-    <div className="absolute top-10 flex flex-col items-center">
+    <div
+      ref={controlBarRef}
+      className="absolute flex flex-col items-center"
+      style={{
+        left: controlBarPosition.left,
+        top: controlBarPosition.top,
+      }}
+    >
       <span className="z-20 p-1 h-12 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
-        <ControlBarHandle icon={MoveIcon} />
-        <IconButton
-          isActive={isDimensionBoxOpen}
-          icon={CompassIcon}
-          onClick={() => setIsDimensionBoxOpen(!isDimensionBoxOpen)}
-        />
-        <VerticalDivider />
+        <ControlBarHandle icon={GripIcon} onDrag={handleMouseMove} />
         <IconButton
           option={1}
           isActive={isColorPickerBoxOpen}
-          icon={PalletIcon}
+          icon={PaletteIcon}
           onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
         />
         <IconButton
@@ -122,6 +151,8 @@ const ControlBar = () => {
         <MenuBox
           isActive={isMenuBoxOpen}
           closeMenuBox={() => setIsMenuBoxOpen(false)}
+          isDimensionBoxOpen={isDimensionBoxOpen}
+          setIsDimensionBoxOpen={setIsDimensionBoxOpen}
         />
       </div>
     </div>
@@ -135,47 +166,29 @@ const VerticalDivider = () => {
 const neutralFg: string = "#8d8d8d";
 const activeFg: string = "#7d87e2";
 
-interface IconButtonProps {
-  option?: number;
-  isActive?: boolean;
-  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  onClick?: () => void;
-}
-
-const IconButton = ({
-  option,
-  icon: Icon,
-  isActive,
-  ...props
-}: IconButtonProps) => {
-  return (
-    <button
-      className={`relative ${
-        isActive ? "bg-gray-100" : "bg-transparent"
-      } rounded-lg p-2.5 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 select-none`}
-      {...props}
-    >
-      <Icon width={18} height={18} fill={isActive ? activeFg : neutralFg} />
-      <span className="absolute bottom-1 right-1 text-zinc-400 text-xxs">
-        {option}
-      </span>
-    </button>
-  );
-};
-
 interface ControlBarHandleProps {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  onDrag: (offsetX: number, offsetY: number) => void;
 }
 
-const ControlBarHandle = ({ icon: Icon }: ControlBarHandleProps) => {
+const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
     setIsMouseDown(true);
   };
 
   const handleMouseUp = () => {
     setIsMouseDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isMouseDown) {
+      const offsetX = e.clientX - e.currentTarget.offsetLeft;
+      const offsetY = e.clientY - e.currentTarget.offsetTop;
+      onDrag(offsetX, offsetY);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -184,11 +197,12 @@ const ControlBarHandle = ({ icon: Icon }: ControlBarHandleProps) => {
 
   return (
     <span
-      className="p-2.5 pr-0 cursor-grab"
+      className="p-2.5 px-0 cursor-grab"
       style={{ cursor: isMouseDown ? "grabbing" : "grab" }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
     >
       <Icon width={18} height={18} fill={isMouseDown ? activeFg : neutralFg} />
     </span>
