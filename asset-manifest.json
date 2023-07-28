@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/prexel/static/css/main.e1ff1980.css",
-    "main.js": "/prexel/static/js/main.49b571b0.js",
+    "main.css": "/prexel/static/css/main.cd1859a5.css",
+    "main.js": "/prexel/static/js/main.fa32b131.js",
     "static/js/787.078647cc.chunk.js": "/prexel/static/js/787.078647cc.chunk.js",
     "static/media/pallet.svg": "/prexel/static/media/pallet.e59d64ab801341712e16282e61498c75.svg",
     "static/media/trash-can.svg": "/prexel/static/media/trash-can.2e3a231aa9a7a266340b1181ff13673b.svg",
@@ -14,12 +14,12 @@
     "static/media/upload.svg": "/prexel/static/media/upload.9d9f1d9c22bfd942d67ffc404b2bdd99.svg",
     "static/media/download.svg": "/prexel/static/media/download.958c3fc04c3297393f123dfd9c3299fb.svg",
     "static/media/menu.svg": "/prexel/static/media/menu.a4bde64597db0df962cbb49278487704.svg",
-    "main.e1ff1980.css.map": "/prexel/static/css/main.e1ff1980.css.map",
-    "main.49b571b0.js.map": "/prexel/static/js/main.49b571b0.js.map",
+    "main.cd1859a5.css.map": "/prexel/static/css/main.cd1859a5.css.map",
+    "main.fa32b131.js.map": "/prexel/static/js/main.fa32b131.js.map",
     "787.078647cc.chunk.js.map": "/prexel/static/js/787.078647cc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1ff1980.css",
-    "static/js/main.49b571b0.js"
+    "static/css/main.cd1859a5.css",
+    "static/js/main.fa32b131.js"
   ]
 }
