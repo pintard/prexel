@@ -24,6 +24,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           placeholder="enter desired cols"
           defaultValue={cols}
           maxValue={100}
+          minValue={2}
           updateValue={setCols}
           setIsFocused={setIsFocused}
         />
@@ -32,6 +33,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           placeholder="enter desired rows"
           defaultValue={rows}
           maxValue={30}
+          minValue={2}
           updateValue={setRows}
           setIsFocused={setIsFocused}
         />
@@ -47,6 +49,7 @@ interface DimensionInputProps {
   placeholder: string;
   defaultValue: number;
   maxValue: number;
+  minValue: number;
   updateValue: Dispatch<SetStateAction<number>>;
   setIsFocused: Dispatch<SetStateAction<boolean>>;
 }
@@ -55,6 +58,7 @@ const DimensionInput = ({
   label,
   defaultValue,
   maxValue,
+  minValue,
   updateValue,
   setIsFocused,
   ...props
@@ -63,6 +67,7 @@ const DimensionInput = ({
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // TODO handle min value
     const newValue: number = Math.min(+e.target.value, maxValue);
     setValue(newValue.toString());
     updateValue(newValue);

@@ -13,17 +13,9 @@ import ColorPickerBox from "./Boxes/ColorPickerBox";
 import MenuBox from "./Boxes/MenuBox";
 import { ActiveControl } from "../contexts/ControlBarProvider";
 import IconButton from "./IconButton";
+import { theme } from "../utils/constants";
 
 const ControlBar = () => {
-  const {
-    activeControl,
-    setActiveControl,
-    color,
-    setColor,
-    swatchColors,
-    swatchHotKeys,
-  } = useControlBarContext();
-
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isMenuBoxOpen, setIsMenuBoxOpen] = useState(false);
   const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState(false);
@@ -33,7 +25,16 @@ const ControlBar = () => {
     top: 0,
   });
 
-  const controlBarRef = useRef<HTMLDivElement>(null);
+  const {
+    activeControl,
+    setActiveControl,
+    color,
+    setColor,
+    swatchColors,
+    swatchHotKeys,
+  } = useControlBarContext();
+
+  const controlBarAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -75,21 +76,12 @@ const ControlBar = () => {
     setActiveControl(activeControl === control ? null : control);
   };
 
-  // const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   const { clientX, clientY } = e;
-  //   const controlBarRect = e.currentTarget.getBoundingClientRect();
-  //   const offsetX = clientX - controlBarRect.left;
-  //   const offsetY = clientY - controlBarRect.top;
-  //   setControlBarPosition({ left: offsetX, top: offsetY });
-  // };
-
-  // const handleMouseUp = () => {};
-
   const handleMouseMove = (offsetX: number, offsetY: number) => {
     const pageWidth = document.documentElement.clientWidth;
     const pageHeight = document.documentElement.clientHeight;
-    const maxLeft = pageWidth - controlBarRef.current!.clientWidth;
-    const maxTop = pageHeight - controlBarRef.current!.clientHeight;
+    const maxLeft = pageWidth - controlBarAreaRef.current!.clientWidth;
+    const maxTop = pageHeight - controlBarAreaRef.current!.clientHeight;
+
     setControlBarPosition({
       left: Math.max(0, Math.min(offsetX, maxLeft)),
       top: Math.max(0, Math.min(offsetY, maxTop)),
@@ -98,7 +90,7 @@ const ControlBar = () => {
 
   return (
     <div
-      ref={controlBarRef}
+      ref={controlBarAreaRef}
       className="absolute flex flex-col items-center"
       style={{
         left: controlBarPosition.left,
@@ -163,9 +155,6 @@ const VerticalDivider = () => {
   return <span className="h-3/5 w-px bg-slate-200"></span>;
 };
 
-const neutralFg: string = "#8d8d8d";
-const activeFg: string = "#7d87e2";
-
 interface ControlBarHandleProps {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   onDrag: (offsetX: number, offsetY: number) => void;
@@ -173,22 +162,26 @@ interface ControlBarHandleProps {
 
 const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [initialX, setInitialX] = useState(0);
+  const [initialY, setInitialY] = useState(0);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     setIsMouseDown(true);
-  };
-
-  const handleMouseUp = () => {
-    setIsMouseDown(false);
+    setInitialX(e.clientX);
+    setInitialY(e.clientY);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isMouseDown) {
-      const offsetX = e.clientX - e.currentTarget.offsetLeft;
-      const offsetY = e.clientY - e.currentTarget.offsetTop;
+      const offsetX = e.clientX - initialX;
+      const offsetY = e.clientY - initialY;
       onDrag(offsetX, offsetY);
     }
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
   };
 
   const handleMouseLeave = () => {
@@ -204,7 +197,11 @@ const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
     >
-      <Icon width={18} height={18} fill={isMouseDown ? activeFg : neutralFg} />
+      <Icon
+        width={18}
+        height={18}
+        fill={isMouseDown ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_GRAY_FG}
+      />
     </span>
   );
 };
