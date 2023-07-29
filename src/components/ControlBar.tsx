@@ -64,10 +64,18 @@ const ControlBar = () => {
         case "4":
           toggleActiveControl("EraseControl");
           break;
+        case "/":
+          setIsMenuBoxOpen(!isMenuBoxOpen);
+          break;
         case "Escape":
           setActiveControl(null);
           setIsColorPickerBoxOpen(false);
           setIsDimensionBoxOpen(false);
+          if (isDimensionBoxOpen || isColorPickerBoxOpen) {
+            return;
+          } else {
+            setIsMenuBoxOpen(false);
+          }
           break;
         default:
           if (swatchHotKeys.includes(e.key)) {
@@ -81,7 +89,13 @@ const ControlBar = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [isFocused, activeControl, swatchColors, isColorPickerBoxOpen]);
+  }, [
+    isFocused,
+    activeControl,
+    swatchColors,
+    isColorPickerBoxOpen,
+    isMenuBoxOpen,
+  ]);
 
   useEffect(() => {
     setIsBoxAreaOpen(

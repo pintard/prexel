@@ -23,7 +23,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           label="cols"
           placeholder="enter desired cols"
           defaultValue={cols}
-          maxValue={100}
+          maxValue={60}
           minValue={1}
           updateValue={setCols}
           setIsFocused={setIsFocused}
@@ -67,7 +67,12 @@ const DimensionInput = ({
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue: number = Math.min(+e.target.value, maxValue); // TODO
+    let newValue: number = +e.target.value;
+
+    if (newValue < minValue || newValue > maxValue) {
+      return;
+    }
+
     setValue(newValue.toString());
     updateValue(newValue);
   };
