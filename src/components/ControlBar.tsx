@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 import {
   BrushIcon,
@@ -20,6 +20,7 @@ const ControlBar = () => {
   const [isMenuBoxOpen, setIsMenuBoxOpen] = useState(false);
   const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState(false);
   const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] = useState(false);
+  const [isBoxAreaOpen, setIsBoxAreaOpen] = useState(false);
   const [controlBarPosition, setControlBarPosition] = useState({
     left: 0,
     top: 0,
@@ -35,6 +36,16 @@ const ControlBar = () => {
   } = useControlBarContext();
 
   const controlBarAreaRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (controlBarAreaRef.current) {
+      const controlBarWidth: number = controlBarAreaRef.current.offsetWidth;
+      setControlBarPosition({
+        left: (window.innerWidth - controlBarWidth) / 2,
+        top: 40,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -72,6 +83,12 @@ const ControlBar = () => {
     };
   }, [isFocused, activeControl, swatchColors, isColorPickerBoxOpen]);
 
+  useEffect(() => {
+    setIsBoxAreaOpen(
+      isMenuBoxOpen || isDimensionBoxOpen || isColorPickerBoxOpen
+    );
+  }, [isMenuBoxOpen, isDimensionBoxOpen, isColorPickerBoxOpen]);
+
   const toggleActiveControl = (control: ActiveControl) => {
     setActiveControl(activeControl === control ? null : control);
   };
@@ -82,10 +99,10 @@ const ControlBar = () => {
     const maxLeft = pageWidth - controlBarAreaRef.current!.clientWidth;
     const maxTop = pageHeight - controlBarAreaRef.current!.clientHeight;
 
-    setControlBarPosition({
-      left: Math.max(0, Math.min(offsetX, maxLeft)),
-      top: Math.max(0, Math.min(offsetY, maxTop)),
-    });
+    setControlBarPosition((prevPosition) => ({
+      left: Math.max(0, Math.min(prevPosition.left + offsetX, maxLeft)),
+      top: Math.max(0, Math.min(prevPosition.top + offsetY, maxTop)),
+    }));
   };
 
   return (
@@ -97,7 +114,7 @@ const ControlBar = () => {
         top: controlBarPosition.top,
       }}
     >
-      <span className="z-20 p-1 h-12 mb-4 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
+      <span className="z-20 p-1 h-12 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
         <ControlBarHandle icon={GripIcon} onDrag={handleMouseMove} />
         <IconButton
           option={1}
@@ -131,7 +148,11 @@ const ControlBar = () => {
         />
       </span>
 
-      <div className="w-full flex flex-row gap-6 items-start justify-center">
+      <div
+        className={`w-full mt-4 flex flex-row gap-6 items-start justify-center ${
+          !isBoxAreaOpen && "hidden"
+        }`}
+      >
         <DimensionBox
           isActive={isDimensionBoxOpen}
           setIsFocused={setIsFocused}
@@ -162,21 +183,26 @@ interface ControlBarHandleProps {
 
 const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
-  const [initialX, setInitialX] = useState(0);
-  const [initialY, setInitialY] = useState(0);
+  const initialPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     setIsMouseDown(true);
-    setInitialX(e.clientX);
-    setInitialY(e.clientY);
+    initialPos.current = {
+      x: e.clientX,
+      y: e.clientY,
+    };
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (isMouseDown) {
-      const offsetX = e.clientX - initialX;
-      const offsetY = e.clientY - initialY;
+      const offsetX = e.clientX - initialPos.current.x;
+      const offsetY = e.clientY - initialPos.current.y;
       onDrag(offsetX, offsetY);
+      initialPos.current = {
+        x: e.clientX,
+        y: e.clientY,
+      };
     }
   };
 
@@ -184,9 +210,20 @@ const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
     setIsMouseDown(false);
   };
 
-  const handleMouseLeave = () => {
-    setIsMouseDown(false);
-  };
+  useEffect(() => {
+    if (isMouseDown) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    } else {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isMouseDown]);
 
   return (
     <span
@@ -194,8 +231,6 @@ const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
       style={{ cursor: isMouseDown ? "grabbing" : "grab" }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}
     >
       <Icon
         width={18}
