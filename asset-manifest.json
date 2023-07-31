@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/prexel/static/css/main.cd9e465d.css",
-    "main.js": "/prexel/static/js/main.96cf5c8a.js",
+    "main.css": "/prexel/static/css/main.32a4c481.css",
+    "main.js": "/prexel/static/js/main.2a43f775.js",
     "static/js/787.078647cc.chunk.js": "/prexel/static/js/787.078647cc.chunk.js",
     "static/media/pallet.svg": "/prexel/static/media/pallet.e59d64ab801341712e16282e61498c75.svg",
     "static/media/trash-can.svg": "/prexel/static/media/trash-can.2e3a231aa9a7a266340b1181ff13673b.svg",
@@ -15,13 +15,13 @@
     "static/media/upload.svg": "/prexel/static/media/upload.9d9f1d9c22bfd942d67ffc404b2bdd99.svg",
     "static/media/download.svg": "/prexel/static/media/download.958c3fc04c3297393f123dfd9c3299fb.svg",
     "static/media/menu.svg": "/prexel/static/media/menu.a4bde64597db0df962cbb49278487704.svg",
-    "static/media/grip-4-2.svg": "/prexel/static/media/grip-4-2.d5ed93ce17337ad59ba5e28981698399.svg",
-    "main.cd9e465d.css.map": "/prexel/static/css/main.cd9e465d.css.map",
-    "main.96cf5c8a.js.map": "/prexel/static/js/main.96cf5c8a.js.map",
+    "static/media/grip-4-2.svg": "/prexel/static/media/grip-4-2.5b873f990354e682ca9c038f0c8a048f.svg",
+    "main.32a4c481.css.map": "/prexel/static/css/main.32a4c481.css.map",
+    "main.2a43f775.js.map": "/prexel/static/js/main.2a43f775.js.map",
     "787.078647cc.chunk.js.map": "/prexel/static/js/787.078647cc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cd9e465d.css",
-    "static/js/main.96cf5c8a.js"
+    "static/css/main.32a4c481.css",
+    "static/js/main.2a43f775.js"
   ]
 }
