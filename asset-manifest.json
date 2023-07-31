@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/prexel/static/css/main.32a4c481.css",
-    "main.js": "/prexel/static/js/main.2a43f775.js",
+    "main.js": "/prexel/static/js/main.7654bb82.js",
     "static/js/787.078647cc.chunk.js": "/prexel/static/js/787.078647cc.chunk.js",
     "static/media/pallet.svg": "/prexel/static/media/pallet.e59d64ab801341712e16282e61498c75.svg",
     "static/media/trash-can.svg": "/prexel/static/media/trash-can.2e3a231aa9a7a266340b1181ff13673b.svg",
@@ -17,11 +17,11 @@
     "static/media/menu.svg": "/prexel/static/media/menu.a4bde64597db0df962cbb49278487704.svg",
     "static/media/grip-4-2.svg": "/prexel/static/media/grip-4-2.5b873f990354e682ca9c038f0c8a048f.svg",
     "main.32a4c481.css.map": "/prexel/static/css/main.32a4c481.css.map",
-    "main.2a43f775.js.map": "/prexel/static/js/main.2a43f775.js.map",
+    "main.7654bb82.js.map": "/prexel/static/js/main.7654bb82.js.map",
     "787.078647cc.chunk.js.map": "/prexel/static/js/787.078647cc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.32a4c481.css",
-    "static/js/main.2a43f775.js"
+    "static/js/main.7654bb82.js"
   ]
 }
