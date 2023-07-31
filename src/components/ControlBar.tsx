@@ -68,22 +68,19 @@ const ControlBar = () => {
           setIsMenuBoxOpen(!isMenuBoxOpen);
           break;
         case "Escape":
-          setIsColorPickerBoxOpen(false);
-          setIsDimensionBoxOpen(false);
-          if (isDimensionBoxOpen || isColorPickerBoxOpen) {
-            return;
-          } else {
+          if (isDimensionBoxOpen) {
+            setIsDimensionBoxOpen(false);
+          } else if (isMenuBoxOpen) {
             setIsMenuBoxOpen(false);
-          }
-          if (isMenuBoxOpen) {
-            return;
+          } else if (isColorPickerBoxOpen) {
+            setIsColorPickerBoxOpen(false);
           } else {
             setActiveControl(null);
           }
           break;
         default:
           if (swatchHotKeys.includes(e.key)) {
-            setColor(swatchColors[e.key] ?? color); // TODO going back to the color before, not the last
+            setColor(swatchColors[e.key] ?? color);
           }
           break;
       }
@@ -94,11 +91,13 @@ const ControlBar = () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, [
+    color,
     isFocused,
-    activeControl,
     swatchColors,
+    activeControl,
     isColorPickerBoxOpen,
     isMenuBoxOpen,
+    isDimensionBoxOpen,
   ]);
 
   useEffect(() => {
