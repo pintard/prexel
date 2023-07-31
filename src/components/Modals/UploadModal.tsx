@@ -61,7 +61,6 @@ const UploadModal = () => {
           <h2 className="text-2xl font-semibold mb-2">Upload a prexel?</h2>
           <p className="mb-4">Upload or paste a prexel code</p>
           <textarea
-            autoFocus={true}
             ref={textareaRef}
             placeholder="paste prexel code here..."
             className="mb-4 p-2 border-solid border-2 rounded-md resize-none focus:outline-blue-400"
@@ -77,6 +76,7 @@ const UploadModal = () => {
             <button
               className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 outline outline-2 focus:outline-blue-400 flex flex-row items-center"
               onClick={readFromFile}
+              autoFocus={true}
             >
               <UploadIcon
                 width={16}

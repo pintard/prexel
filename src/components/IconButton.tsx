@@ -22,7 +22,7 @@ const IconButton = ({
       {...props}
     >
       <Icon width={18} height={18} fill={isActive ? activeFg : neutralFg} />
-      <span className="absolute bottom-1 right-1 text-zinc-400 text-xxs">
+      <span className="absolute bottom-1 right-1 text-zinc-400 text-xxs select-none">
         {option}
       </span>
     </button>

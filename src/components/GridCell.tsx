@@ -8,10 +8,10 @@ interface GridCellProps {
 }
 
 const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
-  const { cellColors, color, activeControl, setCellColors } =
+  const { cellColors, color, activeControl, setCellColors, isDragging } =
     useControlBarContext();
 
-  const [hover, setHover] = useState<boolean>(false);
+  const [isHover, setIsHover] = useState<boolean>(false);
   const [cellColor, setCellColor] = useState<string | undefined>(
     cellColors[id] || undefined
   );
@@ -45,23 +45,24 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   return (
     <span
       id={id}
-      className={`relative z-10 select-none cursor-cell hover:!bg-red-100 active:!bg-red-200 ${
+      className={`relative z-10 select-none" ${
         isEven ? "bg-default-gray" : ""
       }`}
       onClick={handleClick}
     >
       <span
-        className="absolute w-full h-full active:!bg-opacity-50"
+        className="absolute w-full h-full cursor-cell active:!opacity-90"
         onMouseEnter={() => {
-          setHover(true);
+          setIsHover(true);
         }}
         onMouseLeave={() => {
-          setHover(false);
+          setIsHover(false);
         }}
         style={{
           backgroundColor: cellColor,
           opacity: 1,
-          ...(hover ? { opacity: 0.8 } : null),
+          ...(isHover &&
+            !isDragging && { backgroundColor: color, opacity: 0.8 }),
         }}
       ></span>
     </span>

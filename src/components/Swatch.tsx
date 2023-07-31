@@ -54,7 +54,7 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
         style={{ backgroundColor: swatchColor }}
       >
         <span className={`absolute bottom-1 right-2 ${textColor} text-xxs`}>
-          {id}
+          {id.toUpperCase()}
         </span>
       </span>
     </span>

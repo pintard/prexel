@@ -53,28 +53,32 @@ const ControlBar = () => {
 
       switch (e.key) {
         case "1":
-          setIsColorPickerBoxOpen(!isColorPickerBoxOpen);
+          toggleActiveControl("PaintControl");
           break;
         case "2":
-          toggleActiveControl("PaintControl");
+          toggleActiveControl("EraseControl");
           break;
         case "3":
           toggleActiveControl("FillControl");
           break;
         case "4":
-          toggleActiveControl("EraseControl");
+          setIsColorPickerBoxOpen(!isColorPickerBoxOpen);
           break;
         case "/":
           setIsMenuBoxOpen(!isMenuBoxOpen);
           break;
         case "Escape":
-          setActiveControl(null);
           setIsColorPickerBoxOpen(false);
           setIsDimensionBoxOpen(false);
           if (isDimensionBoxOpen || isColorPickerBoxOpen) {
             return;
           } else {
             setIsMenuBoxOpen(false);
+          }
+          if (isMenuBoxOpen) {
+            return;
+          } else {
+            setActiveControl(null);
           }
           break;
         default:
@@ -128,19 +132,19 @@ const ControlBar = () => {
         top: controlBarPosition.top,
       }}
     >
-      <span className="z-20 p-1 h-12 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1">
+      <span className="z-20 p-1 h-12 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1 select-none">
         <ControlBarHandle icon={GripIcon} onDrag={handleMouseMove} />
         <IconButton
           option={1}
-          isActive={isColorPickerBoxOpen}
-          icon={PaletteIcon}
-          onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
-        />
-        <IconButton
-          option={2}
           isActive={activeControl === "PaintControl"}
           icon={BrushIcon}
           onClick={() => toggleActiveControl("PaintControl")}
+        />
+        <IconButton
+          option={2}
+          isActive={activeControl === "EraseControl"}
+          icon={EraserIcon}
+          onClick={() => toggleActiveControl("EraseControl")}
         />
         <IconButton
           option={3}
@@ -150,9 +154,9 @@ const ControlBar = () => {
         />
         <IconButton
           option={4}
-          isActive={activeControl === "EraseControl"}
-          icon={EraserIcon}
-          onClick={() => toggleActiveControl("EraseControl")}
+          isActive={isColorPickerBoxOpen}
+          icon={PaletteIcon}
+          onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
         />
         <VerticalDivider />
         <IconButton
@@ -163,24 +167,26 @@ const ControlBar = () => {
       </span>
 
       <div
-        className={`w-full mt-4 flex flex-row gap-6 items-start justify-center ${
+        className={`w-full mt-4 flex flex-row gap-4 items-start justify-center ${
           !isBoxAreaOpen && "hidden"
         }`}
       >
-        <DimensionBox
-          isActive={isDimensionBoxOpen}
-          setIsFocused={setIsFocused}
-        />
         <ColorPickerBox
           isActive={isColorPickerBoxOpen}
           setIsFocused={setIsFocused}
         />
+        {/* <div className="flex flex-col gap-4"> */}
         <MenuBox
           isActive={isMenuBoxOpen}
           closeMenuBox={() => setIsMenuBoxOpen(false)}
           isDimensionBoxOpen={isDimensionBoxOpen}
           setIsDimensionBoxOpen={setIsDimensionBoxOpen}
         />
+        <DimensionBox
+          isActive={isDimensionBoxOpen}
+          setIsFocused={setIsFocused}
+        />
+        {/* </div> */}
       </div>
     </div>
   );
@@ -196,22 +202,31 @@ interface ControlBarHandleProps {
 }
 
 const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
-  const [isMouseDown, setIsMouseDown] = useState(false);
+  const { isDragging, setIsDragging } = useControlBarContext();
   const initialPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    setIsMouseDown(true);
+    setIsDragging(true);
     initialPos.current = {
       x: e.clientX,
       y: e.clientY,
     };
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+    initialPos.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  };
+
   const handleMouseMove = (e: MouseEvent) => {
-    if (isMouseDown) {
-      const offsetX = e.clientX - initialPos.current.x;
-      const offsetY = e.clientY - initialPos.current.y;
+    if (isDragging) {
+      const offsetX: number = e.clientX - initialPos.current.x;
+      const offsetY: number = e.clientY - initialPos.current.y;
       onDrag(offsetX, offsetY);
       initialPos.current = {
         x: e.clientX,
@@ -220,36 +235,56 @@ const ControlBarHandle = ({ icon: Icon, onDrag }: ControlBarHandleProps) => {
     }
   };
 
+  const handleTouchMove = (e: TouchEvent) => {
+    if (isDragging) {
+      const offsetX: number = e.touches[0].clientX - initialPos.current.x;
+      const offsetY: number = e.touches[0].clientY - initialPos.current.y;
+      onDrag(offsetX, offsetY);
+      initialPos.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    }
+  };
+
   const handleMouseUp = () => {
-    setIsMouseDown(false);
+    setIsDragging(false);
   };
 
   useEffect(() => {
-    if (isMouseDown) {
+    if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleMouseUp);
     } else {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleMouseUp);
     }
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleMouseUp);
     };
-  }, [isMouseDown]);
+  }, [isDragging]);
 
   return (
     <span
       className="p-2.5 px-0 cursor-grab"
-      style={{ cursor: isMouseDown ? "grabbing" : "grab" }}
+      style={{ cursor: isDragging ? "grabbing" : "grab" }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleMouseUp}
     >
       <Icon
-        width={18}
-        height={18}
-        fill={isMouseDown ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_GRAY_FG}
+        width={14}
+        height={22}
+        fill={isDragging ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_GRAY_FG}
       />
     </span>
   );
