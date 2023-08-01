@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { getPrexel } from "../../utils/generateUtils";
 import { UploadIcon } from "../Icons";
-import { StringHash } from "../../contexts/ControlBarProvider";
+import { StringHash } from "../../utils/constants";
 
 const UploadModal = () => {
   const { isUploadModalOpen, setIsUploadModalOpen, setCellColors } =

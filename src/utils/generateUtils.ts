@@ -1,5 +1,5 @@
 import { hexToRgb, rgbToHex } from "./colorUtils";
-import { StringHash } from "../contexts/ControlBarProvider";
+import { StringHash } from "./constants";
 
 const getBlockFromRgb = (rgb: number[]): string => {
   const [r, g, b] = rgb;

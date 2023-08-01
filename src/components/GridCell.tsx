@@ -20,7 +20,7 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
     setCellColor(cellColors[id]);
   }, [cellColors]);
 
-  const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+  const handleClick = () => {
     if (activeControl === "PaintControl") {
       setCellColor(color);
       setCellColors((prevCellColors) => ({

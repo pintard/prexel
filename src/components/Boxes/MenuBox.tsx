@@ -1,6 +1,14 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { TrashIcon, DownloadIcon, UploadIcon, GridIcon } from "../Icons";
+import {
+  TrashIcon,
+  DownloadIcon,
+  UploadIcon,
+  GridIcon,
+  MinimizeIcon,
+} from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
+import { theme } from "../../utils/constants";
+import { HorizontalDivider } from "../Divider";
 
 interface MenuBoxProps {
   isActive: boolean;
@@ -27,19 +35,20 @@ const MenuBox = ({
     closeMenuBox();
     setIsDimensionBoxOpen(false);
   };
-  
+
   const handleUpload = () => {
     setIsUploadModalOpen(true);
     closeMenuBox();
     setIsDimensionBoxOpen(false);
   };
-  
+
   const handleClear = () => {
     setIsClearModalOpen(true);
     closeMenuBox();
     setIsDimensionBoxOpen(false);
   };
 
+  // TODO minimize functionality
   if (isActive) {
     return (
       <span className="z-20 w-44 bg-white rounded-lg shadow-cover">
@@ -56,6 +65,8 @@ const MenuBox = ({
           <MenuItem label="upload" icon={UploadIcon} onClick={handleUpload} />
           <HorizontalDivider />
           <MenuItem label="save" icon={DownloadIcon} onClick={handleSave} />
+          <HorizontalDivider />
+          <MenuItem label="minimize" icon={MinimizeIcon} onClick={() => {}} />
         </ul>
       </span>
     );
@@ -63,13 +74,6 @@ const MenuBox = ({
 
   return null;
 };
-
-const HorizontalDivider = () => {
-  return <span className="w-11/12 h-px bg-slate-200"></span>;
-};
-
-const neutralFg: string = "#000000";
-const activeFg: string = "#7d87e2";
 
 interface MenuItemProps {
   label: string;
@@ -86,8 +90,18 @@ const MenuItem = ({ label, icon: Icon, isActive, ...props }: MenuItemProps) => {
       }`}
       {...props}
     >
-      <Icon width={16} height={16} fill={isActive ? activeFg : neutralFg} />
-      <span style={{ color: isActive ? activeFg : neutralFg }}>{label}</span>
+      <Icon
+        width={16}
+        height={16}
+        fill={isActive ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_BLACK_FG}
+      />
+      <span
+        style={{
+          color: isActive ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_BLACK_FG,
+        }}
+      >
+        {label}
+      </span>
     </li>
   );
 };

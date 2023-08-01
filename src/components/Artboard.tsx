@@ -92,11 +92,11 @@ const Artboard = () => {
     const [row, col] = id.split("-");
     const oldColor: string | undefined = cellColors[id];
     if (oldColor !== color) {
-      floodFill(+row, +col, oldColor, new Set());
+      paintFill(+row, +col, oldColor, new Set());
     }
   };
 
-  const floodFill = (
+  const paintFill = (
     row: number,
     col: number,
     oldColor: string | undefined,
@@ -122,10 +122,10 @@ const Artboard = () => {
       [id]: color,
     }));
 
-    floodFill(row - 1, col, oldColor, visited);
-    floodFill(row + 1, col, oldColor, visited);
-    floodFill(row, col - 1, oldColor, visited);
-    floodFill(row, col + 1, oldColor, visited);
+    paintFill(row - 1, col, oldColor, visited);
+    paintFill(row + 1, col, oldColor, visited);
+    paintFill(row, col - 1, oldColor, visited);
+    paintFill(row, col + 1, oldColor, visited);
   };
 
   return (

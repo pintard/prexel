@@ -15,7 +15,6 @@ interface DimensionBoxProps {
 
 const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
   const { rows, setRows, cols, setCols } = useControlBarContext();
-
   if (isActive) {
     return (
       <span className="z-20 w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4">
@@ -40,7 +39,6 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
       </span>
     );
   }
-
   return null;
 };
 
@@ -102,7 +100,10 @@ const DimensionInput = ({
         max={maxValue}
         min={minValue}
         onChange={handleOnChange}
-        onFocus={() => setIsFocused(true)}
+        onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => {
+          setIsFocused(true);
+          e.target.select();
+        }}
         onBlur={() => setIsFocused(false)}
         className="border-solid border-2 rounded-md p-2 w-8/12 outline-2 focus:outline-blue-400"
         {...props}

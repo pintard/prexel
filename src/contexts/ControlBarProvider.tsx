@@ -5,10 +5,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-
-export interface StringHash {
-  [key: string]: string | undefined;
-}
+import { StringHash } from "../utils/constants";
 
 export type ActiveControl = "PaintControl" | "FillControl" | "EraseControl";
 
