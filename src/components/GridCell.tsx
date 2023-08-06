@@ -8,7 +8,7 @@ interface GridCellProps {
 }
 
 const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
-  const { cellColors, color, activeControl, setCellColors, isDragging } =
+  const { cellColors, color, activeControl, updateColors, isDragging } =
     useControlBarContext();
 
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -23,18 +23,12 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   const handleClick = () => {
     if (activeControl === "PaintControl") {
       setCellColor(color);
-      setCellColors((prevCellColors) => ({
-        ...prevCellColors,
-        [id]: color,
-      }));
+      updateColors(id, color);
     }
 
     if (activeControl === "EraseControl") {
       setCellColor(undefined);
-      setCellColors((prevCellColors) => ({
-        ...prevCellColors,
-        [id]: undefined,
-      }));
+      updateColors(id, undefined);
     }
 
     if (activeControl === "FillControl") {
@@ -45,13 +39,11 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   return (
     <span
       id={id}
-      className={`relative z-10 select-none" ${
-        isEven ? "bg-default-gray" : ""
-      }`}
+      className={`relative z-10 select-none" ${isEven && "bg-default-gray"}`}
       onClick={handleClick}
     >
       <span
-        className="absolute w-full h-full cursor-cell active:!opacity-90"
+        className="absolute w-full h-full cursor-cell select-none active:!opacity-90"
         onMouseEnter={() => {
           setIsHover(true);
         }}

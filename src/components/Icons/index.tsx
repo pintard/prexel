@@ -10,6 +10,8 @@ import { ReactComponent as GridIcon } from "./grid-alt.svg";
 import { ReactComponent as VerticalGripIcon } from "./grip-vert.svg";
 import { ReactComponent as HorizontalGripIcon } from "./grip-horz.svg";
 import { ReactComponent as MinimizeIcon } from "./minimize.svg";
+import { ReactComponent as UndoIcon } from "./undo.svg";
+import { ReactComponent as RedoIcon } from "./redo.svg";
 
 export {
   BrushIcon,
@@ -24,4 +26,6 @@ export {
   VerticalGripIcon,
   HorizontalGripIcon,
   MinimizeIcon,
+  UndoIcon,
+  RedoIcon,
 };

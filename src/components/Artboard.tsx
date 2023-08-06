@@ -3,7 +3,7 @@ import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
 const Artboard = () => {
-  const { rows, cols, cellColors, setCellColors, color, activeControl } =
+  const { rows, cols, cellColors, updateColors, color, activeControl } =
     useControlBarContext();
   const initialGrid: any[][] = Array.from(Array(rows), () =>
     Array(cols).fill(null)
@@ -44,8 +44,10 @@ const Artboard = () => {
       const rect: DOMRect = currentTarget.getBoundingClientRect();
       const cellWidth: number = rect.width / cols;
       const cellHeight: number = rect.height / rows;
+
       const row: number = Math.floor((clientY - rect.top) / cellHeight);
       const col: number = Math.floor((clientX - rect.left) / cellWidth);
+
       const id: string = `${row}-${col}`;
       handleStroke(id);
     }
@@ -64,9 +66,11 @@ const Artboard = () => {
     if (isDragActivated) {
       const cellWidth: number = e.currentTarget.clientWidth / cols;
       const cellHeight: number = e.currentTarget.clientHeight / rows;
+
       const touch = e.touches[0];
       const row: number = Math.floor(touch.pageY / cellHeight);
       const col: number = Math.floor(touch.pageX / cellWidth);
+
       const id: string = `${row}-${col}`;
       handleStroke(id);
     }
@@ -74,17 +78,11 @@ const Artboard = () => {
 
   const handleStroke = (id: string) => {
     if (activeControl === "PaintControl") {
-      setCellColors((prevCellColors) => ({
-        ...prevCellColors,
-        [id]: color,
-      }));
+      updateColors(id, color);
     }
 
     if (activeControl === "EraseControl") {
-      setCellColors((prevCellColors) => ({
-        ...prevCellColors,
-        [id]: undefined,
-      }));
+      updateColors(id, undefined);
     }
   };
 
@@ -117,10 +115,7 @@ const Artboard = () => {
 
     visited.add(id);
 
-    setCellColors((prevCellColors) => ({
-      ...prevCellColors,
-      [id]: color,
-    }));
+    updateColors(id, color);
 
     paintFill(row - 1, col, oldColor, visited);
     paintFill(row + 1, col, oldColor, visited);

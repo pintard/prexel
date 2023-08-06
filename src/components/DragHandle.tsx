@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
-import { useControlBarContext } from "../hooks/useControlBarContext";
 import { theme } from "../utils/constants";
-import { ColorPickerBoxContext } from "../contexts/ColorPickerBoxProvider";
+import { useControlBarContext } from "../hooks/useControlBarContext";
 import { useColorPickerBoxContext } from "../hooks/useColorPickerBoxContext";
 
 interface MousePosition {

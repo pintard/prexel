@@ -4,16 +4,16 @@ import { HexColorPicker, HexColorInput } from "react-colorful";
 import Swatch from "../Swatch";
 import DragHandle from "../DragHandle";
 import { HorizontalGripIcon } from "../Icons";
-import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { PagePosition } from "../../utils/constants";
+import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { useColorPickerBoxContext } from "../../hooks/useColorPickerBoxContext";
 
 interface ColorPickerProps {
   isActive: boolean;
-  setIsFocused: Dispatch<SetStateAction<boolean>>;
+  setIsInputFocused: Dispatch<SetStateAction<boolean>>;
 }
 
-const ColorPickerBox = ({ isActive, setIsFocused }: ColorPickerProps) => {
+const ColorPickerBox = ({ isActive, setIsInputFocused }: ColorPickerProps) => {
   const { color, setColor, swatchHotKeys } = useControlBarContext();
   const [activeSwatch, setActiveSwatch] = useState<string | null>(null);
   const [colorPickerPosition, setColorPickerPoistion] = useState<PagePosition>({
@@ -84,8 +84,8 @@ const ColorPickerBox = ({ isActive, setIsFocused }: ColorPickerProps) => {
           <HexColorInput
             color={color}
             onChange={setColor}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={() => setIsInputFocused(true)}
+            onBlur={() => setIsInputFocused(false)}
             prefixed={true}
             className="border-solid border-2 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
           />

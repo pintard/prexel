@@ -5,12 +5,18 @@ interface IconButtonProps {
   isActive?: boolean;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   onClick?: () => void;
+  width?: number;
+  height?: number;
+  isDisabled?: boolean;
 }
 
 const IconButton = ({
   option,
   icon: Icon,
   isActive,
+  width,
+  height,
+  isDisabled,
   ...props
 }: IconButtonProps) => {
   return (
@@ -21,8 +27,8 @@ const IconButton = ({
       {...props}
     >
       <Icon
-        width={18}
-        height={18}
+        width={width || 18}
+        height={height || 18}
         fill={isActive ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_GRAY_FG}
       />
       <span className="absolute bottom-1 right-1 text-zinc-400 text-xxs select-none">

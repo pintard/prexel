@@ -4,10 +4,13 @@ import {
   ReactNode,
   Dispatch,
   SetStateAction,
+  useRef,
 } from "react";
 import { StringHash } from "../utils/constants";
 
 export type ActiveControl = "PaintControl" | "FillControl" | "EraseControl";
+
+type ColorHistory = StringHash[];
 
 export const ControlBarContext = createContext({
   swatchHotKeys: [""],
@@ -33,6 +36,13 @@ export const ControlBarContext = createContext({
   setIsUploadModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDragging: false,
   setIsDragging: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  historyIndex: 0,
+  setHistoryIndex: (() => {}) as Dispatch<SetStateAction<number>>,
+  colorHistory: {} as ColorHistory,
+  updateColors: (() => {}) as (
+    id: string | StringHash,
+    color?: string | undefined
+  ) => void,
 });
 
 interface ControlBarProviderProps {
@@ -63,6 +73,26 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
+  const colorHistory = useRef<ColorHistory>([{}]);
+
+  const updateColors = (
+    idOrColors: string | StringHash,
+    color?: string | undefined
+  ): void => {
+    setCellColors((oldCellColors) => {
+      const newCellColors =
+        typeof idOrColors === "string"
+          ? { ...oldCellColors, [idOrColors]: color }
+          : idOrColors;
+
+      colorHistory.current = colorHistory.current.slice(0, historyIndex + 1);
+      colorHistory.current.push(newCellColors);
+      setHistoryIndex(colorHistory.current.length - 1);
+      return newCellColors;
+    });
+  };
+
   return (
     <ControlBarContext.Provider
       value={{
@@ -87,6 +117,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
         setIsUploadModalOpen,
         isDragging,
         setIsDragging,
+        historyIndex,
+        setHistoryIndex,
+        colorHistory: colorHistory.current,
+        updateColors,
       }}
     >
       {children}

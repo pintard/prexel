@@ -11,8 +11,8 @@ import UploadModal from "./components/Modals/UploadModal";
 
 const App = () => {
   return (
-    <ControlBarProvider>
-      <div className="h-full w-full">
+    <div className="h-full w-full">
+      <ControlBarProvider>
         <div className="h-full w-full flex justify-center items-center relative">
           <Artboard />
           <ColorPickerBoxProvider>
@@ -22,8 +22,8 @@ const App = () => {
         <ClearModal />
         <SaveModal />
         <UploadModal />
-      </div>
-    </ControlBarProvider>
+      </ControlBarProvider>
+    </div>
   );
 };
 

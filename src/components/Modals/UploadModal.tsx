@@ -5,7 +5,7 @@ import { UploadIcon } from "../Icons";
 import { StringHash } from "../../utils/constants";
 
 const UploadModal = () => {
-  const { isUploadModalOpen, setIsUploadModalOpen, setCellColors } =
+  const { isUploadModalOpen, setIsUploadModalOpen, updateColors } =
     useControlBarContext();
   const [cuteCode, setCuteCode] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
@@ -44,7 +44,7 @@ const UploadModal = () => {
       return;
     }
     const prexel: StringHash = getPrexel(cuteCode);
-    setCellColors(prexel);
+    updateColors(prexel);
     clearModal();
   };
 

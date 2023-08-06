@@ -10,10 +10,10 @@ import { useControlBarContext } from "../../hooks/useControlBarContext";
 
 interface DimensionBoxProps {
   isActive: boolean;
-  setIsFocused: Dispatch<SetStateAction<boolean>>;
+  setIsInputFocused: Dispatch<SetStateAction<boolean>>;
 }
 
-const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
+const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
   const { rows, setRows, cols, setCols } = useControlBarContext();
   if (isActive) {
     return (
@@ -25,7 +25,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           maxValue={60}
           minValue={1}
           updateValue={setCols}
-          setIsFocused={setIsFocused}
+          setIsInputFocused={setIsInputFocused}
         />
         <DimensionInput
           label="rows"
@@ -34,7 +34,7 @@ const DimensionBox = ({ isActive, setIsFocused }: DimensionBoxProps) => {
           maxValue={30}
           minValue={1}
           updateValue={setRows}
-          setIsFocused={setIsFocused}
+          setIsInputFocused={setIsInputFocused}
         />
       </span>
     );
@@ -49,7 +49,7 @@ interface DimensionInputProps {
   maxValue: number;
   minValue: number;
   updateValue: Dispatch<SetStateAction<number>>;
-  setIsFocused: Dispatch<SetStateAction<boolean>>;
+  setIsInputFocused: Dispatch<SetStateAction<boolean>>;
 }
 
 const DimensionInput = ({
@@ -58,7 +58,7 @@ const DimensionInput = ({
   maxValue,
   minValue,
   updateValue,
-  setIsFocused,
+  setIsInputFocused,
   ...props
 }: DimensionInputProps) => {
   const [value, setValue] = useState<string>(defaultValue.toString());
@@ -101,10 +101,10 @@ const DimensionInput = ({
         min={minValue}
         onChange={handleOnChange}
         onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => {
-          setIsFocused(true);
+          setIsInputFocused(true);
           e.target.select();
         }}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => setIsInputFocused(false)}
         className="border-solid border-2 rounded-md p-2 w-8/12 outline-2 focus:outline-blue-400"
         {...props}
       />

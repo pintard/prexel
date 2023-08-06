@@ -7,6 +7,8 @@ import {
   PaletteIcon,
   MenuIcon,
   VerticalGripIcon,
+  UndoIcon,
+  RedoIcon,
 } from "./Icons";
 import DimensionBox from "./Boxes/DimensionBox";
 import ColorPickerBox from "./Boxes/ColorPickerBox";
@@ -20,7 +22,7 @@ import { PagePosition } from "../utils/constants";
 import { VerticalDivider } from "./Divider";
 
 const ControlBar = () => {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
   const [isMenuBoxOpen, setIsMenuBoxOpen] = useState<boolean>(false);
   const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState<boolean>(false);
   const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] =
@@ -41,6 +43,10 @@ const ControlBar = () => {
     setColor,
     swatchColors,
     swatchHotKeys,
+    historyIndex,
+    setHistoryIndex,
+    colorHistory,
+    setCellColors,
   } = useControlBarContext();
 
   useLayoutEffect(() => {
@@ -55,7 +61,17 @@ const ControlBar = () => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (isFocused) return;
+      if (isInputFocused) return;
+
+      if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
+        if (e.shiftKey) {
+          console.log("click redo")
+          redo();
+        } else {
+          console.log("click undo")
+          undo();
+        }
+      }
 
       switch (e.key) {
         case "1":
@@ -98,7 +114,7 @@ const ControlBar = () => {
     };
   }, [
     color,
-    isFocused,
+    isInputFocused,
     swatchColors,
     activeControl,
     isColorPickerBoxOpen,
@@ -109,6 +125,20 @@ const ControlBar = () => {
   useEffect(() => {
     setIsBoxAreaOpen(isMenuBoxOpen || isDimensionBoxOpen);
   }, [isMenuBoxOpen, isDimensionBoxOpen]);
+
+  const undo = () => {
+    if (historyIndex > 0) {
+      setHistoryIndex((prev) => prev - 1);
+      setCellColors(colorHistory[historyIndex - 1]);
+    }
+  };
+
+  const redo = () => {
+    if (historyIndex < colorHistory.length - 1) {
+      setHistoryIndex((prev) => prev + 1);
+      setCellColors(colorHistory[historyIndex + 1]);
+    }
+  };
 
   const toggleActiveControl = (control: ActiveControl) => {
     setActiveControl(activeControl === control ? null : control);
@@ -148,6 +178,9 @@ const ControlBar = () => {
         useDragContext={useControlBarContext}
         className="p-2.5 px-0 cursor-grab"
       />
+      <IconButton icon={UndoIcon} onClick={undo} />
+      <IconButton icon={RedoIcon} onClick={redo} />
+      <VerticalDivider />
       <IconButton
         option={1}
         isActive={activeControl === "PaintControl"}
@@ -195,7 +228,7 @@ const ControlBar = () => {
     <DimensionBox
       key="dimensionBox"
       isActive={isDimensionBoxOpen}
-      setIsFocused={setIsFocused}
+      setIsInputFocused={setIsInputFocused}
     />
   );
 
@@ -220,11 +253,11 @@ const ControlBar = () => {
           top: controlBarPosition.top,
         }}
       >
-        {isBelowMidScreen ? [boxArea, controlBar] : [controlBar, boxArea]}
+        {[controlBar, boxArea]}
       </div>
       <ColorPickerBox
         isActive={isColorPickerBoxOpen}
-        setIsFocused={setIsFocused}
+        setIsInputFocused={setIsInputFocused}
       />
     </>
   );
