@@ -65,10 +65,10 @@ const ControlBar = () => {
 
       if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
         if (e.shiftKey) {
-          console.log("click redo")
+          console.log("click redo");
           redo();
         } else {
-          console.log("click undo")
+          console.log("click undo");
           undo();
         }
       }
@@ -128,15 +128,17 @@ const ControlBar = () => {
 
   const undo = () => {
     if (historyIndex > 0) {
-      setHistoryIndex((prev) => prev - 1);
-      setCellColors(colorHistory[historyIndex - 1]);
+      const newHistoryIndex: number = historyIndex - 1;
+      setHistoryIndex(newHistoryIndex);
+      setCellColors(colorHistory[newHistoryIndex]);
     }
   };
 
   const redo = () => {
     if (historyIndex < colorHistory.length - 1) {
-      setHistoryIndex((prev) => prev + 1);
-      setCellColors(colorHistory[historyIndex + 1]);
+      const newHistoryIndex: number = historyIndex + 1;
+      setHistoryIndex(newHistoryIndex);
+      setCellColors(colorHistory[newHistoryIndex]);
     }
   };
 
@@ -165,7 +167,7 @@ const ControlBar = () => {
     });
   };
 
-  const controlBar: JSX.Element = (
+  const controlBar: React.JSX.Element = (
     <span
       key="controlBar"
       className="z-30 p-1 h-12 bg-white rounded-lg shadow-cover flex flex-row justify-between items-center gap-1 select-none"
@@ -214,7 +216,7 @@ const ControlBar = () => {
     </span>
   );
 
-  const menuBox: JSX.Element = (
+  const menuBox: React.JSX.Element = (
     <MenuBox
       key="menuBox"
       isActive={isMenuBoxOpen}
@@ -224,7 +226,7 @@ const ControlBar = () => {
     />
   );
 
-  const dimensionBox: JSX.Element = (
+  const dimensionBox: React.JSX.Element = (
     <DimensionBox
       key="dimensionBox"
       isActive={isDimensionBoxOpen}
@@ -232,7 +234,7 @@ const ControlBar = () => {
     />
   );
 
-  const boxArea: JSX.Element = (
+  const boxArea: React.JSX.Element = (
     <div
       key="boxArea"
       className={`z-30 w-full ${

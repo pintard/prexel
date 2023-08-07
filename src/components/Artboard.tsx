@@ -3,13 +3,22 @@ import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
 const Artboard = () => {
-  const { rows, cols, cellColors, updateColors, color, activeControl } =
-    useControlBarContext();
+  const {
+    rows,
+    cols,
+    cellColors,
+    setCellColors,
+    updateColors,
+    color,
+    activeControl,
+    updateHistory,
+    isStrokeActive,
+    setIsStrokeActive,
+  } = useControlBarContext();
   const initialGrid: any[][] = Array.from(Array(rows), () =>
     Array(cols).fill(null)
   );
   const [grid, setGrid] = useState<any[][]>(initialGrid);
-  const [isDragActivated, setIsDragActivated] = useState<boolean>(false);
 
   useEffect(() => {
     const updatedGrid: any[][] = Array.from(Array(rows), () =>
@@ -19,25 +28,26 @@ const Artboard = () => {
   }, [rows, cols]);
 
   useEffect(() => {
-    document.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("mouseup", handleStrokeEnd);
+    document.addEventListener("touchend", handleStrokeEnd);
 
     return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("mouseup", handleStrokeEnd);
+      document.removeEventListener("touchend", handleStrokeEnd);
     };
-  }, [isDragActivated]);
+  }, [isStrokeActive]);
 
   const handleMouseDown = () => {
-    setIsDragActivated(true);
+    setIsStrokeActive(true);
   };
 
-  const handleMouseUp = () => {
-    setIsDragActivated(false);
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setIsStrokeActive(true);
+    handleTouchMove(e);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (isDragActivated) {
+    if (isStrokeActive) {
       const { clientX, clientY, currentTarget } = e.nativeEvent;
       if (!(currentTarget instanceof HTMLDivElement)) return;
 
@@ -53,17 +63,8 @@ const Artboard = () => {
     }
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    setIsDragActivated(true);
-    handleTouchMove(e);
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragActivated(false);
-  };
-
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (isDragActivated) {
+    if (isStrokeActive) {
       const cellWidth: number = e.currentTarget.clientWidth / cols;
       const cellHeight: number = e.currentTarget.clientHeight / rows;
 
@@ -78,16 +79,27 @@ const Artboard = () => {
 
   const handleStroke = (id: string) => {
     if (activeControl === "PaintControl") {
-      updateColors(id, color);
+      setCellColors((prevColors) => ({
+        ...prevColors,
+        [id]: color,
+      }));
     }
 
     if (activeControl === "EraseControl") {
-      updateColors(id, undefined);
+      setCellColors((prevColors) => ({
+        ...prevColors,
+        [id]: undefined,
+      }));
     }
   };
 
-  const handleCellClick = (id: string) => {
-    const [row, col] = id.split("-");
+  const handleStrokeEnd = () => {
+    setIsStrokeActive(false);
+    updateHistory(cellColors);
+  };
+
+  const handlePaintFill = (id: string) => {
+    const [row, col]: string[] = id.split("-");
     const oldColor: string | undefined = cellColors[id];
     if (oldColor !== color) {
       paintFill(+row, +col, oldColor, new Set());
@@ -136,14 +148,17 @@ const Artboard = () => {
       onTouchMove={handleTouchMove}
     >
       {grid.map((row, rowIndex) =>
-        row.map((_, colIndex) => (
-          <GridCell
-            key={`${rowIndex}-${colIndex}`}
-            id={`${rowIndex}-${colIndex}`}
-            isEven={(rowIndex + colIndex) % 2 === 0}
-            onClick={handleCellClick}
-          />
-        ))
+        row.map((_, colIndex) => {
+          const cellId: string = `${rowIndex}-${colIndex}`;
+          return (
+            <GridCell
+              key={cellId}
+              id={cellId}
+              isEven={(rowIndex + colIndex) % 2 === 0}
+              onClick={handlePaintFill}
+            />
+          );
+        })
       )}
     </div>
   );

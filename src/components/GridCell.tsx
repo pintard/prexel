@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useControlBarContext } from "../hooks/useControlBarContext";
+import { theme } from "../utils/constants";
 
 interface GridCellProps {
   isEven: boolean;
@@ -13,7 +14,7 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
 
   const [isHover, setIsHover] = useState<boolean>(false);
   const [cellColor, setCellColor] = useState<string | undefined>(
-    cellColors[id] || undefined
+    cellColors[id]
   );
 
   useEffect(() => {
@@ -54,7 +55,14 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
           backgroundColor: cellColor,
           opacity: 1,
           ...(isHover &&
-            !isDragging && { backgroundColor: color, opacity: 0.8 }),
+            !isDragging && {
+              backgroundColor:
+                activeControl === "FillControl" ||
+                activeControl === "PaintControl"
+                  ? color
+                  : theme.NEUTRAL_GRAY_FG,
+              opacity: 0.8,
+            }),
         }}
       ></span>
     </span>

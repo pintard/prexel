@@ -5,6 +5,8 @@ import {
   Dispatch,
   SetStateAction,
   useRef,
+  useMemo,
+  useEffect,
 } from "react";
 import { StringHash } from "../utils/constants";
 
@@ -36,6 +38,8 @@ export const ControlBarContext = createContext({
   setIsUploadModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDragging: false,
   setIsDragging: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isStrokeActive: false,
+  setIsStrokeActive: (() => {}) as Dispatch<SetStateAction<boolean>>,
   historyIndex: 0,
   setHistoryIndex: (() => {}) as Dispatch<SetStateAction<number>>,
   colorHistory: {} as ColorHistory,
@@ -43,6 +47,7 @@ export const ControlBarContext = createContext({
     id: string | StringHash,
     color?: string | undefined
   ) => void,
+  updateHistory: (() => {}) as (cellColors: StringHash) => void,
 });
 
 interface ControlBarProviderProps {
@@ -72,57 +77,98 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isStrokeActive, setIsStrokeActive] = useState<boolean>(false);
 
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const colorHistory = useRef<ColorHistory>([{}]);
+
+  useEffect(() => {
+    if (!isStrokeActive) {
+      updateHistory(cellColors);
+    }
+  }, [cellColors]);
+
+  useEffect(() => {
+    console.log("Color history", colorHistory);
+  }, [colorHistory]);
 
   const updateColors = (
     idOrColors: string | StringHash,
     color?: string | undefined
   ): void => {
     setCellColors((oldCellColors) => {
-      const newCellColors =
-        typeof idOrColors === "string"
-          ? { ...oldCellColors, [idOrColors]: color }
-          : idOrColors;
-
-      colorHistory.current = colorHistory.current.slice(0, historyIndex + 1);
-      colorHistory.current.push(newCellColors);
-      setHistoryIndex(colorHistory.current.length - 1);
-      return newCellColors;
+      return typeof idOrColors === "string"
+        ? { ...oldCellColors, [idOrColors]: color }
+        : idOrColors;
     });
   };
 
+  const updateHistory = (newCellColors: StringHash) => {
+    const newColorHistory: ColorHistory = colorHistory.current.slice(
+      0,
+      historyIndex + 1
+    );
+    newColorHistory.push(newCellColors);
+
+    if (newColorHistory.length > 20) {
+      newColorHistory.shift();
+    }
+
+    colorHistory.current = newColorHistory;
+    setHistoryIndex(newColorHistory.length - 1);
+  };
+
+  const value = useMemo(
+    () => ({
+      swatchHotKeys,
+      color,
+      setColor,
+      rows,
+      setRows,
+      cols,
+      setCols,
+      activeControl,
+      setActiveControl,
+      swatchColors,
+      setSwatchColors,
+      cellColors,
+      setCellColors,
+      isClearModalOpen,
+      setIsClearModalOpen,
+      isSaveModalOpen,
+      setIsSaveModalOpen,
+      isUploadModalOpen,
+      setIsUploadModalOpen,
+      isDragging,
+      setIsDragging,
+      isStrokeActive,
+      setIsStrokeActive,
+      historyIndex,
+      setHistoryIndex,
+      colorHistory: colorHistory.current,
+      updateColors,
+      updateHistory,
+    }),
+    [
+      swatchHotKeys,
+      color,
+      rows,
+      cols,
+      activeControl,
+      swatchColors,
+      cellColors,
+      isClearModalOpen,
+      isSaveModalOpen,
+      isUploadModalOpen,
+      isDragging,
+      isStrokeActive,
+      historyIndex,
+      colorHistory.current,
+    ]
+  );
+
   return (
-    <ControlBarContext.Provider
-      value={{
-        swatchHotKeys,
-        color,
-        setColor,
-        rows,
-        setRows,
-        cols,
-        setCols,
-        activeControl,
-        setActiveControl,
-        swatchColors,
-        setSwatchColors,
-        cellColors,
-        setCellColors,
-        isClearModalOpen,
-        setIsClearModalOpen,
-        isSaveModalOpen,
-        setIsSaveModalOpen,
-        isUploadModalOpen,
-        setIsUploadModalOpen,
-        isDragging,
-        setIsDragging,
-        historyIndex,
-        setHistoryIndex,
-        colorHistory: colorHistory.current,
-        updateColors,
-      }}
-    >
+    <ControlBarContext.Provider value={value}>
       {children}
     </ControlBarContext.Provider>
   );
