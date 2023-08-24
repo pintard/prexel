@@ -13,7 +13,7 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
     useControlBarContext();
 
   const [swatchColor, setSwatchColor] = useState<string | undefined>(
-    swatchColors[id] || undefined
+    swatchColors[id]
   );
 
   const handleClick = () => {
@@ -36,10 +36,11 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
     // TODO need to throttle color change rate
   }, [color, isActive, id, setSwatchColors]);
 
+  const getSwatchTextColor = (swatchColor: string): string =>
+    isColorLight(swatchColor) ? "text-black" : "text-white";
+
   const textColor = swatchColor
-    ? isColorLight(swatchColor)
-      ? "text-black"
-      : "text-white"
+    ? getSwatchTextColor(swatchColor)
     : "text-zinc-400";
 
   return (

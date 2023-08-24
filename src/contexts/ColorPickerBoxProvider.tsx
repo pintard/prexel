@@ -4,6 +4,7 @@ import {
   ReactNode,
   Dispatch,
   SetStateAction,
+  useMemo,
 } from "react";
 
 export const ColorPickerBoxContext = createContext({
@@ -18,13 +19,16 @@ interface ColorPickerBoxProviderProps {
 const ColorPickerBoxProvider = ({ children }: ColorPickerBoxProviderProps) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const value = useMemo(
+    () => ({
+      isDragging,
+      setIsDragging,
+    }),
+    [isDragging]
+  );
+
   return (
-    <ColorPickerBoxContext.Provider
-      value={{
-        isDragging,
-        setIsDragging,
-      }}
-    >
+    <ColorPickerBoxContext.Provider value={value}>
       {children}
     </ColorPickerBoxContext.Provider>
   );

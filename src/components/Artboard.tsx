@@ -68,7 +68,7 @@ const Artboard = () => {
       const cellWidth: number = e.currentTarget.clientWidth / cols;
       const cellHeight: number = e.currentTarget.clientHeight / rows;
 
-      const touch = e.touches[0];
+      const touch: React.Touch = e.touches[0];
       const row: number = Math.floor(touch.pageY / cellHeight);
       const col: number = Math.floor(touch.pageX / cellWidth);
 
