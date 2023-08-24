@@ -23,7 +23,7 @@ const IconButton = ({
     <button
       className={`relative ${
         isActive ? "bg-gray-100" : "bg-transparent"
-      } rounded-lg p-2.5 hover:bg-red-50 focus:outline-none border-solid border border-transparent active:border-red-200 select-none`}
+      } rounded-lg p-2.5 hover:bg-blue-50 focus:outline-none border-solid border border-transparent active:border-blue-200 select-none`}
       {...props}
     >
       <Icon

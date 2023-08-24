@@ -17,7 +17,7 @@ const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
   const { rows, setRows, cols, setCols } = useControlBarContext();
   if (isActive) {
     return (
-      <span className="z-20 w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4">
+      <span className="z-20 w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4 pointer-events-auto">
         <DimensionInput
           label="cols"
           placeholder="enter desired cols"

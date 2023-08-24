@@ -12,6 +12,7 @@ import { ReactComponent as HorizontalGripIcon } from "./grip-horz.svg";
 import { ReactComponent as MinimizeIcon } from "./minimize.svg";
 import { ReactComponent as UndoIcon } from "./undo.svg";
 import { ReactComponent as RedoIcon } from "./redo.svg";
+import { ReactComponent as CloudUploadIcon } from "./cloud-upload.svg";
 
 export {
   BrushIcon,
@@ -28,4 +29,5 @@ export {
   MinimizeIcon,
   UndoIcon,
   RedoIcon,
+  CloudUploadIcon,
 };

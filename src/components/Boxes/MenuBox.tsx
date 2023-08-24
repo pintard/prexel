@@ -5,6 +5,7 @@ import {
   UploadIcon,
   GridIcon,
   MinimizeIcon,
+  CloudUploadIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { theme } from "../../utils/constants";
@@ -36,6 +37,8 @@ const MenuBox = ({
     setIsDimensionBoxOpen(false);
   };
 
+  const handlePublish = () => {};
+
   const handleUpload = () => {
     setIsUploadModalOpen(true);
     closeMenuBox();
@@ -48,16 +51,19 @@ const MenuBox = ({
     setIsDimensionBoxOpen(false);
   };
 
+  const handleMinimize = () => {};
+
   // TODO minimize functionality
   if (isActive) {
     return (
-      <span className="z-20 w-44 bg-white rounded-lg shadow-cover">
-        <ul className="w-full flex flex-col p-4 items-center">
+      <span className="z-20 w-44 bg-white rounded-lg shadow-cover pointer-events-auto">
+        <ul className="w-full flex flex-col items-center">
           <MenuItem
             label="resize"
             icon={GridIcon}
             onClick={handleResize}
             isActive={isDimensionBoxOpen}
+            position="first"
           />
           <HorizontalDivider />
           <MenuItem label="clear" icon={TrashIcon} onClick={handleClear} />
@@ -66,7 +72,24 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem label="save" icon={DownloadIcon} onClick={handleSave} />
           <HorizontalDivider />
-          <MenuItem label="minimize" icon={MinimizeIcon} onClick={() => {}} />
+          <MenuItem
+            label="publish"
+            icon={CloudUploadIcon}
+            onClick={handlePublish}
+          />
+          <HorizontalDivider />
+          <MenuItem
+            label="dark mode"
+            icon={CloudUploadIcon}
+            onClick={handlePublish}
+          />
+          <HorizontalDivider />
+          <MenuItem
+            label="minimize"
+            icon={MinimizeIcon}
+            onClick={handleMinimize}
+            position="last"
+          />
         </ul>
       </span>
     );
@@ -75,19 +98,42 @@ const MenuBox = ({
   return null;
 };
 
+type MenuItemPosition = "first" | "middle" | "last";
+
 interface MenuItemProps {
   label: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   onClick?: () => void;
   isActive?: boolean;
+  position?: MenuItemPosition;
 }
 
-const MenuItem = ({ label, icon: Icon, isActive, ...props }: MenuItemProps) => {
+const MenuItem = ({
+  label,
+  icon: Icon,
+  isActive,
+  position,
+  ...props
+}: MenuItemProps) => {
+  let borderRadius: string = "";
+
+  switch (position) {
+    case "first":
+      borderRadius = "rounded-t-lg";
+      break;
+    case "last":
+      borderRadius = "rounded-b-lg";
+      break;
+    default:
+      borderRadius = "";
+      break;
+  }
+
   return (
     <li
-      className={`rounded-lg px-4 py-2 w-full hover:bg-red-50 flex flex-row gap-4 items-center cursor-pointer select-none ${
+      className={`px-4 py-2 w-full hover:bg-blue-50 flex flex-row gap-4 items-center cursor-pointer select-none ${
         isActive ? "bg-gray-100" : "bg-transparent"
-      }`}
+      } ${borderRadius}`}
       {...props}
     >
       <Icon
