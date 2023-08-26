@@ -1,27 +1,32 @@
 {
   "files": {
-    "main.css": "/prexel/static/css/main.ba3b3bb4.css",
-    "main.js": "/prexel/static/js/main.d428a1f7.js",
+    "main.css": "/prexel/static/css/main.cd244a84.css",
+    "main.js": "/prexel/static/js/main.d1bae7a8.js",
     "static/js/787.078647cc.chunk.js": "/prexel/static/js/787.078647cc.chunk.js",
     "static/media/minimize.svg": "/prexel/static/media/minimize.6ceb58070ed7562c97055083c243abee.svg",
+    "static/media/sun.svg": "/prexel/static/media/sun.feb97cbd7f21935a10662b02f5d8d9ad.svg",
     "static/media/pallet.svg": "/prexel/static/media/pallet.e59d64ab801341712e16282e61498c75.svg",
     "static/media/trash-can.svg": "/prexel/static/media/trash-can.2e3a231aa9a7a266340b1181ff13673b.svg",
     "static/media/grid-alt.svg": "/prexel/static/media/grid-alt.35dd759f48d0cba15b8d137b52a60365.svg",
+    "static/media/cloud-upload.svg": "/prexel/static/media/cloud-upload.94c7d510e64402482fc8d1d5546d6d70.svg",
     "static/media/paint-bucket-alt.svg": "/prexel/static/media/paint-bucket-alt.0dbcf157b45920834bbf98d92d8b588a.svg",
+    "static/media/redo.svg": "/prexel/static/media/redo.5a5bd52fc803626cf5900c298c09a665.svg",
+    "static/media/undo.svg": "/prexel/static/media/undo.4f2626cfeee93e49890640b2575e7ccb.svg",
     "static/media/brush-alt.svg": "/prexel/static/media/brush-alt.80adc205390e2d97dcbd94bfcbbb9ce6.svg",
     "static/media/eraser.svg": "/prexel/static/media/eraser.4ed959cccda2644ff1c804a409cfe2ae.svg",
     "index.html": "/prexel/index.html",
     "static/media/upload.svg": "/prexel/static/media/upload.9d9f1d9c22bfd942d67ffc404b2bdd99.svg",
     "static/media/download.svg": "/prexel/static/media/download.958c3fc04c3297393f123dfd9c3299fb.svg",
     "static/media/menu.svg": "/prexel/static/media/menu.a4bde64597db0df962cbb49278487704.svg",
+    "static/media/moon.svg": "/prexel/static/media/moon.dce061275b0676685df8869a5c03da07.svg",
     "static/media/grip-horz.svg": "/prexel/static/media/grip-horz.9a527d9bf253ecd4e3863e71481a3d9b.svg",
     "static/media/grip-vert.svg": "/prexel/static/media/grip-vert.5b873f990354e682ca9c038f0c8a048f.svg",
-    "main.ba3b3bb4.css.map": "/prexel/static/css/main.ba3b3bb4.css.map",
-    "main.d428a1f7.js.map": "/prexel/static/js/main.d428a1f7.js.map",
+    "main.cd244a84.css.map": "/prexel/static/css/main.cd244a84.css.map",
+    "main.d1bae7a8.js.map": "/prexel/static/js/main.d1bae7a8.js.map",
     "787.078647cc.chunk.js.map": "/prexel/static/js/787.078647cc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba3b3bb4.css",
-    "static/js/main.d428a1f7.js"
+    "static/css/main.cd244a84.css",
+    "static/js/main.d1bae7a8.js"
   ]
 }
