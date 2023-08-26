@@ -13,6 +13,8 @@ import { ReactComponent as MinimizeIcon } from "./minimize.svg";
 import { ReactComponent as UndoIcon } from "./undo.svg";
 import { ReactComponent as RedoIcon } from "./redo.svg";
 import { ReactComponent as CloudUploadIcon } from "./cloud-upload.svg";
+import { ReactComponent as MoonIcon } from "./moon.svg";
+import { ReactComponent as SunIcon } from "./sun.svg";
 
 export {
   BrushIcon,
@@ -30,4 +32,6 @@ export {
   UndoIcon,
   RedoIcon,
   CloudUploadIcon,
+  MoonIcon,
+  SunIcon,
 };

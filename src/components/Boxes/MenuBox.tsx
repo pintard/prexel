@@ -6,10 +6,13 @@ import {
   GridIcon,
   MinimizeIcon,
   CloudUploadIcon,
+  MoonIcon,
+  SunIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { theme } from "../../utils/constants";
 import { HorizontalDivider } from "../Divider";
+import { useDarkModeContext } from "../../hooks/useDarkModeContext";
 
 interface MenuBoxProps {
   isActive: boolean;
@@ -26,6 +29,7 @@ const MenuBox = ({
 }: MenuBoxProps) => {
   const { setIsClearModalOpen, setIsSaveModalOpen, setIsUploadModalOpen } =
     useControlBarContext();
+  const { darkMode, toggleDarkMode } = useDarkModeContext();
 
   const handleResize = () => {
     setIsDimensionBoxOpen(!isDimensionBoxOpen);
@@ -79,9 +83,9 @@ const MenuBox = ({
           />
           <HorizontalDivider />
           <MenuItem
-            label="dark mode"
-            icon={CloudUploadIcon}
-            onClick={handlePublish}
+            label={darkMode ? "dark mode" : "light mode"}
+            icon={darkMode ? MoonIcon : SunIcon}
+            onClick={toggleDarkMode}
           />
           <HorizontalDivider />
           <MenuItem
@@ -98,7 +102,7 @@ const MenuBox = ({
   return null;
 };
 
-type MenuItemPosition = "first" | "middle" | "last";
+type MenuItemPosition = "first" | "last";
 
 interface MenuItemProps {
   label: string;

@@ -7,6 +7,7 @@ import { StringHash } from "../../utils/constants";
 const UploadModal = () => {
   const { isUploadModalOpen, setIsUploadModalOpen, updateColors } =
     useControlBarContext();
+
   const [cuteCode, setCuteCode] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -14,14 +15,24 @@ const UploadModal = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file: File | undefined = event.target.files?.[0];
+
     if (file) {
       setFileName(file.name);
       const reader: FileReader = new FileReader();
 
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const fileContent: string = e.target?.result as string;
+
+        if (/[\x00-\x08\x0E-\x1F\x80-\xFF]/.test(fileContent)) {
+          alert("Invalid file content. Please upload a valid prexel file.");
+          setCuteCode("");
+          setFileName("");
+          return;
+        }
+
         setCuteCode(fileContent);
       };
+
       reader.readAsText(file);
     }
   };
@@ -43,6 +54,7 @@ const UploadModal = () => {
       );
       return;
     }
+
     const prexel: StringHash = getPrexel(cuteCode);
     updateColors(prexel);
     clearModal();

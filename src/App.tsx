@@ -8,22 +8,25 @@ import ColorPickerBoxProvider from "./contexts/ColorPickerBoxProvider";
 import ClearModal from "./components/Modals/ClearModal";
 import SaveModal from "./components/Modals/SaveModal";
 import UploadModal from "./components/Modals/UploadModal";
+import DarkModeProvider from "./contexts/DarkModeProvider";
 
 const App = () => {
   return (
-    <div className="h-full w-full">
-      <ControlBarProvider>
-        <div className="h-full w-full flex justify-center items-center relative">
-          <Artboard />
-          <ColorPickerBoxProvider>
-            <ControlBar />
-          </ColorPickerBoxProvider>
-        </div>
-        <ClearModal />
-        <SaveModal />
-        <UploadModal />
-      </ControlBarProvider>
-    </div>
+    <DarkModeProvider>
+      <div className="h-full w-full bg-white dark:bg-slate-400">
+        <ControlBarProvider>
+          <div className="h-full w-full flex justify-center items-center relative">
+            <Artboard />
+            <ColorPickerBoxProvider>
+              <ControlBar />
+            </ColorPickerBoxProvider>
+          </div>
+          <ClearModal />
+          <SaveModal />
+          <UploadModal />
+        </ControlBarProvider>
+      </div>
+    </DarkModeProvider>
   );
 };
 

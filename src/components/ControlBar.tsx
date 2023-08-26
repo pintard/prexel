@@ -60,18 +60,8 @@ const ControlBar = () => {
   }, []);
 
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
+    const handleKeydown = (e: KeyboardEvent) => {
       if (isInputFocused) return;
-
-      if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
-        if (e.shiftKey) {
-          console.log("click redo");
-          redo();
-        } else {
-          console.log("click undo");
-          undo();
-        }
-      }
 
       switch (e.key) {
         case "1":
@@ -89,16 +79,11 @@ const ControlBar = () => {
         case "/":
           setIsMenuBoxOpen(!isMenuBoxOpen);
           break;
+        case "z":
+          handleHistory(e);
+          break;
         case "Escape":
-          if (isDimensionBoxOpen) {
-            setIsDimensionBoxOpen(false);
-          } else if (isMenuBoxOpen) {
-            setIsMenuBoxOpen(false);
-          } else if (isColorPickerBoxOpen) {
-            setIsColorPickerBoxOpen(false);
-          } else {
-            setActiveControl(null);
-          }
+          handleEscape();
           break;
         default:
           if (swatchHotKeys.includes(e.key)) {
@@ -108,9 +93,9 @@ const ControlBar = () => {
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("keydown", handleKeydown);
     return () => {
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keydown", handleKeydown);
     };
   }, [
     color,
@@ -125,6 +110,30 @@ const ControlBar = () => {
   useEffect(() => {
     setIsBoxAreaOpen(isMenuBoxOpen || isDimensionBoxOpen);
   }, [isMenuBoxOpen, isDimensionBoxOpen]);
+
+  const handleHistory = (e: KeyboardEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.shiftKey) {
+        console.log("click redo");
+        redo();
+      } else {
+        console.log("click undo");
+        undo();
+      }
+    }
+  };
+
+  const handleEscape = () => {
+    if (isDimensionBoxOpen) {
+      setIsDimensionBoxOpen(false);
+    } else if (isMenuBoxOpen) {
+      setIsMenuBoxOpen(false);
+    } else if (isColorPickerBoxOpen) {
+      setIsColorPickerBoxOpen(false);
+    } else {
+      setActiveControl(null);
+    }
+  };
 
   const undo = () => {
     if (historyIndex > 0) {
@@ -151,6 +160,7 @@ const ControlBar = () => {
     const pageHeight: number = document.documentElement.clientHeight;
     const maxLeft: number = pageWidth - controlBarAreaRef.current!.clientWidth;
     const maxTop: number = pageHeight - controlBarAreaRef.current!.clientHeight;
+    const verticalMidPage: number = pageHeight / 2;
 
     setControlBarPosition((prevPos: PagePosition) => {
       const newLeft: number = Math.max(
@@ -162,7 +172,7 @@ const ControlBar = () => {
         Math.min(prevPos.top + offsetY, maxTop)
       );
 
-      setIsBelowMidScreen(newTop > pageHeight / 2);
+      setIsBelowMidScreen(newTop > verticalMidPage);
       return { left: newLeft, top: newTop };
     });
   };
@@ -243,9 +253,9 @@ const ControlBar = () => {
         </span>
         <div
           key="boxArea"
-          className={`z-30 w-full ${
-            isBelowMidScreen ? "mb-4" : "mt-4"
-          } flex flex-col gap-4 items-center ${!isBoxAreaOpen && "hidden"}`}
+          className={`z-30 w-full flex flex-col gap-4 items-center mt-4 ${
+            !isBoxAreaOpen && "hidden"
+          }`}
         >
           {isBelowMidScreen ? [dimensionBox, menuBox] : [menuBox, dimensionBox]}
         </div>

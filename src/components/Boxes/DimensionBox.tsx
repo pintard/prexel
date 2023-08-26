@@ -15,6 +15,9 @@ interface DimensionBoxProps {
 
 const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
   const { rows, setRows, cols, setCols } = useControlBarContext();
+  const MAX_ROWS: number = 30;
+  const MAX_COLS: number = 60;
+
   if (isActive) {
     return (
       <span className="z-20 w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4 pointer-events-auto">
@@ -22,7 +25,7 @@ const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
           label="cols"
           placeholder="enter desired cols"
           defaultValue={cols}
-          maxValue={60}
+          maxValue={MAX_COLS}
           minValue={1}
           updateValue={setCols}
           setIsInputFocused={setIsInputFocused}
@@ -31,7 +34,7 @@ const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
           label="rows"
           placeholder="enter desired rows"
           defaultValue={rows}
-          maxValue={30}
+          maxValue={MAX_ROWS}
           minValue={1}
           updateValue={setRows}
           setIsInputFocused={setIsInputFocused}
@@ -39,6 +42,7 @@ const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
       </span>
     );
   }
+
   return null;
 };
 

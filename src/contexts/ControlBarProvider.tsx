@@ -55,6 +55,10 @@ interface ControlBarProviderProps {
 }
 
 const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
+  const DEFAULT_ROWS: number = 12;
+  const DEFAULT_COLS: number = 40;
+  const DEFAULT_COLOR: string = "#ff0000";
+
   const swatchHotKeys: string[] = new Array<string>(
     "q",
     "w",
@@ -65,9 +69,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
     "d",
     "f"
   );
-  const [color, setColor] = useState<string>("#ff0000");
-  const [rows, setRows] = useState<number>(12);
-  const [cols, setCols] = useState<number>(40);
+
+  const [color, setColor] = useState<string>(DEFAULT_COLOR);
+  const [rows, setRows] = useState<number>(DEFAULT_ROWS);
+  const [cols, setCols] = useState<number>(DEFAULT_COLS);
   const [activeControl, setActiveControl] = useState<ActiveControl | null>(
     null
   );
@@ -83,14 +88,12 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const colorHistory = useRef<ColorHistory>([{}]);
 
   useEffect(() => {
+    console.log("Colors:", cellColors);
+
     if (!isStrokeActive) {
       updateHistory(cellColors);
     }
   }, [cellColors]);
-
-  useEffect(() => {
-    console.log("Color history", colorHistory);
-  }, [colorHistory]);
 
   const updateColors = (
     idOrColors: string | StringHash,
