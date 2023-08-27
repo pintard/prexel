@@ -33,7 +33,6 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
         [id]: color,
       }));
     }
-    // TODO need to throttle color change rate
   }, [color, isActive, id, setSwatchColors]);
 
   const getSwatchTextColor = (swatchColor: string): string =>

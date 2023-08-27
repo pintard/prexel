@@ -57,7 +57,6 @@ const MenuBox = ({
 
   const handleMinimize = () => {};
 
-  // TODO minimize functionality
   if (isActive) {
     return (
       <span className="z-20 w-44 bg-white rounded-lg shadow-cover pointer-events-auto">

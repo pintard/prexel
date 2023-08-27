@@ -85,24 +85,34 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isStrokeActive, setIsStrokeActive] = useState<boolean>(false);
 
   const [historyIndex, setHistoryIndex] = useState<number>(0);
-  const colorHistory = useRef<ColorHistory>([{}]);
+  const colorHistory = useRef<ColorHistory>([]);
 
   useEffect(() => {
     console.log("Colors:", cellColors);
+    console.log("History:", colorHistory.current);
 
+    // TODO diffrentiate from click, double trigger
     if (!isStrokeActive) {
       updateHistory(cellColors);
     }
-  }, [cellColors]);
+  }, [cellColors, isStrokeActive]);
 
   const updateColors = (
     idOrColors: string | StringHash,
     color?: string | undefined
   ): void => {
+    // setCellColors((oldCellColors) => {
+    //   return typeof idOrColors === "string"
+    //     ? { ...oldCellColors, [idOrColors]: color }
+    //     : idOrColors;
+    // });
     setCellColors((oldCellColors) => {
-      return typeof idOrColors === "string"
-        ? { ...oldCellColors, [idOrColors]: color }
-        : idOrColors;
+      const newColors =
+        typeof idOrColors === "string"
+          ? { ...oldCellColors, [idOrColors]: color }
+          : idOrColors;
+      console.log("Updating cell colors:", newColors);
+      return newColors;
     });
   };
 
@@ -111,14 +121,20 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       0,
       historyIndex + 1
     );
-    newColorHistory.push(newCellColors);
 
-    if (newColorHistory.length > 20) {
-      newColorHistory.shift();
+    if (
+      JSON.stringify(newColorHistory[newColorHistory.length - 1]) !==
+      JSON.stringify(newCellColors)
+    ) {
+      newColorHistory.push(newCellColors);
+
+      if (newColorHistory.length > 20) {
+        newColorHistory.shift();
+      }
+
+      colorHistory.current = newColorHistory;
+      setHistoryIndex(newColorHistory.length - 1);
     }
-
-    colorHistory.current = newColorHistory;
-    setHistoryIndex(newColorHistory.length - 1);
   };
 
   const value = useMemo(

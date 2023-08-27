@@ -44,6 +44,7 @@ const Artboard = () => {
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setIsStrokeActive(true);
     handleTouchMove(e);
+    // TODO diffrentiate from click, double trigger
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

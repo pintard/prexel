@@ -22,6 +22,8 @@ import { PagePosition } from "../utils/constants";
 import { VerticalDivider } from "./Divider";
 
 const ControlBar = () => {
+  const CONTROLBAR_INITIAL_Y_POS: number = 40;
+
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
   const [isMenuBoxOpen, setIsMenuBoxOpen] = useState<boolean>(false);
   const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState<boolean>(false);
@@ -54,7 +56,7 @@ const ControlBar = () => {
       const controlBarWidth: number = controlBarAreaRef.current.offsetWidth;
       setControlBarPosition({
         left: (window.innerWidth - controlBarWidth) / 2,
-        top: 40,
+        top: CONTROLBAR_INITIAL_Y_POS,
       });
     }
   }, []);
@@ -114,11 +116,11 @@ const ControlBar = () => {
   const handleHistory = (e: KeyboardEvent) => {
     if (e.ctrlKey || e.metaKey) {
       if (e.shiftKey) {
-        console.log("click redo");
         redo();
+        console.log("click redo");
       } else {
-        console.log("click undo");
         undo();
+        console.log("click undo");
       }
     }
   };
@@ -137,17 +139,17 @@ const ControlBar = () => {
 
   const undo = () => {
     if (historyIndex > 0) {
-      const newHistoryIndex: number = historyIndex - 1;
-      setHistoryIndex(newHistoryIndex);
-      setCellColors(colorHistory[newHistoryIndex]);
+      const index: number = historyIndex - 1;
+      setHistoryIndex(index);
+      setCellColors(colorHistory[index]);
     }
   };
 
   const redo = () => {
     if (historyIndex < colorHistory.length - 1) {
-      const newHistoryIndex: number = historyIndex + 1;
-      setHistoryIndex(newHistoryIndex);
-      setCellColors(colorHistory[newHistoryIndex]);
+      const index: number = historyIndex + 1;
+      setHistoryIndex(index);
+      setCellColors(colorHistory[index]);
     }
   };
 
