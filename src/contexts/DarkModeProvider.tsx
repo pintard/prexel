@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
+import { ReactNode, createContext, useEffect, useMemo } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const DarkModeContext = createContext({
   darkMode: false,
@@ -10,10 +11,7 @@ interface DarkModeProviderProps {
 }
 
 const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    const existingPreference: string | null = localStorage.getItem("dark-mode");
-    return existingPreference ? JSON.parse(existingPreference) : false;
-  });
+  const [darkMode, setDarkMode] = useLocalStorage<boolean>("dark-mode", false);
 
   useEffect(() => {
     if (darkMode) {
@@ -21,7 +19,6 @@ const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("dark-mode", JSON.stringify(darkMode));
   }, [darkMode]);
 
   const toggleDarkMode = () => {
