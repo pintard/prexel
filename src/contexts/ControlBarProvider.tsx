@@ -101,11 +101,6 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
     idOrColors: string | StringHash,
     color?: string | undefined
   ): void => {
-    // setCellColors((oldCellColors) => {
-    //   return typeof idOrColors === "string"
-    //     ? { ...oldCellColors, [idOrColors]: color }
-    //     : idOrColors;
-    // });
     setCellColors((oldCellColors) => {
       const newColors =
         typeof idOrColors === "string"

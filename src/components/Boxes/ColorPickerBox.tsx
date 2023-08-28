@@ -61,14 +61,14 @@ const ColorPickerBox = ({ isActive, setIsInputFocused }: ColorPickerProps) => {
   if (isActive) {
     return (
       <span
-        className="absolute z-20 w-64 bg-white rounded-lg shadow-cover flex flex-col items-center overflow-hidden"
+        className="absolute z-20 w-64 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-col items-center overflow-hidden"
         ref={colorPickerRef}
         style={{
           left: colorPickerPosition.left,
           top: colorPickerPosition.top,
         }}
       >
-        <div className="bg-slate-50 w-full flex justify-center">
+        <div className="bg-slate-50 dark:bg-neutral-900 w-full flex justify-center">
           <DragHandle
             icon={HorizontalGripIcon}
             width={30}
@@ -87,10 +87,10 @@ const ColorPickerBox = ({ isActive, setIsInputFocused }: ColorPickerProps) => {
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
             prefixed={true}
-            className="border-solid border-2 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
+            className="bg-white dark:bg-default-neutral border-solid border-2 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
           />
           <div className="w-full grid grid-rows-2 grid-cols-4 gap-4">
-            {swatchHotKeys.map((swatchHotKeyId) => {
+            {swatchHotKeys.map((swatchHotKeyId: string) => {
               return (
                 <Swatch
                   key={swatchHotKeyId}

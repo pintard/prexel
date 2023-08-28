@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useControlBarContext } from "../hooks/useControlBarContext";
-import { theme } from "../utils/constants";
 
 interface GridCellProps {
   isEven: boolean;
@@ -40,11 +39,11 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   return (
     <span
       id={id}
-      className={`relative z-10 select-none" ${isEven && "bg-default-gray dark:bg-slate-600"}`}
+      className={`relative z-10 select-none" ${isEven && "bg-default-gray dark:bg-default-neutral"}`}
       onClick={handleClick}
     >
       <span
-        className="absolute w-full h-full cursor-cell select-none active:!opacity-90"
+        className="absolute w-full h-full cursor-cell select-none active:!opacity-40"
         onMouseEnter={() => {
           setIsHover(true);
         }}
@@ -53,15 +52,14 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
         }}
         style={{
           backgroundColor: cellColor,
-          opacity: 1,
           ...(isHover &&
             !isDragging && {
               backgroundColor:
-                activeControl === "FillControl" ||
-                activeControl === "PaintControl"
+                (activeControl === "FillControl" ||
+                activeControl === "PaintControl")
                   ? color
-                  : theme.NEUTRAL_GRAY_FG,
-              opacity: 0.8,
+                  : "#000000",
+              opacity: 0.3,
             }),
         }}
       ></span>

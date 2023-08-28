@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { theme } from "../utils/constants";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 import { useColorPickerBoxContext } from "../hooks/useColorPickerBoxContext";
 
@@ -111,7 +110,9 @@ const DragHandle = ({
       <Icon
         width={width}
         height={height}
-        fill={isDragging ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_GRAY_FG}
+        className={`fill-current ${
+          isDragging ? "text-active-blue" : "text-neutral-gray"
+        } dark:text-neutral-500`}
       />
     </span>
   );

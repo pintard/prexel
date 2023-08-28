@@ -10,7 +10,6 @@ import {
   SunIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import { theme } from "../../utils/constants";
 import { HorizontalDivider } from "../Divider";
 import { useDarkModeContext } from "../../hooks/useDarkModeContext";
 
@@ -59,7 +58,7 @@ const MenuBox = ({
 
   if (isActive) {
     return (
-      <span className="z-20 w-44 bg-white rounded-lg shadow-cover pointer-events-auto">
+      <span className="z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-cover pointer-events-auto">
         <ul className="w-full flex flex-col items-center">
           <MenuItem
             label="resize"
@@ -142,12 +141,14 @@ const MenuItem = ({
       <Icon
         width={16}
         height={16}
-        fill={isActive ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_BLACK_FG}
+        className={`fill-current ${
+          isActive ? "text-active-blue" : "text-black"
+        } dark:text-neutral-500`}
       />
       <span
-        style={{
-          color: isActive ? theme.ACTIVE_BLUE_FG : theme.NEUTRAL_BLACK_FG,
-        }}
+        className={`${
+          isActive ? "text-active-blue" : "text-black"
+        } dark:text-neutral-500`}
       >
         {label}
       </span>

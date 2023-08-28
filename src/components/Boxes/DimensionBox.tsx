@@ -20,7 +20,7 @@ const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
 
   if (isActive) {
     return (
-      <span className="z-20 w-44 bg-white rounded-lg shadow-cover flex flex-col p-4 gap-4 pointer-events-auto">
+      <span className="z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-col p-4 gap-4 pointer-events-auto">
         <DimensionInput
           label="cols"
           placeholder="enter desired cols"
@@ -109,7 +109,7 @@ const DimensionInput = ({
           e.target.select();
         }}
         onBlur={() => setIsInputFocused(false)}
-        className="border-solid border-2 rounded-md p-2 w-8/12 outline-2 focus:outline-blue-400"
+        className="bg-white dark:bg-default-neutral border-solid border-2 rounded-md p-2 w-8/12 outline-2 focus:outline-blue-400"
         {...props}
       />
     </div>
