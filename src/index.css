@@ -22,5 +22,5 @@ body,
 }
 
 .dark .react-colorful .react-colorful__pointer {
-  border: "2px solid #000000" !important;
+  border-color: #1b1b1b;
 }
