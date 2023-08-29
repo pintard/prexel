@@ -133,7 +133,7 @@ const MenuItem = ({
 
   return (
     <li
-      className={`px-4 py-2 w-full hover:bg-blue-50 flex flex-row gap-4 items-center cursor-pointer select-none ${
+      className={`px-4 py-2 w-full hover:bg-blue-50 dark:hover:bg-neutral-800 flex flex-row gap-4 items-center cursor-pointer select-none ${
         isActive ? "bg-gray-100" : "bg-transparent"
       } ${borderRadius}`}
       {...props}

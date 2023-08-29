@@ -87,19 +87,17 @@ const ColorPickerBox = ({ isActive, setIsInputFocused }: ColorPickerProps) => {
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
             prefixed={true}
-            className="bg-white dark:bg-default-neutral border-solid border-2 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
+            className="bg-white dark:bg-default-neutral dark:text-neutral-500 border-solid border-2 dark:border-neutral-800 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
           />
           <div className="w-full grid grid-rows-2 grid-cols-4 gap-4">
-            {swatchHotKeys.map((swatchHotKeyId: string) => {
-              return (
-                <Swatch
-                  key={swatchHotKeyId}
-                  id={swatchHotKeyId}
-                  isActive={activeSwatch === swatchHotKeyId}
-                  onClick={handleSwatchClick}
-                />
-              );
-            })}
+            {swatchHotKeys.map((swatchHotKeyId: string) => (
+              <Swatch
+                key={swatchHotKeyId}
+                id={swatchHotKeyId}
+                isActive={activeSwatch === swatchHotKeyId}
+                onClick={handleSwatchClick}
+              />
+            ))}
           </div>
         </div>
       </span>
