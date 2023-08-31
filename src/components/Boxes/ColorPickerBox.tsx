@@ -9,11 +9,11 @@ import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { useColorPickerBoxContext } from "../../hooks/useColorPickerBoxContext";
 
 interface ColorPickerProps {
-  isActive: boolean;
+  isOpen: boolean;
   setIsInputFocused: Dispatch<SetStateAction<boolean>>;
 }
 
-const ColorPickerBox = ({ isActive, setIsInputFocused }: ColorPickerProps) => {
+const ColorPickerBox = ({ isOpen, setIsInputFocused }: ColorPickerProps) => {
   const { color, setColor, swatchHotKeys } = useControlBarContext();
   const [activeSwatch, setActiveSwatch] = useState<string | null>(null);
   const [colorPickerPosition, setColorPickerPoistion] = useState<PagePosition>({
@@ -58,7 +58,7 @@ const ColorPickerBox = ({ isActive, setIsInputFocused }: ColorPickerProps) => {
     }));
   };
 
-  if (isActive) {
+  if (isOpen) {
     return (
       <span
         className="absolute z-20 w-64 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-col items-center overflow-hidden"

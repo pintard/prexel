@@ -107,6 +107,7 @@ const ControlBar = () => {
     isColorPickerBoxOpen,
     isMenuBoxOpen,
     isDimensionBoxOpen,
+    historyIndex,
   ]);
 
   useEffect(() => {
@@ -117,10 +118,8 @@ const ControlBar = () => {
     if (e.ctrlKey || e.metaKey) {
       if (e.shiftKey) {
         redo();
-        console.log("click redo");
       } else {
         undo();
-        console.log("click undo");
       }
     }
   };
@@ -182,17 +181,18 @@ const ControlBar = () => {
   const menuBox: React.JSX.Element = (
     <MenuBox
       key="menuBox"
-      isActive={isMenuBoxOpen}
+      isOpen={isMenuBoxOpen}
       closeMenuBox={() => setIsMenuBoxOpen(false)}
       isDimensionBoxOpen={isDimensionBoxOpen}
       setIsDimensionBoxOpen={setIsDimensionBoxOpen}
+      isInputFocused={isInputFocused}
     />
   );
 
   const dimensionBox: React.JSX.Element = (
     <DimensionBox
       key="dimensionBox"
-      isActive={isDimensionBoxOpen}
+      isOpen={isDimensionBoxOpen}
       setIsInputFocused={setIsInputFocused}
     />
   );
@@ -263,7 +263,7 @@ const ControlBar = () => {
         </div>
       </div>
       <ColorPickerBox
-        isActive={isColorPickerBoxOpen}
+        isOpen={isColorPickerBoxOpen}
         setIsInputFocused={setIsInputFocused}
       />
     </>

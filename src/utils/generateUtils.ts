@@ -1,5 +1,5 @@
 import { hexToRgb, rgbToHex } from "./colorUtils";
-import { StringHash } from "./constants";
+import { StringHash as ColorGroup } from "./constants";
 
 const getBlockFromRgb = (rgb: number[]): string => {
   const [r, g, b] = rgb;
@@ -22,7 +22,7 @@ const getRgbFromBlock = (block: string): number[] => {
 };
 
 export const getCuteCode = (
-  cellColors: StringHash,
+  cellColors: ColorGroup,
   rows: number,
   cols: number
 ): string => {
@@ -44,8 +44,8 @@ export const getCuteCode = (
   return btoa(rawCuteCode);
 };
 
-export const getPrexel = (cuteCode: string): StringHash => {
-  const prexel: StringHash = {};
+export const getPrexel = (cuteCode: string): ColorGroup => {
+  const prexel: ColorGroup = {};
   const rawCuteCode: string = atob(cuteCode);
   const rows: string[] = rawCuteCode.split("\n");
 

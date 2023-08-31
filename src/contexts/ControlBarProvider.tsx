@@ -8,11 +8,12 @@ import {
   useMemo,
   useEffect,
 } from "react";
-import { StringHash } from "../utils/constants";
+import { StringHash as ColorGroup } from "../utils/constants";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export type ActiveControl = "PaintControl" | "FillControl" | "EraseControl";
 
-type ColorHistory = StringHash[];
+type ColorHistory = ColorGroup[];
 
 export const ControlBarContext = createContext({
   swatchHotKeys: [""],
@@ -26,10 +27,10 @@ export const ControlBarContext = createContext({
   setActiveControl: (() => {}) as Dispatch<
     SetStateAction<ActiveControl | null>
   >,
-  swatchColors: {} as StringHash,
-  setSwatchColors: (() => {}) as Dispatch<SetStateAction<StringHash>>,
-  cellColors: {} as StringHash,
-  setCellColors: (() => {}) as Dispatch<SetStateAction<StringHash>>,
+  swatchColors: {} as ColorGroup,
+  setSwatchColors: (() => {}) as Dispatch<SetStateAction<ColorGroup>>,
+  cellColors: {} as ColorGroup,
+  setCellColors: (() => {}) as Dispatch<SetStateAction<ColorGroup>>,
   isClearModalOpen: false,
   setIsClearModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isSaveModalOpen: false,
@@ -44,10 +45,10 @@ export const ControlBarContext = createContext({
   setHistoryIndex: (() => {}) as Dispatch<SetStateAction<number>>,
   colorHistory: {} as ColorHistory,
   updateColors: (() => {}) as (
-    id: string | StringHash,
+    id: string | ColorGroup,
     color?: string | undefined
   ) => void,
-  updateHistory: (() => {}) as (cellColors: StringHash) => void,
+  updateHistory: (() => {}) as (cellColors: ColorGroup) => void,
 });
 
 interface ControlBarProviderProps {
@@ -71,13 +72,22 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   );
 
   const [color, setColor] = useState<string>(DEFAULT_COLOR);
-  const [rows, setRows] = useState<number>(DEFAULT_ROWS);
-  const [cols, setCols] = useState<number>(DEFAULT_COLS);
+  const [rows, setRows] = useLocalStorage<number>(
+    "artboard-rows",
+    DEFAULT_ROWS
+  );
+  const [cols, setCols] = useLocalStorage<number>(
+    "artboard-cols",
+    DEFAULT_COLS
+  );
   const [activeControl, setActiveControl] = useState<ActiveControl | null>(
     null
   );
-  const [swatchColors, setSwatchColors] = useState<StringHash>({});
-  const [cellColors, setCellColors] = useState<StringHash>({});
+  const [swatchColors, setSwatchColors] = useLocalStorage<ColorGroup>(
+    "swatch-map",
+    {}
+  );
+  const [cellColors, setCellColors] = useState<ColorGroup>({});
   const [isClearModalOpen, setIsClearModalOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
@@ -98,10 +108,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   }, [cellColors, isStrokeActive]);
 
   const updateColors = (
-    idOrColors: string | StringHash,
+    idOrColors: string | ColorGroup,
     color?: string | undefined
   ): void => {
-    setCellColors((oldCellColors) => {
+    setCellColors((oldCellColors: ColorGroup) => {
       const newColors =
         typeof idOrColors === "string"
           ? { ...oldCellColors, [idOrColors]: color }
@@ -111,7 +121,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
     });
   };
 
-  const updateHistory = (newCellColors: StringHash) => {
+  const updateHistory = (newCellColors: ColorGroup) => {
     const newColorHistory: ColorHistory = colorHistory.current.slice(
       0,
       historyIndex + 1

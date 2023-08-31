@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { getPrexel } from "../../utils/generateUtils";
 import { UploadIcon } from "../Icons";
-import { StringHash } from "../../utils/constants";
+import { StringHash as ColorGroup } from "../../utils/constants";
 
 const UploadModal = () => {
   const { isUploadModalOpen, setIsUploadModalOpen, updateColors } =
@@ -55,7 +55,7 @@ const UploadModal = () => {
       return;
     }
 
-    const prexel: StringHash = getPrexel(cuteCode);
+    const prexel: ColorGroup = getPrexel(cuteCode);
     updateColors(prexel);
     clearModal();
   };

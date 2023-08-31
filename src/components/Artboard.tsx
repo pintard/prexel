@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
-type CellValue = JSX.Element | null;
-type Grid = CellValue[][];
+type Grid = (JSX.Element | null)[][];
 
 const Artboard = () => {
   const {
@@ -19,16 +18,12 @@ const Artboard = () => {
     setIsStrokeActive,
   } = useControlBarContext();
 
-  const initialGrid: Grid = Array.from(Array(rows), () =>
-    Array(cols).fill(null)
-  );
-  const [grid, setGrid] = useState<Grid>(initialGrid);
+  const emptyGrid: Grid = Array.from(Array(rows), () => Array(cols).fill(null));
+
+  const [grid, setGrid] = useState<Grid>(emptyGrid);
 
   useEffect(() => {
-    const updatedGrid: Grid = Array.from(Array(rows), () =>
-      Array(cols).fill(null)
-    );
-    setGrid(updatedGrid);
+    setGrid(emptyGrid);
   }, [rows, cols]);
 
   useEffect(() => {

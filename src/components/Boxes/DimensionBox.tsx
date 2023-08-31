@@ -9,16 +9,16 @@ import {
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 
 interface DimensionBoxProps {
-  isActive: boolean;
+  isOpen: boolean;
   setIsInputFocused: Dispatch<SetStateAction<boolean>>;
 }
 
-const DimensionBox = ({ isActive, setIsInputFocused }: DimensionBoxProps) => {
+const DimensionBox = ({ isOpen, setIsInputFocused }: DimensionBoxProps) => {
   const { rows, setRows, cols, setCols } = useControlBarContext();
   const MAX_ROWS: number = 30;
   const MAX_COLS: number = 60;
 
-  if (isActive) {
+  if (isOpen) {
     return (
       <span className="z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-col p-4 gap-4 pointer-events-auto">
         <DimensionInput
