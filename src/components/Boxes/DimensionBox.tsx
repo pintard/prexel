@@ -20,7 +20,7 @@ const DimensionBox = ({ isOpen, setIsInputFocused }: DimensionBoxProps) => {
 
   if (isOpen) {
     return (
-      <span className="z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-col p-4 gap-4 pointer-events-auto">
+      <span className="z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col p-4 gap-4 pointer-events-auto">
         <DimensionInput
           label="cols"
           placeholder="enter desired cols"

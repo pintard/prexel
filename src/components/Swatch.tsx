@@ -16,6 +16,20 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
     swatchColors[id]
   );
 
+  useEffect(() => {
+    setSwatchColor(swatchColors[id]);
+  }, [swatchColors, id]);
+
+  useEffect(() => {
+    if (isActive && color !== swatchColors[id]) {
+      setSwatchColor(color);
+      setSwatchColors((prevSwatchColors) => ({
+        ...prevSwatchColors,
+        [id]: color,
+      }));
+    }
+  }, [color, isActive, id, setSwatchColors, swatchColors]);
+
   const handleClick = () => {
     if (!swatchColor) {
       setSwatchColor(color);
@@ -24,16 +38,6 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
     }
     onClick(id);
   };
-
-  useEffect(() => {
-    if (isActive) {
-      setSwatchColor(color);
-      setSwatchColors((prevSwatchColors) => ({
-        ...prevSwatchColors,
-        [id]: color,
-      }));
-    }
-  }, [color, isActive, id, setSwatchColors]);
 
   const getSwatchTextColor = (swatchColor: string): string =>
     isColorLight(swatchColor) ? "text-black" : "text-white";

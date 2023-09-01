@@ -1,4 +1,3 @@
-import React from "react";
 import Artboard from "./components/Artboard";
 import ControlBar from "./components/ControlBar";
 

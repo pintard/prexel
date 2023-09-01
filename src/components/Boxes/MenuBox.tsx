@@ -8,27 +8,22 @@ import {
   CloudUploadIcon,
   MoonIcon,
   SunIcon,
+  ResetIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { HorizontalDivider } from "../Divider";
 import { useDarkModeContext } from "../../hooks/useDarkModeContext";
 import { getOperatingSystem } from "../../utils/platformUtils";
-import { StringHash } from "../../utils/constants";
+import KeybindModal from "../Modals/KeybindModal";
 
 type ModifierKey = "\u2325" | "alt";
 
-const modifierKey: ModifierKey =
-  getOperatingSystem() === "Mac" ? "\u2325" : "alt";
-
-const MENU_KEYBINDS: StringHash = {
-  resize: `${modifierKey} + R`,
-  clear: `${modifierKey} + shift + C`,
-  upload: `${modifierKey} + U`,
-  save: `${modifierKey} + S`,
-  publish: `${modifierKey} + P`,
-  darkLightToggle: `${modifierKey} + D`,
-  minimize: `${modifierKey} + M`,
-};
+interface KeybindMap {
+  [keybind: string]: {
+    label: string;
+    action: () => void;
+  };
+}
 
 interface MenuBoxProps {
   isOpen: boolean;
@@ -50,30 +45,17 @@ const MenuBox = ({
     setIsSaveModalOpen,
     setIsUploadModalOpen,
     cellColors,
+    setSwatchColors,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
 
   const hasCellColors: boolean = Object.keys(cellColors).length > 0;
+  const modifierKey: ModifierKey =
+    getOperatingSystem() === "Mac" ? "\u2325" : "alt";
 
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (isInputFocused) return;
-
-      switch (e.key) {
-        case "1":
-          break;
-        case "2":
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, []);
+  const handleReset = () => {
+    setSwatchColors({});
+  };
 
   const handleResize = () => {
     setIsDimensionBoxOpen(!isDimensionBoxOpen);
@@ -83,17 +65,15 @@ const MenuBox = ({
     if (hasCellColors) {
       setIsSaveModalOpen(true);
     }
-
-    // closeMenuBox();
-    // setIsDimensionBoxOpen(false);
   };
 
-  const handlePublish = () => {};
+  const handlePublish = () => {
+    if (hasCellColors) {
+    }
+  };
 
   const handleUpload = () => {
     setIsUploadModalOpen(true);
-    // closeMenuBox();
-    // setIsDimensionBoxOpen(false);
   };
 
   const handleClear = () => {
@@ -104,21 +84,77 @@ const MenuBox = ({
 
   const handleMinimize = () => {};
 
+  const MENU_KEYBINDS: KeybindMap = {
+    reset: {
+      label: `${modifierKey} + shift + R`,
+      action: handleReset,
+    },
+    resize: {
+      label: `${modifierKey} + R`,
+      action: handleResize,
+    },
+    clear: {
+      label: `${modifierKey} + shift + C`,
+      action: handleClear,
+    },
+    save: {
+      label: `${modifierKey} + S`,
+      action: handleSave,
+    },
+    darkLightToggle: {
+      label: `${modifierKey} + D`,
+      action: toggleDarkMode,
+    },
+    minimize: {
+      label: `${modifierKey} + M`,
+      action: handleMinimize,
+    },
+  };
+
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (isInputFocused) return;
+
+      if (e.altKey) {
+        switch (e.code) {
+          case "KeyR":
+            handleResize();
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [isInputFocused, isDimensionBoxOpen]);
+
   if (isOpen) {
     return (
-      <span className="z-20 bg-white dark:bg-default-neutral rounded-lg shadow-cover pointer-events-auto">
+      <span className="z-20 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light pointer-events-auto">
         <ul className="w-full flex flex-col items-center">
           <MenuItem
-            label="resize"
-            icon={GridIcon}
-            onClick={handleResize}
-            isActive={isDimensionBoxOpen}
+            label="reset"
+            keybind={MENU_KEYBINDS.reset.label}
+            icon={ResetIcon}
+            onClick={handleReset}
             position="first"
           />
           <HorizontalDivider />
           <MenuItem
+            label="resize"
+            keybind={MENU_KEYBINDS.resize.label}
+            icon={GridIcon}
+            onClick={handleResize}
+            isActive={isDimensionBoxOpen}
+          />
+          <HorizontalDivider />
+          <MenuItem
             label="clear"
-            keybind={MENU_KEYBINDS.clear}
+            keybind={MENU_KEYBINDS.clear.label}
             icon={TrashIcon}
             onClick={handleClear}
           />
@@ -127,7 +163,7 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="save"
-            keybind={MENU_KEYBINDS.save}
+            keybind={MENU_KEYBINDS.save.label}
             icon={DownloadIcon}
             onClick={handleSave}
             disabled={!hasCellColors}
@@ -141,13 +177,14 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label={darkMode ? "dark mode" : "light mode"}
-            keybind={MENU_KEYBINDS.darkLightToggle}
+            keybind={MENU_KEYBINDS.darkLightToggle.label}
             icon={darkMode ? MoonIcon : SunIcon}
             onClick={toggleDarkMode}
           />
           <HorizontalDivider />
           <MenuItem
             label="minimize"
+            keybind={MENU_KEYBINDS.minimize.label}
             icon={MinimizeIcon}
             onClick={handleMinimize}
             position="last"
@@ -181,41 +218,48 @@ const MenuItem = ({
   disabled,
   ...props
 }: MenuItemProps) => {
-  let borderRadius: string = "";
+  const { setIsKeybindModalOpen, keybindModalId, setKeybindModalId } =
+    useControlBarContext();
 
-  switch (position) {
-    case "first":
-      borderRadius = "rounded-t-lg";
-      break;
-    case "last":
-      borderRadius = "rounded-b-lg";
-      break;
-    default:
-      borderRadius = "";
-      break;
-  }
+  const openKeybindModal = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
+    setIsKeybindModalOpen(true);
+    setKeybindModalId(label);
+  };
+
+  const updateKeybind = (newKeybind: string) => {
+    setIsKeybindModalOpen(false);
+  };
 
   return (
-    <li
-      className={`px-4 py-2 w-full hover:bg-blue-50 dark:hover:bg-neutral-900 flex flex-row gap-4 items-center cursor-pointer select-none ${
-        isActive ? "bg-gray-100 dark:bg-neutral-800" : "bg-transparent"
-      } ${borderRadius} ${
-        isActive ? "text-active-blue" : "text-black dark:text-neutral-500"
-      } whitespace-nowrap ${disabled && "cursor-not-allowed"}`}
-      {...props}
-    >
-      <span>
-        <Icon width={16} height={16} className={`fill-current`} />
-      </span>
-      <span>{label}</span>
-      {keybind && (
-        <span className="w-full text-end">
-          <span className="italic inline-block px-2 py-1 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded">
-            {keybind}
-          </span>
+    <>
+      <li
+        className={`px-4 py-2 w-full hover:bg-blue-50 dark:hover:bg-neutral-900 flex flex-row gap-4 items-center cursor-pointer select-none ${
+          isActive ? "bg-gray-100 dark:bg-neutral-800" : "bg-transparent"
+        } ${position === "first" ? "rounded-t-lg" : "rounded-b-lg"} ${
+          isActive ? "text-active-blue" : "text-black dark:text-neutral-500"
+        } whitespace-nowrap ${disabled && "!cursor-not-allowed"}`}
+        {...props}
+      >
+        <span>
+          <Icon width={16} height={16} className={`fill-current`} />
         </span>
+        <span>{label}</span>
+        {keybind && (
+          <span className="w-full text-end">
+            <span
+              onClick={openKeybindModal}
+              className="italic inline-block px-2 py-1 border border-gray-300 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded hover:bg-gray-200 dark:hover:bg-neutral-700 active:bg-gray-300 dark:active:bg-neutral-600"
+            >
+              {keybind}
+            </span>
+          </span>
+        )}
+      </li>
+      {keybind && keybindModalId === label && (
+        <KeybindModal currentKeybind={keybind} onSave={updateKeybind} />
       )}
-    </li>
+    </>
   );
 };
 

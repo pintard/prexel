@@ -37,10 +37,14 @@ export const ControlBarContext = createContext({
   setIsSaveModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isUploadModalOpen: false,
   setIsUploadModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isKeybindModalOpen: false,
+  setIsKeybindModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDragging: false,
   setIsDragging: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isStrokeActive: false,
   setIsStrokeActive: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  keybindModalId: null as string | null,
+  setKeybindModalId: (() => {}) as Dispatch<SetStateAction<string | null>>,
   historyIndex: 0,
   setHistoryIndex: (() => {}) as Dispatch<SetStateAction<number>>,
   colorHistory: {} as ColorHistory,
@@ -91,8 +95,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isClearModalOpen, setIsClearModalOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
+  const [isKeybindModalOpen, setIsKeybindModalOpen] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isStrokeActive, setIsStrokeActive] = useState<boolean>(false);
+  const [keybindModalId, setKeybindModalId] = useState<string | null>(null);
 
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const colorHistory = useRef<ColorHistory>([]);
@@ -163,10 +169,14 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       setIsSaveModalOpen,
       isUploadModalOpen,
       setIsUploadModalOpen,
+      isKeybindModalOpen,
+      setIsKeybindModalOpen,
       isDragging,
       setIsDragging,
       isStrokeActive,
       setIsStrokeActive,
+      keybindModalId,
+      setKeybindModalId,
       historyIndex,
       setHistoryIndex,
       colorHistory: colorHistory.current,
@@ -184,8 +194,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       isClearModalOpen,
       isSaveModalOpen,
       isUploadModalOpen,
+      isKeybindModalOpen,
       isDragging,
       isStrokeActive,
+      keybindModalId,
       historyIndex,
       colorHistory.current,
     ]

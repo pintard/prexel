@@ -209,7 +209,7 @@ const ControlBar = () => {
       >
         <span
           key="controlBar"
-          className="z-30 p-1 h-12 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-row justify-between items-center gap-1 select-none pointer-events-auto"
+          className="z-30 p-1 h-12 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-row justify-between items-center gap-1 select-none pointer-events-auto"
         >
           <DragHandle
             icon={VerticalGripIcon}

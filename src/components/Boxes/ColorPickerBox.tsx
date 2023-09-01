@@ -7,6 +7,7 @@ import { HorizontalGripIcon } from "../Icons";
 import { PagePosition } from "../../utils/constants";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { useColorPickerBoxContext } from "../../hooks/useColorPickerBoxContext";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 interface ColorPickerProps {
   isOpen: boolean;
@@ -16,10 +17,11 @@ interface ColorPickerProps {
 const ColorPickerBox = ({ isOpen, setIsInputFocused }: ColorPickerProps) => {
   const { color, setColor, swatchHotKeys } = useControlBarContext();
   const [activeSwatch, setActiveSwatch] = useState<string | null>(null);
-  const [colorPickerPosition, setColorPickerPoistion] = useState<PagePosition>({
-    left: 20,
-    top: 20,
-  });
+  const [colorPickerPosition, setColorPickerPoistion] =
+    useLocalStorage<PagePosition>("colorpicker-position", {
+      left: 20,
+      top: 20,
+    });
   const colorPickerRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -61,7 +63,7 @@ const ColorPickerBox = ({ isOpen, setIsInputFocused }: ColorPickerProps) => {
   if (isOpen) {
     return (
       <span
-        className="absolute z-20 w-64 bg-white dark:bg-default-neutral rounded-lg shadow-cover flex flex-col items-center overflow-hidden"
+        className="absolute z-20 w-64 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden"
         ref={colorPickerRef}
         style={{
           left: colorPickerPosition.left,
