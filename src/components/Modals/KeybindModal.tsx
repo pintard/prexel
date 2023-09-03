@@ -3,11 +3,6 @@ import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { StringHash } from "../../utils/constants";
 import { getOperatingSystem } from "../../utils/platformUtils";
 
-interface KeybindModalProps {
-  currentKeybind: string;
-  onSave: (newKeybind: string) => void;
-}
-
 const MAC_KEY_MAP: StringHash = {
   MetaLeft: "\u2318",
   MetaRight: "\u2318",
@@ -29,6 +24,11 @@ const DEFAULT_KEY_MAP: StringHash = {
   ShiftLeft: "shift",
   ShiftRight: "shift",
 };
+
+interface KeybindModalProps {
+  currentKeybind: string;
+  onSave: (newKeybind: string) => void;
+}
 
 const KeybindModal = ({ currentKeybind, onSave }: KeybindModalProps) => {
   const { isKeybindModalOpen, setIsKeybindModalOpen } = useControlBarContext();
@@ -72,10 +72,10 @@ const KeybindModal = ({ currentKeybind, onSave }: KeybindModalProps) => {
 
   const handleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setTimeout(() => {
-      setPressedKeys((prevKeys) => {
-        const newKeys = new Set(prevKeys);
-        newKeys.delete(e.code);
+      setPressedKeys((prevKeys: Set<string>) => {
+        const newKeys: Set<string> = new Set(prevKeys);
         setNewKeybind(Array.from(newKeys).map(getFriendlyKey).join(" + "));
+        newKeys.delete(e.code);
         return newKeys;
       });
     }, 50);

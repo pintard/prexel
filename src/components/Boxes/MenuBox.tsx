@@ -13,17 +13,9 @@ import {
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { HorizontalDivider } from "../Divider";
 import { useDarkModeContext } from "../../hooks/useDarkModeContext";
-import { getOperatingSystem } from "../../utils/platformUtils";
 import KeybindModal from "../Modals/KeybindModal";
-
-type ModifierKey = "\u2325" | "alt";
-
-interface KeybindMap {
-  [keybind: string]: {
-    label: string;
-    action: () => void;
-  };
-}
+import { useKeybindContext } from "../../hooks/useKeybindContext";
+import { KeybindMap } from "../../contexts/KeybindProvider";
 
 interface MenuBoxProps {
   isOpen: boolean;
@@ -48,10 +40,9 @@ const MenuBox = ({
     setSwatchColors,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
+  const { menuKeybinds } = useKeybindContext();
 
   const hasCellColors: boolean = Object.keys(cellColors).length > 0;
-  const modifierKey: ModifierKey =
-    getOperatingSystem() === "Mac" ? "\u2325" : "alt";
 
   const handleReset = () => {
     setSwatchColors({});
@@ -84,33 +75,6 @@ const MenuBox = ({
 
   const handleMinimize = () => {};
 
-  const MENU_KEYBINDS: KeybindMap = {
-    reset: {
-      label: `${modifierKey} + shift + R`,
-      action: handleReset,
-    },
-    resize: {
-      label: `${modifierKey} + R`,
-      action: handleResize,
-    },
-    clear: {
-      label: `${modifierKey} + shift + C`,
-      action: handleClear,
-    },
-    save: {
-      label: `${modifierKey} + S`,
-      action: handleSave,
-    },
-    darkLightToggle: {
-      label: `${modifierKey} + D`,
-      action: toggleDarkMode,
-    },
-    minimize: {
-      label: `${modifierKey} + M`,
-      action: handleMinimize,
-    },
-  };
-
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (isInputFocused) return;
@@ -138,7 +102,7 @@ const MenuBox = ({
         <ul className="w-full flex flex-col items-center">
           <MenuItem
             label="reset"
-            keybind={MENU_KEYBINDS.reset.label}
+            keybind={menuKeybinds.reset.keybind}
             icon={ResetIcon}
             onClick={handleReset}
             position="first"
@@ -146,7 +110,7 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="resize"
-            keybind={MENU_KEYBINDS.resize.label}
+            keybind={menuKeybinds.resize.keybind}
             icon={GridIcon}
             onClick={handleResize}
             isActive={isDimensionBoxOpen}
@@ -154,7 +118,7 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="clear"
-            keybind={MENU_KEYBINDS.clear.label}
+            keybind={menuKeybinds.clear.keybind}
             icon={TrashIcon}
             onClick={handleClear}
           />
@@ -163,7 +127,7 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="save"
-            keybind={MENU_KEYBINDS.save.label}
+            keybind={menuKeybinds.save.keybind}
             icon={DownloadIcon}
             onClick={handleSave}
             disabled={!hasCellColors}
@@ -177,14 +141,14 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label={darkMode ? "dark mode" : "light mode"}
-            keybind={MENU_KEYBINDS.darkLightToggle.label}
+            keybind={menuKeybinds.darkLightToggle?.keybind}
             icon={darkMode ? MoonIcon : SunIcon}
             onClick={toggleDarkMode}
           />
           <HorizontalDivider />
           <MenuItem
             label="minimize"
-            keybind={MENU_KEYBINDS.minimize.label}
+            keybind={menuKeybinds.minimize.keybind}
             icon={MinimizeIcon}
             onClick={handleMinimize}
             position="last"
@@ -220,6 +184,7 @@ const MenuItem = ({
 }: MenuItemProps) => {
   const { setIsKeybindModalOpen, keybindModalId, setKeybindModalId } =
     useControlBarContext();
+  const { setMenuKeybinds } = useKeybindContext();
 
   const openKeybindModal = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
@@ -228,6 +193,12 @@ const MenuItem = ({
   };
 
   const updateKeybind = (newKeybind: string) => {
+    setMenuKeybinds((prevMenuKeybind: KeybindMap) => ({
+      ...prevMenuKeybind,
+      [label]: {
+        keybind: newKeybind,
+      },
+    }));
     setIsKeybindModalOpen(false);
   };
 
@@ -236,7 +207,7 @@ const MenuItem = ({
       <li
         className={`px-4 py-2 w-full hover:bg-blue-50 dark:hover:bg-neutral-900 flex flex-row gap-4 items-center cursor-pointer select-none ${
           isActive ? "bg-gray-100 dark:bg-neutral-800" : "bg-transparent"
-        } ${position === "first" ? "rounded-t-lg" : "rounded-b-lg"} ${
+        } ${
           isActive ? "text-active-blue" : "text-black dark:text-neutral-500"
         } whitespace-nowrap ${disabled && "!cursor-not-allowed"}`}
         {...props}

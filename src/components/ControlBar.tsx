@@ -178,25 +178,6 @@ const ControlBar = () => {
     });
   };
 
-  const menuBox: React.JSX.Element = (
-    <MenuBox
-      key="menuBox"
-      isOpen={isMenuBoxOpen}
-      closeMenuBox={() => setIsMenuBoxOpen(false)}
-      isDimensionBoxOpen={isDimensionBoxOpen}
-      setIsDimensionBoxOpen={setIsDimensionBoxOpen}
-      isInputFocused={isInputFocused}
-    />
-  );
-
-  const dimensionBox: React.JSX.Element = (
-    <DimensionBox
-      key="dimensionBox"
-      isOpen={isDimensionBoxOpen}
-      setIsInputFocused={setIsInputFocused}
-    />
-  );
-
   return (
     <>
       <div
@@ -259,9 +240,21 @@ const ControlBar = () => {
             !isBoxAreaOpen && "hidden"
           }`}
         >
-          {isBelowMidScreen ? [dimensionBox, menuBox] : [menuBox, dimensionBox]}
+          <MenuBox
+            key="menuBox"
+            isOpen={isMenuBoxOpen}
+            closeMenuBox={() => setIsMenuBoxOpen(false)}
+            isDimensionBoxOpen={isDimensionBoxOpen}
+            setIsDimensionBoxOpen={setIsDimensionBoxOpen}
+            isInputFocused={isInputFocused}
+          />
         </div>
       </div>
+      <DimensionBox
+        key="dimensionBox"
+        isOpen={isDimensionBoxOpen}
+        setIsInputFocused={setIsInputFocused}
+      />
       <ColorPickerBox
         isOpen={isColorPickerBoxOpen}
         setIsInputFocused={setIsInputFocused}

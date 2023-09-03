@@ -20,10 +20,17 @@ const DimensionBox = ({ isOpen, setIsInputFocused }: DimensionBoxProps) => {
 
   if (isOpen) {
     return (
-      <span className="z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col p-4 gap-4 pointer-events-auto">
+      <span
+        className="absolute z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col p-4 gap-4 pointer-events-auto"
+        style={{
+          right: 20,
+          top: 20,
+        }}
+      >
         <DimensionInput
           label="cols"
           placeholder="enter desired cols"
+          autoFocus={true}
           defaultValue={cols}
           maxValue={MAX_COLS}
           minValue={1}
@@ -49,6 +56,7 @@ const DimensionBox = ({ isOpen, setIsInputFocused }: DimensionBoxProps) => {
 interface DimensionInputProps {
   label?: string;
   placeholder: string;
+  autoFocus?: boolean;
   defaultValue: number;
   maxValue: number;
   minValue: number;
