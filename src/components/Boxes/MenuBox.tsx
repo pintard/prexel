@@ -13,9 +13,7 @@ import {
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { HorizontalDivider } from "../Divider";
 import { useDarkModeContext } from "../../hooks/useDarkModeContext";
-import KeybindModal from "../Modals/KeybindModal";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
-import { KeybindMap } from "../../contexts/KeybindProvider";
 
 interface MenuBoxProps {
   isOpen: boolean;
@@ -102,6 +100,7 @@ const MenuBox = ({
         <ul className="w-full flex flex-col items-center">
           <MenuItem
             label="reset"
+            value="reset"
             keybind={menuKeybinds.reset.keybind}
             icon={ResetIcon}
             onClick={handleReset}
@@ -110,6 +109,7 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="resize"
+            value="resize"
             keybind={menuKeybinds.resize.keybind}
             icon={GridIcon}
             onClick={handleResize}
@@ -118,15 +118,22 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="clear"
+            value="clear"
             keybind={menuKeybinds.clear.keybind}
             icon={TrashIcon}
             onClick={handleClear}
           />
           <HorizontalDivider />
-          <MenuItem label="upload" icon={UploadIcon} onClick={handleUpload} />
+          <MenuItem
+            label="upload"
+            value="upload"
+            icon={UploadIcon}
+            onClick={handleUpload}
+          />
           <HorizontalDivider />
           <MenuItem
             label="save"
+            value="save"
             keybind={menuKeybinds.save.keybind}
             icon={DownloadIcon}
             onClick={handleSave}
@@ -135,19 +142,22 @@ const MenuBox = ({
           <HorizontalDivider />
           <MenuItem
             label="publish"
+            value="publish"
             icon={CloudUploadIcon}
             onClick={handlePublish}
           />
           <HorizontalDivider />
           <MenuItem
             label={darkMode ? "dark mode" : "light mode"}
-            keybind={menuKeybinds.darkLightToggle?.keybind}
+            value="darkLightToggle"
+            keybind={menuKeybinds.darkLightToggle.keybind}
             icon={darkMode ? MoonIcon : SunIcon}
             onClick={toggleDarkMode}
           />
           <HorizontalDivider />
           <MenuItem
             label="minimize"
+            value="minimize"
             keybind={menuKeybinds.minimize.keybind}
             icon={MinimizeIcon}
             onClick={handleMinimize}
@@ -162,9 +172,19 @@ const MenuBox = ({
 };
 
 type MenuItemPosition = "first" | "last";
+type MenuItemValue =
+  | "reset"
+  | "resize"
+  | "clear"
+  | "upload"
+  | "save"
+  | "publish"
+  | "darkLightToggle"
+  | "minimize";
 
 interface MenuItemProps {
   label: string;
+  value: MenuItemValue;
   keybind?: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   onClick?: () => void;
@@ -175,6 +195,7 @@ interface MenuItemProps {
 
 const MenuItem = ({
   label,
+  value,
   keybind,
   icon: Icon,
   isActive,
@@ -182,24 +203,13 @@ const MenuItem = ({
   disabled,
   ...props
 }: MenuItemProps) => {
-  const { setIsKeybindModalOpen, keybindModalId, setKeybindModalId } =
-    useControlBarContext();
-  const { setMenuKeybinds } = useKeybindContext();
+  const { setIsKeybindModalOpen } = useControlBarContext();
+  const { setKeybindModalId } = useKeybindContext();
 
   const openKeybindModal = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
+    setKeybindModalId(value);
     setIsKeybindModalOpen(true);
-    setKeybindModalId(label);
-  };
-
-  const updateKeybind = (newKeybind: string) => {
-    setMenuKeybinds((prevMenuKeybind: KeybindMap) => ({
-      ...prevMenuKeybind,
-      [label]: {
-        keybind: newKeybind,
-      },
-    }));
-    setIsKeybindModalOpen(false);
   };
 
   return (
@@ -227,9 +237,6 @@ const MenuItem = ({
           </span>
         )}
       </li>
-      {keybind && keybindModalId === label && (
-        <KeybindModal currentKeybind={keybind} onSave={updateKeybind} />
-      )}
     </>
   );
 };

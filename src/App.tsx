@@ -9,6 +9,7 @@ import KeybindProvider from "./contexts/KeybindProvider";
 import ClearModal from "./components/Modals/ClearModal";
 import SaveModal from "./components/Modals/SaveModal";
 import UploadModal from "./components/Modals/UploadModal";
+import KeybindModal from "./components/Modals/KeybindModal";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <ClearModal />
             <SaveModal />
             <UploadModal />
+            <KeybindModal />
           </ControlBarProvider>
         </KeybindProvider>
       </div>

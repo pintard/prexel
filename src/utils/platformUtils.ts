@@ -1,3 +1,5 @@
+import { DEFAULT_KEY_MAP, MAC_KEY_MAP } from "./constants";
+
 export const getOperatingSystem = (): string => {
   const userAgent: string = window.navigator.userAgent;
 
@@ -11,4 +13,15 @@ export const getOperatingSystem = (): string => {
     default:
       return "Unknown";
   }
+};
+
+export const getFriendlyKey = (code: string): string => {
+  const friendlyKey: string | undefined =
+    getOperatingSystem() === "Mac" ? MAC_KEY_MAP[code] : DEFAULT_KEY_MAP[code];
+
+  if (code.startsWith("Key")) {
+    return code.charAt(3);
+  }
+
+  return friendlyKey || code;
 };

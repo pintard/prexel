@@ -1,53 +1,18 @@
 import React, { useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import { StringHash } from "../../utils/constants";
-import { getOperatingSystem } from "../../utils/platformUtils";
+import { getFriendlyKey, getOperatingSystem } from "../../utils/platformUtils";
+import { useKeybindContext } from "../../hooks/useKeybindContext";
+import { DEFAULT_KEY_MAP, MAC_KEY_MAP } from "../../utils/constants";
 
-const MAC_KEY_MAP: StringHash = {
-  MetaLeft: "\u2318",
-  MetaRight: "\u2318",
-  AltLeft: "\u2325",
-  AltRight: "\u2325",
-  ControlLeft: "\u2303",
-  ControlRight: "\u2303",
-  ShiftLeft: "shift",
-  ShiftRight: "shift",
-};
-
-const DEFAULT_KEY_MAP: StringHash = {
-  MetaLeft: "cmd",
-  MetaRight: "cmd",
-  AltLeft: "alt",
-  AltRight: "alt",
-  ControlLeft: "ctrl",
-  ControlRight: "ctrl",
-  ShiftLeft: "shift",
-  ShiftRight: "shift",
-};
-
-interface KeybindModalProps {
-  currentKeybind: string;
-  onSave: (newKeybind: string) => void;
-}
-
-const KeybindModal = ({ currentKeybind, onSave }: KeybindModalProps) => {
+const KeybindModal = () => {
   const { isKeybindModalOpen, setIsKeybindModalOpen } = useControlBarContext();
+  const { keybindModalId, menuKeybinds, updateMenuKeybind } =
+    useKeybindContext();
 
-  const [newKeybind, setNewKeybind] = useState<string>(currentKeybind);
+  const initialKeybind: string = menuKeybinds[keybindModalId]?.keybind;
+
+  const [newKeybind, setNewKeybind] = useState<string>(initialKeybind);
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
-
-  const getFriendlyKey = (code: string): string => {
-    const friendlyKey: string | undefined =
-      getOperatingSystem() === "Mac"
-        ? MAC_KEY_MAP[code]
-        : DEFAULT_KEY_MAP[code];
-
-    if (code.startsWith("Key")) {
-      return code.charAt(3);
-    }
-
-    return friendlyKey || code;
-  };
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -81,12 +46,17 @@ const KeybindModal = ({ currentKeybind, onSave }: KeybindModalProps) => {
     }, 50);
   };
 
-  if (isKeybindModalOpen) {
+  const handleSave = () => {
+    updateMenuKeybind(newKeybind);
+    setIsKeybindModalOpen(false);
+  };
+
+  if (isKeybindModalOpen && keybindModalId) {
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
         <div className="bg-white rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-2">Set a new keybind</h2>
-          <p className="mb-4">Your current keybind is: {currentKeybind}</p>
+          <p className="mb-4">Your current keybind is: {initialKeybind}</p>
           <input
             type="text"
             autoFocus={true}
@@ -99,7 +69,7 @@ const KeybindModal = ({ currentKeybind, onSave }: KeybindModalProps) => {
           <span>
             <button
               className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mr-4 outline outline-2 focus:outline-blue-400"
-              onClick={() => onSave(newKeybind)}
+              onClick={handleSave}
             >
               Save
             </button>
