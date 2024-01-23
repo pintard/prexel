@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { getFriendlyKey, getOperatingSystem } from "../../utils/platformUtils";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
@@ -9,10 +9,17 @@ const KeybindModal = () => {
   const { keybindModalId, menuKeybinds, updateMenuKeybind } =
     useKeybindContext();
 
-  const initialKeybind: string = menuKeybinds[keybindModalId]?.keybind;
-
-  const [newKeybind, setNewKeybind] = useState<string>(initialKeybind);
+  const [initialKeybind, setInitialKeybind] = useState<string>("");
+  const [newKeybind, setNewKeybind] = useState<string>("");
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setInitialKeybind(menuKeybinds[keybindModalId]?.keybind || "");
+  }, [keybindModalId]);
+
+  useEffect(() => {
+    setNewKeybind(initialKeybind);
+  }, [initialKeybind]);
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();

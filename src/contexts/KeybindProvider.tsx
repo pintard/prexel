@@ -3,7 +3,6 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -22,6 +21,7 @@ export const KeybindContext = createContext({
   keybindModalId: "",
   setKeybindModalId: (() => {}) as Dispatch<SetStateAction<string>>,
   updateMenuKeybind: (() => {}) as (newKeybind: string) => void,
+  resetKeybinds: (() => {}) as () => void,
 });
 
 type ModifierKey = "\u2325" | "alt";
@@ -70,6 +70,10 @@ const KeybindProvider = ({ children }: KeybindProviderProps) => {
     }));
   };
 
+  const resetKeybinds = () => {
+    setMenuKeybinds(DEFAULT_MENU_KEYBINDS);
+  };
+
   const value = useMemo(
     () => ({
       menuKeybinds,
@@ -77,6 +81,7 @@ const KeybindProvider = ({ children }: KeybindProviderProps) => {
       keybindModalId,
       setKeybindModalId,
       updateMenuKeybind,
+      resetKeybinds,
     }),
     [menuKeybinds, keybindModalId]
   );

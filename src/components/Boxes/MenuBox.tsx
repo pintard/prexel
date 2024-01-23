@@ -38,12 +38,13 @@ const MenuBox = ({
     setSwatchColors,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
-  const { menuKeybinds } = useKeybindContext();
+  const { menuKeybinds, resetKeybinds } = useKeybindContext();
 
   const hasCellColors: boolean = Object.keys(cellColors).length > 0;
 
   const handleReset = () => {
     setSwatchColors({});
+    resetKeybinds();
   };
 
   const handleResize = () => {
