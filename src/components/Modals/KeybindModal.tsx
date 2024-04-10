@@ -9,52 +9,41 @@ const KeybindModal = () => {
   const { keybindModalId, menuKeybinds, updateMenuKeybind } =
     useKeybindContext();
 
-  const [initialKeybind, setInitialKeybind] = useState<string>("");
-  const [newKeybind, setNewKeybind] = useState<string>("");
-  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
+  const [activeKeybind, setActiveKeybind] = useState("");
+  const [initialKeybind, setInitialKeybind] = useState("");
 
   useEffect(() => {
-    setInitialKeybind(menuKeybinds[keybindModalId]?.keybind || "");
-  }, [keybindModalId]);
+    if (keybindModalId) {
+      setInitialKeybind(menuKeybinds[keybindModalId]?.keybind || "");
+      setActiveKeybind(initialKeybind);
+    }
+  }, [keybindModalId, menuKeybinds]);
 
-  useEffect(() => {
-    setNewKeybind(initialKeybind);
-  }, [initialKeybind]);
+  const handleFocus = () => {
+    setActiveKeybind("");
+  };
 
-  const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    const validKeys: string[] =
-      getOperatingSystem() === "Mac"
-        ? Object.keys(MAC_KEY_MAP)
-        : Object.keys(DEFAULT_KEY_MAP);
+    const keyMap =
+      getOperatingSystem() === "Mac" ? MAC_KEY_MAP : DEFAULT_KEY_MAP;
+    const friendlyKey = getFriendlyKey(e.code);
 
-    if (
-      validKeys.includes(e.code) ||
-      (e.code.startsWith("Key") && e.code.length === 4)
-    ) {
-      setPressedKeys((prevKeys: Set<string>) => {
-        const newKeys: Set<string> = new Set(prevKeys);
-        newKeys.add(e.code);
-        setNewKeybind(Array.from(newKeys).map(getFriendlyKey).join(" + "));
-        return newKeys;
+    if (keyMap[e.code] || (!keyMap[e.code] && e.code.startsWith("Key"))) {
+      setActiveKeybind((prev) => {
+        const keys = new Set(prev ? prev.split(" + ") : []);
+        keys.add(friendlyKey);
+
+        console.log("keys", keys);
+
+        return Array.from(keys).join(" + ");
       });
     }
   };
 
-  const handleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setTimeout(() => {
-      setPressedKeys((prevKeys: Set<string>) => {
-        const newKeys: Set<string> = new Set(prevKeys);
-        setNewKeybind(Array.from(newKeys).map(getFriendlyKey).join(" + "));
-        newKeys.delete(e.code);
-        return newKeys;
-      });
-    }, 50);
-  };
-
   const handleSave = () => {
-    updateMenuKeybind(newKeybind);
+    updateMenuKeybind(activeKeybind);
     setIsKeybindModalOpen(false);
   };
 
@@ -67,11 +56,12 @@ const KeybindModal = () => {
           <input
             type="text"
             autoFocus={true}
-            value={newKeybind}
-            onChange={(e) => setNewKeybind(e.target.value)}
+            value={activeKeybind}
+            readOnly={true}
+            onFocus={handleFocus}
+            onClick={handleFocus}
             className="bg-white border-solid border-2 rounded-md p-2 w-full mb-6 outline-2 focus:outline-blue-400"
-            onKeyDown={handleKeydown}
-            onKeyUp={handleKeyup}
+            onKeyDown={handleKeyDown}
           />
           <span>
             <button
