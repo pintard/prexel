@@ -39,7 +39,7 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   return (
     <span
       id={id}
-      className={`relative z-10 select-none" ${isEven && "bg-default-gray dark:bg-default-neutral"}`}
+      className={`relative z-10 select-none ${isEven && "bg-default-gray dark:bg-default-neutral"}`}
       onClick={handleClick}
     >
       <span

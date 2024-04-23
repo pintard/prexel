@@ -7,6 +7,8 @@ export interface StringHash {
   [key: string]: string | undefined;
 }
 
+export type KeyArray = string[];
+
 export const MAC_KEY_MAP: StringHash = {
   MetaLeft: "\u2318",
   MetaRight: "\u2318",
@@ -28,3 +30,4 @@ export const DEFAULT_KEY_MAP: StringHash = {
   ShiftLeft: "shift",
   ShiftRight: "shift",
 };
+ 

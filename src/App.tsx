@@ -13,24 +13,25 @@ import KeybindModal from "./components/Modals/KeybindModal";
 
 const App = () => {
   return (
-    <DarkModeProvider>
-      <div className="h-full w-full bg-white dark:bg-neutral-900">
+    <div className="h-full w-full dark:bg-neutral-900 bg-white">
+      <DarkModeProvider>
         <KeybindProvider>
           <ControlBarProvider>
-            <div className="h-full w-full flex justify-center items-center relative">
-              <Artboard />
+            <div className="h-full w-full flex flex-col">
               <ColorPickerBoxProvider>
                 <ControlBar />
               </ColorPickerBoxProvider>
+              <Artboard />
             </div>
+
             <ClearModal />
             <SaveModal />
             <UploadModal />
             <KeybindModal />
           </ControlBarProvider>
         </KeybindProvider>
-      </div>
-    </DarkModeProvider>
+      </DarkModeProvider>
+    </div>
   );
 };
 
