@@ -9,6 +9,10 @@ import {
   MoonIcon,
   SunIcon,
   ResetIcon,
+  PaletteIcon,
+  EraserIcon,
+  PaintBucketIcon,
+  BrushIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { HorizontalDivider } from "../Divider";
@@ -16,16 +20,12 @@ import { useDarkModeContext } from "../../hooks/useDarkModeContext";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
 
 interface MenuBoxProps {
-  isOpen: boolean;
-  closeMenuBox: () => void;
   isDimensionBoxOpen: boolean;
   setIsDimensionBoxOpen: Dispatch<SetStateAction<boolean>>;
   isInputFocused: boolean;
 }
 
 const MenuBox = ({
-  isOpen,
-  closeMenuBox,
   isDimensionBoxOpen,
   setIsDimensionBoxOpen,
   isInputFocused,
@@ -36,6 +36,7 @@ const MenuBox = ({
     setIsUploadModalOpen,
     cellColors,
     setSwatchColors,
+    isMenuBoxOpen,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const { menuKeybinds, resetKeybinds } = useKeybindContext();
@@ -68,7 +69,6 @@ const MenuBox = ({
 
   const handleClear = () => {
     setIsClearModalOpen(true);
-    // closeMenuBox();
     // setIsDimensionBoxOpen(false);
   };
 
@@ -95,9 +95,9 @@ const MenuBox = ({
     };
   }, [isInputFocused, isDimensionBoxOpen]);
 
-  if (isOpen) {
+  if (isMenuBoxOpen) {
     return (
-      <span className="z-20 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light pointer-events-auto">
+      <span>
         <ul className="w-full flex flex-col items-center">
           <MenuItem
             label="reset"
@@ -107,7 +107,30 @@ const MenuBox = ({
             onClick={handleReset}
             position="first"
           />
-          <HorizontalDivider />
+          <MenuItem
+            label="paint"
+            value="paint"
+            keybind={menuKeybinds.paint.keybind}
+            icon={BrushIcon}
+          />
+          <MenuItem
+            label="erase"
+            value="erase"
+            keybind={menuKeybinds.erase.keybind}
+            icon={EraserIcon}
+          />
+          <MenuItem
+            label="fill"
+            value="fill"
+            keybind={menuKeybinds.fill.keybind}
+            icon={PaintBucketIcon}
+          />
+          <MenuItem
+            label="picker"
+            value="picker"
+            keybind={menuKeybinds.picker.keybind}
+            icon={PaletteIcon}
+          />
           <MenuItem
             label="resize"
             value="resize"
@@ -116,7 +139,6 @@ const MenuBox = ({
             onClick={handleResize}
             isActive={isDimensionBoxOpen}
           />
-          <HorizontalDivider />
           <MenuItem
             label="clear"
             value="clear"
@@ -124,14 +146,12 @@ const MenuBox = ({
             icon={TrashIcon}
             onClick={handleClear}
           />
-          <HorizontalDivider />
           <MenuItem
             label="upload"
             value="upload"
             icon={UploadIcon}
             onClick={handleUpload}
           />
-          <HorizontalDivider />
           <MenuItem
             label="save"
             value="save"
@@ -140,14 +160,12 @@ const MenuBox = ({
             onClick={handleSave}
             disabled={!hasCellColors}
           />
-          <HorizontalDivider />
           <MenuItem
             label="publish"
             value="publish"
             icon={CloudUploadIcon}
             onClick={handlePublish}
           />
-          <HorizontalDivider />
           <MenuItem
             label={darkMode ? "dark mode" : "light mode"}
             value="darkLightToggle"
@@ -155,7 +173,6 @@ const MenuBox = ({
             icon={darkMode ? MoonIcon : SunIcon}
             onClick={toggleDarkMode}
           />
-          <HorizontalDivider />
           <MenuItem
             label="minimize"
             value="minimize"
@@ -174,6 +191,10 @@ const MenuBox = ({
 
 type MenuItemPosition = "first" | "last";
 type MenuItemValue =
+  | "paint"
+  | "erase"
+  | "fill"
+  | "picker"
   | "reset"
   | "resize"
   | "clear"

@@ -33,6 +33,18 @@ const DEFAULT_MENU_KEYBINDS: KeybindMap = {
   reset: {
     keybind: `${modifierKey} + shift + R`,
   },
+  paint: {
+    keybind: "1",
+  },
+  erase: {
+    keybind: "2",
+  },
+  fill: {
+    keybind: "3",
+  },
+  picker: {
+    keybind: "4",
+  },
   resize: {
     keybind: `${modifierKey} + R`,
   },

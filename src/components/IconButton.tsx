@@ -25,15 +25,15 @@ const IconButton = ({
       {...props}
     >
       <Icon
-        width={width ?? 18}
-        height={height ?? 18}
+        width={width ?? 22}
+        height={height ?? 22}
         className={`fill-current ${
           isActive ? "text-active-blue" : "text-neutral-gray"
         } dark:text-neutral-500`}
       />
-      <span className="absolute bottom-1 right-1 text-neutral-400 dark:text-neutral-400 text-xxs select-none">
+      {/* <span className="absolute top-0 left-1 text-neutral-400 dark:text-neutral-400 text-xs select-none">
         {option}
-      </span>
+      </span> */}
     </button>
   );
 };

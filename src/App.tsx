@@ -10,28 +10,36 @@ import ClearModal from "./components/Modals/ClearModal";
 import SaveModal from "./components/Modals/SaveModal";
 import UploadModal from "./components/Modals/UploadModal";
 import KeybindModal from "./components/Modals/KeybindModal";
+import MenuBar from "./components/MenuBar";
 
 const App = () => {
   return (
-    <div className="h-full w-full dark:bg-neutral-900 bg-white">
-      <DarkModeProvider>
-        <KeybindProvider>
-          <ControlBarProvider>
-            <div className="h-full w-full flex flex-col">
+    <DarkModeProvider>
+      <KeybindProvider>
+        <ControlBarProvider>
+          <div className="h-full w-full grid grid-rows-[auto_1fr] grid-cols-[auto_1fr]">
+            <div className="row-span-2">
               <ColorPickerBoxProvider>
                 <ControlBar />
               </ColorPickerBoxProvider>
-              <Artboard />
+            </div>
+            <div className="col-span-1">
+              <MenuBar />
+            </div>
+            <div className="row-span-1 col-span-1 pr-4 pb-4">
+              <div className="w-full h-full bg-gray-200 rounded-xl overflow-hidden">
+                <Artboard />
+              </div>
             </div>
 
             <ClearModal />
             <SaveModal />
             <UploadModal />
             <KeybindModal />
-          </ControlBarProvider>
-        </KeybindProvider>
-      </DarkModeProvider>
-    </div>
+          </div>
+        </ControlBarProvider>
+      </KeybindProvider>
+    </DarkModeProvider>
   );
 };
 

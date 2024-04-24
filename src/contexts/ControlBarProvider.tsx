@@ -43,6 +43,14 @@ export const ControlBarContext = createContext({
   setIsDragging: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isStrokeActive: false,
   setIsStrokeActive: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isMenuBoxOpen: false,
+  setIsMenuBoxOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isDimensionBoxOpen: false,
+  setIsDimensionBoxOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isColorPickerBoxOpen: false,
+  setIsColorPickerBoxOpen: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  isInputFocused: false,
+  setIsInputFocused: (() => {}) as Dispatch<SetStateAction<boolean>>,
   historyIndex: 0,
   setHistoryIndex: (() => {}) as Dispatch<SetStateAction<number>>,
   colorHistory: {} as ColorHistory,
@@ -96,6 +104,13 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isKeybindModalOpen, setIsKeybindModalOpen] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isStrokeActive, setIsStrokeActive] = useState<boolean>(false);
+
+  const [isMenuBoxOpen, setIsMenuBoxOpen] = useState<boolean>(false);
+  const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState<boolean>(false);
+  const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] =
+    useState<boolean>(false);
+
+  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const colorHistory = useRef<ColorHistory>([]);
@@ -172,6 +187,14 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       setIsDragging,
       isStrokeActive,
       setIsStrokeActive,
+      isMenuBoxOpen,
+      setIsMenuBoxOpen,
+      isDimensionBoxOpen,
+      setIsDimensionBoxOpen,
+      isColorPickerBoxOpen,
+      setIsColorPickerBoxOpen,
+      isInputFocused,
+      setIsInputFocused,
       historyIndex,
       setHistoryIndex,
       colorHistory: colorHistory.current,
@@ -192,6 +215,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       isKeybindModalOpen,
       isDragging,
       isStrokeActive,
+      isMenuBoxOpen,
+      isDimensionBoxOpen,
+      isColorPickerBoxOpen,
+      isInputFocused,
       historyIndex,
       colorHistory.current,
     ]

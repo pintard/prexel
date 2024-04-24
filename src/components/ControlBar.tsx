@@ -24,11 +24,6 @@ import { VerticalDivider } from "./Divider";
 const ControlBar = () => {
   const CONTROLBAR_INITIAL_Y_POS: number = 40;
 
-  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
-  const [isMenuBoxOpen, setIsMenuBoxOpen] = useState<boolean>(false);
-  const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState<boolean>(false);
-  const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] =
-    useState<boolean>(false);
   const [isBoxAreaOpen, setIsBoxAreaOpen] = useState<boolean>(false);
   const [isBelowMidScreen, setIsBelowMidScreen] = useState<boolean>(false);
   const [controlBarPosition, setControlBarPosition] = useState<PagePosition>({
@@ -51,6 +46,14 @@ const ControlBar = () => {
     setHistoryIndex,
     colorHistory,
     setCellColors,
+    isMenuBoxOpen,
+    setIsMenuBoxOpen,
+    isDimensionBoxOpen,
+    setIsDimensionBoxOpen,
+    isColorPickerBoxOpen,
+    setIsColorPickerBoxOpen,
+    isInputFocused,
+    setIsInputFocused,
   } = useControlBarContext();
 
   useLayoutEffect(() => {
@@ -180,12 +183,103 @@ const ControlBar = () => {
     });
   };
 
-  const ControlBarItems = () => {
+  if (isDraggable) {
     return (
       <>
+        <div
+          ref={controlBarAreaRef}
+          className="absolute flex flex-col items-center pointer-events-none"
+          style={{
+            left: controlBarPosition.left,
+            top: controlBarPosition.top,
+          }}
+        >
+          <span
+            key="controlBar"
+            className="z-30 p-1 h-12 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-row justify-between items-center gap-1 select-none pointer-events-auto"
+          >
+            <DragHandle
+              icon={VerticalGripIcon}
+              width={14}
+              height={22}
+              onDrag={handleMouseMove}
+              useDragContext={useControlBarContext}
+              className="p-2.5 px-0 cursor-grab"
+            />
+            <IconButton icon={UndoIcon} onClick={undo} />
+            <IconButton icon={RedoIcon} onClick={redo} />
+            <VerticalDivider />
+            <IconButton
+              option={1}
+              isActive={activeControl === "PaintControl"}
+              icon={BrushIcon}
+              onClick={() => toggleActiveControl("PaintControl")}
+            />
+            <IconButton
+              option={2}
+              isActive={activeControl === "EraseControl"}
+              icon={EraserIcon}
+              onClick={() => toggleActiveControl("EraseControl")}
+            />
+            <IconButton
+              option={3}
+              isActive={activeControl === "FillControl"}
+              icon={PaintBucketIcon}
+              onClick={() => toggleActiveControl("FillControl")}
+            />
+            <IconButton
+              option={4}
+              isActive={isColorPickerBoxOpen}
+              icon={PaletteIcon}
+              onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
+            />
+            <VerticalDivider />
+            <IconButton
+              isActive={isMenuBoxOpen}
+              icon={MenuIcon}
+              onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
+            />
+          </span>
+          <div
+            key="boxArea"
+            className={`z-30 w-full flex flex-col gap-4 items-center mt-4 ${
+              !isBoxAreaOpen && "hidden"
+            }`}
+          >
+            <MenuBox
+              key="menuBox"
+              isDimensionBoxOpen={isDimensionBoxOpen}
+              setIsDimensionBoxOpen={setIsDimensionBoxOpen}
+              isInputFocused={isInputFocused}
+            />
+          </div>
+        </div>
+        <DimensionBox
+          key="dimensionBox"
+          isOpen={isDimensionBoxOpen}
+          setIsInputFocused={setIsInputFocused}
+        />
+        <ColorPickerBox
+          isOpen={isColorPickerBoxOpen}
+          setIsInputFocused={setIsInputFocused}
+        />
+      </>
+    );
+  }
+
+  return (
+    <div className="h-full flex flex-row">
+      <span
+        key="controlBar"
+        className="h-full z-30 p-1 flex flex-col items-center gap-1 select-none pointer-events-auto"
+      >
+        <IconButton
+          isActive={isMenuBoxOpen}
+          icon={MenuIcon}
+          onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
+        />
         <IconButton icon={UndoIcon} onClick={undo} />
         <IconButton icon={RedoIcon} onClick={redo} />
-        <VerticalDivider />
         <IconButton
           option={1}
           isActive={activeControl === "PaintControl"}
@@ -210,93 +304,13 @@ const ControlBar = () => {
           icon={PaletteIcon}
           onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
         />
-        <VerticalDivider />
-        <IconButton
-          isActive={isMenuBoxOpen}
-          icon={MenuIcon}
-          onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
-        />
-      </>
-    );
-  };
-
-  if (isDraggable) {
-    return (
-      <>
-        <div
-          ref={controlBarAreaRef}
-          className="absolute flex flex-col items-center pointer-events-none"
-          style={{
-            left: controlBarPosition.left,
-            top: controlBarPosition.top,
-          }}
-        >
-          <span
-            key="controlBar"
-            className="z-30 p-1 h-12 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-row justify-between items-center gap-1 select-none pointer-events-auto"
-          >
-            <DragHandle
-              icon={VerticalGripIcon}
-              width={14}
-              height={22}
-              onDrag={handleMouseMove}
-              useDragContext={useControlBarContext}
-              className="p-2.5 px-0 cursor-grab"
-            />
-            <ControlBarItems />
-          </span>
-          <div
-            key="boxArea"
-            className={`z-30 w-full flex flex-col gap-4 items-center mt-4 ${
-              !isBoxAreaOpen && "hidden"
-            }`}
-          >
-            <MenuBox
-              key="menuBox"
-              isOpen={isMenuBoxOpen}
-              closeMenuBox={() => setIsMenuBoxOpen(false)}
-              isDimensionBoxOpen={isDimensionBoxOpen}
-              setIsDimensionBoxOpen={setIsDimensionBoxOpen}
-              isInputFocused={isInputFocused}
-            />
-          </div>
-        </div>
-        <DimensionBox
-          key="dimensionBox"
-          isOpen={isDimensionBoxOpen}
-          setIsInputFocused={setIsInputFocused}
-        />
-        <ColorPickerBox
-          isOpen={isColorPickerBoxOpen}
-          setIsInputFocused={setIsInputFocused}
-        />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <span
-        key="controlBar"
-        className="z-30 p-1 h-12 bg-white dark:bg-default-neutral flex flex-row justify-between items-center gap-1 select-none pointer-events-auto"
-      >
-        <ControlBarItems />
       </span>
-      <div
-        key="boxArea"
-        className={`z-30 w-full flex flex-col gap-4 items-center mt-4 ${
-          !isBoxAreaOpen && "hidden"
-        }`}
-      >
-        <MenuBox
-          key="menuBox"
-          isOpen={isMenuBoxOpen}
-          closeMenuBox={() => setIsMenuBoxOpen(false)}
-          isDimensionBoxOpen={isDimensionBoxOpen}
-          setIsDimensionBoxOpen={setIsDimensionBoxOpen}
-          isInputFocused={isInputFocused}
-        />
-      </div>
+      <MenuBox
+        key="menuBox"
+        isDimensionBoxOpen={isDimensionBoxOpen}
+        setIsDimensionBoxOpen={setIsDimensionBoxOpen}
+        isInputFocused={isInputFocused}
+      />
       <DimensionBox
         key="dimensionBox"
         isOpen={isDimensionBoxOpen}
@@ -306,7 +320,7 @@ const ControlBar = () => {
         isOpen={isColorPickerBoxOpen}
         setIsInputFocused={setIsInputFocused}
       />
-    </>
+    </div>
   );
 };
 
