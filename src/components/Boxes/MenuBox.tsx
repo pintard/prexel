@@ -20,14 +20,10 @@ import { useDarkModeContext } from "../../hooks/useDarkModeContext";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
 
 interface MenuBoxProps {
-  isDimensionBoxOpen: boolean;
-  setIsDimensionBoxOpen: Dispatch<SetStateAction<boolean>>;
   isInputFocused: boolean;
 }
 
 const MenuBox = ({
-  isDimensionBoxOpen,
-  setIsDimensionBoxOpen,
   isInputFocused,
 }: MenuBoxProps) => {
   const {
@@ -37,6 +33,8 @@ const MenuBox = ({
     cellColors,
     setSwatchColors,
     isMenuBoxOpen,
+    isDimensionBoxOpen,
+    setIsDimensionBoxOpen,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const { menuKeybinds, resetKeybinds } = useKeybindContext();
@@ -72,8 +70,6 @@ const MenuBox = ({
     // setIsDimensionBoxOpen(false);
   };
 
-  const handleMinimize = () => {};
-
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (isInputFocused) return;
@@ -99,14 +95,6 @@ const MenuBox = ({
     return (
       <span>
         <ul className="w-full flex flex-col items-center">
-          <MenuItem
-            label="reset"
-            value="reset"
-            keybind={menuKeybinds.reset.keybind}
-            icon={ResetIcon}
-            onClick={handleReset}
-            position="first"
-          />
           <MenuItem
             label="paint"
             value="paint"
@@ -161,12 +149,6 @@ const MenuBox = ({
             disabled={!hasCellColors}
           />
           <MenuItem
-            label="publish"
-            value="publish"
-            icon={CloudUploadIcon}
-            onClick={handlePublish}
-          />
-          <MenuItem
             label={darkMode ? "dark mode" : "light mode"}
             value="darkLightToggle"
             keybind={menuKeybinds.darkLightToggle.keybind}
@@ -174,12 +156,16 @@ const MenuBox = ({
             onClick={toggleDarkMode}
           />
           <MenuItem
-            label="minimize"
-            value="minimize"
-            keybind={menuKeybinds.minimize.keybind}
-            icon={MinimizeIcon}
-            onClick={handleMinimize}
-            position="last"
+            label="publish"
+            value="publish"
+            icon={CloudUploadIcon}
+            onClick={handlePublish}
+          />
+          <MenuItem
+            label="reset"
+            value="reset"
+            icon={ResetIcon}
+            onClick={handleReset}
           />
         </ul>
       </span>

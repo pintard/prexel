@@ -248,8 +248,6 @@ const ControlBar = () => {
           >
             <MenuBox
               key="menuBox"
-              isDimensionBoxOpen={isDimensionBoxOpen}
-              setIsDimensionBoxOpen={setIsDimensionBoxOpen}
               isInputFocused={isInputFocused}
             />
           </div>
@@ -307,8 +305,6 @@ const ControlBar = () => {
       </span>
       <MenuBox
         key="menuBox"
-        isDimensionBoxOpen={isDimensionBoxOpen}
-        setIsDimensionBoxOpen={setIsDimensionBoxOpen}
         isInputFocused={isInputFocused}
       />
       <DimensionBox
