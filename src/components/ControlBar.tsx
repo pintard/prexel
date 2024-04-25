@@ -9,6 +9,7 @@ import {
   VerticalGripIcon,
   UndoIcon,
   RedoIcon,
+  TrashIcon,
 } from "./Icons";
 import DimensionBox from "./Boxes/DimensionBox";
 import ColorPickerBox from "./Boxes/ColorPickerBox";
@@ -246,21 +247,11 @@ const ControlBar = () => {
               !isBoxAreaOpen && "hidden"
             }`}
           >
-            <MenuBox
-              key="menuBox"
-              isInputFocused={isInputFocused}
-            />
+            <MenuBox />
           </div>
         </div>
-        <DimensionBox
-          key="dimensionBox"
-          isOpen={isDimensionBoxOpen}
-          setIsInputFocused={setIsInputFocused}
-        />
-        <ColorPickerBox
-          isOpen={isColorPickerBoxOpen}
-          setIsInputFocused={setIsInputFocused}
-        />
+        <DimensionBox />
+        <ColorPickerBox />
       </>
     );
   }
@@ -302,20 +293,9 @@ const ControlBar = () => {
           icon={PaletteIcon}
           onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
         />
+        <IconButton icon={TrashIcon} />
       </span>
-      <MenuBox
-        key="menuBox"
-        isInputFocused={isInputFocused}
-      />
-      <DimensionBox
-        key="dimensionBox"
-        isOpen={isDimensionBoxOpen}
-        setIsInputFocused={setIsInputFocused}
-      />
-      <ColorPickerBox
-        isOpen={isColorPickerBoxOpen}
-        setIsInputFocused={setIsInputFocused}
-      />
+      {/* <ColorPickerBox /> */}
     </div>
   );
 };

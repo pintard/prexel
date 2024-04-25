@@ -8,24 +8,23 @@ import {
 } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 
-interface DimensionBoxProps {
-  isOpen: boolean;
-  setIsInputFocused: Dispatch<SetStateAction<boolean>>;
-}
-
-const DimensionBox = ({ isOpen, setIsInputFocused }: DimensionBoxProps) => {
-  const { rows, setRows, cols, setCols } = useControlBarContext();
+const DimensionBox = () => {
+  const {
+    rows,
+    setRows,
+    cols,
+    setCols,
+    isDimensionBoxOpen,
+    setIsInputFocused,
+  } = useControlBarContext();
   const MAX_ROWS: number = 30;
   const MAX_COLS: number = 60;
 
-  if (isOpen) {
+  if (isDimensionBoxOpen) {
     return (
       <span
-        className="absolute z-20 w-44 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col p-4 gap-4 pointer-events-auto"
-        style={{
-          right: 20,
-          top: 20,
-        }}
+        className="absolute z-20 w-44 bg-gray-100 dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col p-4 gap-4 pointer-events-auto top-4 right-4"
+
       >
         <DimensionInput
           label="cols"

@@ -30,4 +30,3 @@ export const DEFAULT_KEY_MAP: StringHash = {
   ShiftLeft: "shift",
   ShiftRight: "shift",
 };
- 

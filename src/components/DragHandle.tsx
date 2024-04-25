@@ -33,6 +33,7 @@ const DragHandle = ({
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
+    console.log("MOUSE DOWN");
     setIsDragging(true);
     initialPos.current = {
       x: e.clientX,
@@ -51,6 +52,7 @@ const DragHandle = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
+      console.log("MOUSE MOVE")
       const offsetX: number = e.clientX - initialPos.current.x;
       const offsetY: number = e.clientY - initialPos.current.y;
       onDrag(offsetX, offsetY);

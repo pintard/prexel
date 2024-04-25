@@ -9,13 +9,14 @@ import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { useColorPickerBoxContext } from "../../hooks/useColorPickerBoxContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
-interface ColorPickerProps {
-  isOpen: boolean;
-  setIsInputFocused: Dispatch<SetStateAction<boolean>>;
-}
-
-const ColorPickerBox = ({ isOpen, setIsInputFocused }: ColorPickerProps) => {
-  const { color, setColor, swatchHotKeys } = useControlBarContext();
+const ColorPickerBox = () => {
+  const {
+    color,
+    setColor,
+    swatchHotKeys,
+    isColorPickerBoxOpen,
+    setIsInputFocused,
+  } = useControlBarContext();
   const [activeSwatch, setActiveSwatch] = useState<string | null>(null);
   const [colorPickerPosition, setColorPickerPoistion] =
     useLocalStorage<PagePosition>("colorpicker-position", {
@@ -60,10 +61,10 @@ const ColorPickerBox = ({ isOpen, setIsInputFocused }: ColorPickerProps) => {
     }));
   };
 
-  if (isOpen) {
+  if (isColorPickerBoxOpen) {
     return (
       <span
-        className="absolute z-20 w-64 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden"
+        className="absolute z-20 w-64 bg-gray-100 dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden"
         ref={colorPickerRef}
         style={{
           left: colorPickerPosition.left,
