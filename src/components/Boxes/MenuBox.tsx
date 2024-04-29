@@ -88,7 +88,7 @@ const MenuBox = () => {
 
   if (isMenuBoxOpen) {
     return (
-      <span className="absolute top-4 left-4 z-40 bg-gray-100 rounded-xl shadow-dark overflow-hidden">
+      <span className="absolute top-4 left-4 z-30 bg-gray-100 rounded-xl shadow-dark overflow-hidden">
         <ul className="w-full flex flex-col items-center">
           <MenuItem
             label="paint"

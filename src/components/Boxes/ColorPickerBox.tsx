@@ -18,7 +18,7 @@ const ColorPickerBox = () => {
     setIsInputFocused,
   } = useControlBarContext();
   const [activeSwatch, setActiveSwatch] = useState<string | null>(null);
-  const [colorPickerPosition, setColorPickerPoistion] =
+  const [colorPickerPosition, setColorPickerPosition] =
     useLocalStorage<PagePosition>("colorpicker-position", {
       left: 20,
       top: 20,
@@ -50,15 +50,26 @@ const ColorPickerBox = () => {
   };
 
   const handleMouseMove = (offsetX: number, offsetY: number) => {
-    const pageWidth: number = document.documentElement.clientWidth;
-    const pageHeight: number = document.documentElement.clientHeight;
-    const maxLeft: number = pageWidth - colorPickerRef.current!.clientWidth;
-    const maxTop: number = pageHeight - colorPickerRef.current!.clientHeight;
+    if (colorPickerRef.current && colorPickerRef.current.parentElement) {
+      const parentRect: DOMRect =
+        colorPickerRef.current.parentElement.getBoundingClientRect();
+      const maxLeft: number =
+        parentRect.width - colorPickerRef.current.offsetWidth;
+      const maxTop: number =
+        parentRect.height - colorPickerRef.current.offsetHeight;
 
-    setColorPickerPoistion((prevPosition: PagePosition) => ({
-      left: Math.max(0, Math.min(prevPosition.left + offsetX, maxLeft)),
-      top: Math.max(0, Math.min(prevPosition.top + offsetY, maxTop)),
-    }));
+      setColorPickerPosition((prevPosition) => {
+        const newLeft: number = Math.max(
+          0,
+          Math.min(prevPosition.left + offsetX, maxLeft)
+        );
+        const newTop: number = Math.max(
+          0,
+          Math.min(prevPosition.top + offsetY, maxTop)
+        );
+        return { left: newLeft, top: newTop };
+      });
+    }
   };
 
   if (isColorPickerBoxOpen) {
@@ -81,7 +92,6 @@ const ColorPickerBox = () => {
             className="cursor-grab"
           />
         </div>
-
         <div className="w-full flex flex-col p-4 gap-4 items-center">
           <HexColorPicker color={color} onChange={setColor} />
           <HexColorInput

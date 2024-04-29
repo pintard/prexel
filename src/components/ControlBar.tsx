@@ -295,7 +295,6 @@ const ControlBar = () => {
         />
         <IconButton icon={TrashIcon} />
       </span>
-      {/* <ColorPickerBox /> */}
     </div>
   );
 };

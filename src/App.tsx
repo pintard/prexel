@@ -21,22 +21,22 @@ const App = () => {
       <KeybindProvider>
         <ControlBarProvider>
           <div className="h-full w-full grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] bg-gray-100">
-            <div className="row-span-2">
-              <ColorPickerBoxProvider>
+            <ColorPickerBoxProvider>
+              <div className="row-span-2">
                 <ControlBar />
-              </ColorPickerBoxProvider>
-            </div>
-            <div className="col-span-1">
-              <MenuBar />
-            </div>
-            <div className="row-span-1 col-span-1 pr-4 pb-4">
-              <div className="w-full h-full bg-gray-200 rounded-xl border-solid border border-gray-100 overflow-hidden relative">
-                <Artboard />
-                <MenuBox />
-                <DimensionBox />
-                <ColorPickerBox />
               </div>
-            </div>
+              <div className="col-span-1">
+                <MenuBar />
+              </div>
+              <div className="row-span-1 col-span-1 pr-4 pb-4">
+                <div className="w-full h-full bg-gray-200 rounded-xl border-solid border border-gray-100 overflow-hidden relative">
+                  <Artboard />
+                  <MenuBox />
+                  <DimensionBox />
+                  <ColorPickerBox />
+                </div>
+              </div>
+            </ColorPickerBoxProvider>
             <ClearModal />
             <SaveModal />
             <UploadModal />
