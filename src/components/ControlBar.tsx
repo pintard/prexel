@@ -6,36 +6,16 @@ import {
   PaintBucketIcon,
   PaletteIcon,
   MenuIcon,
-  VerticalGripIcon,
   UndoIcon,
   RedoIcon,
   TrashIcon,
 } from "./Icons";
-import DimensionBox from "./Boxes/DimensionBox";
-import ColorPickerBox from "./Boxes/ColorPickerBox";
-import MenuBox from "./Boxes/MenuBox";
 
 import IconButton from "./IconButton";
-import DragHandle from "./DragHandle";
 
 import { ActiveControl } from "../contexts/ControlBarProvider";
-import { PagePosition } from "../utils/constants";
-import { VerticalDivider } from "./Divider";
 
 const ControlBar = () => {
-  const CONTROLBAR_INITIAL_Y_POS: number = 40;
-
-  const [isBoxAreaOpen, setIsBoxAreaOpen] = useState<boolean>(false);
-  const [isBelowMidScreen, setIsBelowMidScreen] = useState<boolean>(false);
-  const [controlBarPosition, setControlBarPosition] = useState<PagePosition>({
-    left: 0,
-    top: 0,
-  });
-
-  const [isDraggable, setIsDraggable] = useState<boolean>(false);
-
-  const controlBarAreaRef = useRef<HTMLDivElement>(null);
-
   const {
     activeControl,
     setActiveControl,
@@ -55,17 +35,8 @@ const ControlBar = () => {
     setIsColorPickerBoxOpen,
     isInputFocused,
     setIsInputFocused,
+    setIsClearModalOpen,
   } = useControlBarContext();
-
-  useLayoutEffect(() => {
-    if (controlBarAreaRef.current) {
-      const controlBarWidth: number = controlBarAreaRef.current.offsetWidth;
-      setControlBarPosition({
-        left: (window.innerWidth - controlBarWidth) / 2,
-        top: CONTROLBAR_INITIAL_Y_POS,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -116,10 +87,6 @@ const ControlBar = () => {
     historyIndex,
   ]);
 
-  useEffect(() => {
-    setIsBoxAreaOpen(isMenuBoxOpen || isDimensionBoxOpen);
-  }, [isMenuBoxOpen, isDimensionBoxOpen]);
-
   const handleHistory = (e: KeyboardEvent) => {
     if (e.ctrlKey || e.metaKey) {
       if (e.shiftKey) {
@@ -162,99 +129,10 @@ const ControlBar = () => {
     setActiveControl(activeControl === control ? null : control);
   };
 
-  const handleMouseMove = (offsetX: number, offsetY: number) => {
-    const pageWidth: number = document.documentElement.clientWidth;
-    const pageHeight: number = document.documentElement.clientHeight;
-    const maxLeft: number = pageWidth - controlBarAreaRef.current!.clientWidth;
-    const maxTop: number = pageHeight - controlBarAreaRef.current!.clientHeight;
-    const verticalMidPage: number = pageHeight / 2;
-
-    setControlBarPosition((prevPos: PagePosition) => {
-      const newLeft: number = Math.max(
-        0,
-        Math.min(prevPos.left + offsetX, maxLeft)
-      );
-      const newTop: number = Math.max(
-        0,
-        Math.min(prevPos.top + offsetY, maxTop)
-      );
-
-      setIsBelowMidScreen(newTop > verticalMidPage);
-      return { left: newLeft, top: newTop };
-    });
+  const handleClear = () => {
+    setIsClearModalOpen(true);
+    // setIsDimensionBoxOpen(false);
   };
-
-  if (isDraggable) {
-    return (
-      <>
-        <div
-          ref={controlBarAreaRef}
-          className="absolute flex flex-col items-center pointer-events-none"
-          style={{
-            left: controlBarPosition.left,
-            top: controlBarPosition.top,
-          }}
-        >
-          <span
-            key="controlBar"
-            className="z-30 p-1 h-12 bg-white dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-row justify-between items-center gap-1 select-none pointer-events-auto"
-          >
-            <DragHandle
-              icon={VerticalGripIcon}
-              width={14}
-              height={22}
-              onDrag={handleMouseMove}
-              useDragContext={useControlBarContext}
-              className="p-2.5 px-0 cursor-grab"
-            />
-            <IconButton icon={UndoIcon} onClick={undo} />
-            <IconButton icon={RedoIcon} onClick={redo} />
-            <VerticalDivider />
-            <IconButton
-              option={1}
-              isActive={activeControl === "PaintControl"}
-              icon={BrushIcon}
-              onClick={() => toggleActiveControl("PaintControl")}
-            />
-            <IconButton
-              option={2}
-              isActive={activeControl === "EraseControl"}
-              icon={EraserIcon}
-              onClick={() => toggleActiveControl("EraseControl")}
-            />
-            <IconButton
-              option={3}
-              isActive={activeControl === "FillControl"}
-              icon={PaintBucketIcon}
-              onClick={() => toggleActiveControl("FillControl")}
-            />
-            <IconButton
-              option={4}
-              isActive={isColorPickerBoxOpen}
-              icon={PaletteIcon}
-              onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
-            />
-            <VerticalDivider />
-            <IconButton
-              isActive={isMenuBoxOpen}
-              icon={MenuIcon}
-              onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
-            />
-          </span>
-          <div
-            key="boxArea"
-            className={`z-30 w-full flex flex-col gap-4 items-center mt-4 ${
-              !isBoxAreaOpen && "hidden"
-            }`}
-          >
-            <MenuBox />
-          </div>
-        </div>
-        <DimensionBox />
-        <ColorPickerBox />
-      </>
-    );
-  }
 
   return (
     <div className="h-full flex flex-row">
@@ -293,7 +171,7 @@ const ControlBar = () => {
           icon={PaletteIcon}
           onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
         />
-        <IconButton icon={TrashIcon} />
+        <IconButton icon={TrashIcon} onClick={handleClear} />
       </span>
     </div>
   );

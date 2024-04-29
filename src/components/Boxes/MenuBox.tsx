@@ -60,11 +60,6 @@ const MenuBox = () => {
     setIsUploadModalOpen(true);
   };
 
-  const handleClear = () => {
-    setIsClearModalOpen(true);
-    // setIsDimensionBoxOpen(false);
-  };
-
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (isInputFocused) return;
@@ -127,7 +122,6 @@ const MenuBox = () => {
             value="clear"
             keybind={menuKeybinds.clear.keybind}
             icon={TrashIcon}
-            onClick={handleClear}
           />
           <MenuItem
             label="upload"
