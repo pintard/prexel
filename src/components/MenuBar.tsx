@@ -20,7 +20,7 @@ const MenuBar = () => {
   };
 
   return (
-    <div className="w-full p-1 flex flex-row items-center justify-between gap-1 select-none pointer-events-auto">
+    <div className="w-full p-1 pr-4 flex flex-row items-center justify-between gap-1 select-none pointer-events-auto">
       <div>
         <Link to="/">
           <IconButton icon={HouseIcon} />
