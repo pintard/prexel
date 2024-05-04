@@ -13,6 +13,7 @@ import ClearModal from "../components/Modals/ClearModal";
 import SaveModal from "../components/Modals/SaveModal";
 import UploadModal from "../components/Modals/UploadModal";
 import KeybindModal from "../components/Modals/KeybindModal";
+import PublishModal from "../components/Modals/PublishModal";
 
 const Editor = () => {
   return (
@@ -40,6 +41,7 @@ const Editor = () => {
             <SaveModal />
             <UploadModal />
             <KeybindModal />
+            <PublishModal />
           </div>
         </ControlBarProvider>
       </KeybindProvider>

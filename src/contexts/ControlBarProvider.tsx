@@ -38,7 +38,9 @@ export const ControlBarContext = createContext({
   isUploadModalOpen: false,
   setIsUploadModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isKeybindModalOpen: false,
-  setIsKeybindModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  setIsKeybindModalOpen: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  isPublishModalOpen: false,
+  setIsPublishModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDragging: false,
   setIsDragging: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isStrokeActive: false,
@@ -102,6 +104,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
   const [isKeybindModalOpen, setIsKeybindModalOpen] = useState<boolean>(false);
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isStrokeActive, setIsStrokeActive] = useState<boolean>(false);
 
@@ -183,6 +186,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       setIsUploadModalOpen,
       isKeybindModalOpen,
       setIsKeybindModalOpen,
+      isPublishModalOpen,
+      setIsPublishModalOpen,
       isDragging,
       setIsDragging,
       isStrokeActive,
@@ -213,6 +218,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       isSaveModalOpen,
       isUploadModalOpen,
       isKeybindModalOpen,
+      isPublishModalOpen,
       isDragging,
       isStrokeActive,
       isMenuBoxOpen,

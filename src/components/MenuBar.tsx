@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
 import IconButton from "./IconButton";
-import { CloudUploadIcon, DiskIcon, HouseIcon } from "./Icons";
+import { CloudUploadIcon, DiskIcon, HouseIcon, TrashIcon } from "./Icons";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
 const MenuBar = () => {
-  const { cellColors, setIsSaveModalOpen } = useControlBarContext();
+  const {
+    cellColors,
+    setIsSaveModalOpen,
+    setIsPublishModalOpen,
+    setIsClearModalOpen,
+  } = useControlBarContext();
 
   const hasCellColors: boolean = Object.keys(cellColors).length > 0;
 
@@ -16,7 +21,13 @@ const MenuBar = () => {
 
   const handlePublish = () => {
     if (hasCellColors) {
+      setIsPublishModalOpen(true);
     }
+  };
+
+  const handleClear = () => {
+    setIsClearModalOpen(true);
+    // setIsDimensionBoxOpen(false);
   };
 
   return (
@@ -25,9 +36,14 @@ const MenuBar = () => {
         <Link to="/">
           <IconButton icon={HouseIcon} />
         </Link>
+        <IconButton icon={TrashIcon} onClick={handleClear} />
       </div>
       <div>
-        <IconButton icon={CloudUploadIcon} onClick={handlePublish} />
+        <IconButton
+          icon={CloudUploadIcon}
+          onClick={handlePublish}
+          isDisabled={!hasCellColors}
+        />
         <IconButton
           icon={DiskIcon}
           onClick={handleSave}

@@ -20,6 +20,8 @@ import { ReactComponent as HouseIcon } from "./house.svg";
 import { ReactComponent as WaffleIcon } from "./waffle.svg";
 import { ReactComponent as DiskIcon } from "./disk.svg";
 import { ReactComponent as KeysIcon } from "./keys.svg";
+import { ReactComponent as DropIcon } from "./drop.svg";
+import { ReactComponent as PencilIcon } from "./pencil.svg";
 
 export {
   BrushIcon,
@@ -44,4 +46,6 @@ export {
   WaffleIcon,
   DiskIcon,
   KeysIcon,
+  DropIcon,
+  PencilIcon,
 };

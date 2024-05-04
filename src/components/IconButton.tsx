@@ -6,6 +6,7 @@ interface IconButtonProps {
   width?: number;
   height?: number;
   isDisabled?: boolean;
+  color?: string;
 }
 
 const IconButton = ({
@@ -15,6 +16,7 @@ const IconButton = ({
   width,
   height,
   isDisabled,
+  color,
   ...props
 }: IconButtonProps) => {
   return (
@@ -27,11 +29,12 @@ const IconButton = ({
       {...props}
     >
       <Icon
-        width={width ?? 22}
-        height={height ?? 22}
+        width={width ?? color ? 28 : 22}
+        height={height ?? color ? 28 : 22}
         className={`fill-current ${
           isActive ? "text-active-blue" : "text-neutral-gray"
         } dark:text-neutral-500`}
+        style={color ? { color } : undefined}
       />
     </button>
   );

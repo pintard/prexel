@@ -9,6 +9,8 @@ import {
   UndoIcon,
   RedoIcon,
   TrashIcon,
+  DropIcon,
+  PencilIcon,
 } from "./Icons";
 
 import IconButton from "./IconButton";
@@ -34,7 +36,6 @@ const ControlBar = () => {
     isColorPickerBoxOpen,
     setIsColorPickerBoxOpen,
     isInputFocused,
-    setIsInputFocused,
     setIsClearModalOpen,
   } = useControlBarContext();
 
@@ -129,11 +130,6 @@ const ControlBar = () => {
     setActiveControl(activeControl === control ? null : control);
   };
 
-  const handleClear = () => {
-    setIsClearModalOpen(true);
-    // setIsDimensionBoxOpen(false);
-  };
-
   return (
     <div
       key="controlBar"
@@ -149,7 +145,7 @@ const ControlBar = () => {
       <IconButton
         option={1}
         isActive={activeControl === "PaintControl"}
-        icon={BrushIcon}
+        icon={PencilIcon}
         onClick={() => toggleActiveControl("PaintControl")}
       />
       <IconButton
@@ -167,10 +163,10 @@ const ControlBar = () => {
       <IconButton
         option={4}
         isActive={isColorPickerBoxOpen}
-        icon={PaletteIcon}
+        icon={DropIcon}
         onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
+        color={color}
       />
-      <IconButton icon={TrashIcon} onClick={handleClear} />
     </div>
   );
 };
