@@ -135,44 +135,42 @@ const ControlBar = () => {
   };
 
   return (
-    <div className="h-full flex flex-row">
-      <span
-        key="controlBar"
-        className="h-full z-30 p-1 flex flex-col items-center gap-1 select-none pointer-events-auto"
-      >
-        <IconButton
-          isActive={isMenuBoxOpen}
-          icon={MenuIcon}
-          onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
-        />
-        <IconButton icon={UndoIcon} onClick={undo} />
-        <IconButton icon={RedoIcon} onClick={redo} />
-        <IconButton
-          option={1}
-          isActive={activeControl === "PaintControl"}
-          icon={BrushIcon}
-          onClick={() => toggleActiveControl("PaintControl")}
-        />
-        <IconButton
-          option={2}
-          isActive={activeControl === "EraseControl"}
-          icon={EraserIcon}
-          onClick={() => toggleActiveControl("EraseControl")}
-        />
-        <IconButton
-          option={3}
-          isActive={activeControl === "FillControl"}
-          icon={PaintBucketIcon}
-          onClick={() => toggleActiveControl("FillControl")}
-        />
-        <IconButton
-          option={4}
-          isActive={isColorPickerBoxOpen}
-          icon={PaletteIcon}
-          onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
-        />
-        <IconButton icon={TrashIcon} onClick={handleClear} />
-      </span>
+    <div
+      key="controlBar"
+      className="h-full p-1 flex flex-col items-center gap-1 select-none pointer-events-auto"
+    >
+      <IconButton
+        isActive={isMenuBoxOpen}
+        icon={MenuIcon}
+        onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
+      />
+      <IconButton icon={UndoIcon} onClick={undo} />
+      <IconButton icon={RedoIcon} onClick={redo} />
+      <IconButton
+        option={1}
+        isActive={activeControl === "PaintControl"}
+        icon={BrushIcon}
+        onClick={() => toggleActiveControl("PaintControl")}
+      />
+      <IconButton
+        option={2}
+        isActive={activeControl === "EraseControl"}
+        icon={EraserIcon}
+        onClick={() => toggleActiveControl("EraseControl")}
+      />
+      <IconButton
+        option={3}
+        isActive={activeControl === "FillControl"}
+        icon={PaintBucketIcon}
+        onClick={() => toggleActiveControl("FillControl")}
+      />
+      <IconButton
+        option={4}
+        isActive={isColorPickerBoxOpen}
+        icon={PaletteIcon}
+        onClick={() => setIsColorPickerBoxOpen(!isColorPickerBoxOpen)}
+      />
+      <IconButton icon={TrashIcon} onClick={handleClear} />
     </div>
   );
 };

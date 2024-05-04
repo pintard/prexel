@@ -24,10 +24,10 @@ export const KeybindContext = createContext({
   resetKeybinds: (() => {}) as () => void,
 });
 
-type ModifierKey = "\u2325" | "alt";
+type ModifierKey = "\u2318" | "ctrl";
 
 const modifierKey: ModifierKey =
-  getOperatingSystem() === "Mac" ? "\u2325" : "alt";
+  getOperatingSystem() === "Mac" ? "\u2318" : "ctrl";
 
 const DEFAULT_MENU_KEYBINDS: KeybindMap = {
   reset: {
@@ -44,9 +44,6 @@ const DEFAULT_MENU_KEYBINDS: KeybindMap = {
   },
   picker: {
     keybind: "4",
-  },
-  resize: {
-    keybind: `${modifierKey} + R`,
   },
   clear: {
     keybind: `${modifierKey} + shift + C`,

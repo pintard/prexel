@@ -17,6 +17,9 @@ import { ReactComponent as MoonIcon } from "./moon.svg";
 import { ReactComponent as SunIcon } from "./sun.svg";
 import { ReactComponent as ResetIcon } from "./reset.svg";
 import { ReactComponent as HouseIcon } from "./house.svg";
+import { ReactComponent as WaffleIcon } from "./waffle.svg";
+import { ReactComponent as DiskIcon } from "./disk.svg";
+import { ReactComponent as KeysIcon } from "./keys.svg";
 
 export {
   BrushIcon,
@@ -37,5 +40,8 @@ export {
   MoonIcon,
   SunIcon,
   ResetIcon,
-  HouseIcon
+  HouseIcon,
+  WaffleIcon,
+  DiskIcon,
+  KeysIcon,
 };

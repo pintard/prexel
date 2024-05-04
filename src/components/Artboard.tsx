@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import GridCell from "./GridCell";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
@@ -48,15 +48,15 @@ const Artboard = () => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isStrokeActive) {
-      const { clientX, clientY, currentTarget } = e.nativeEvent;
-      if (!(currentTarget instanceof HTMLDivElement)) return;
+      const rect: DOMRect = e.currentTarget.getBoundingClientRect();
+      const offsetX: number = e.clientX - rect.left;
+      const offsetY: number = e.clientY - rect.top;
 
-      const rect: DOMRect = currentTarget.getBoundingClientRect();
       const cellWidth: number = rect.width / cols;
       const cellHeight: number = rect.height / rows;
 
-      const row: number = Math.floor((clientY - rect.top) / cellHeight);
-      const col: number = Math.floor((clientX - rect.left) / cellWidth);
+      const col: number = Math.floor(offsetX / cellWidth);
+      const row: number = Math.floor(offsetY / cellHeight);
 
       const id: string = `${row}-${col}`;
       handleStroke(id);
@@ -64,13 +64,28 @@ const Artboard = () => {
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (isStrokeActive) {
-      const cellWidth: number = e.currentTarget.clientWidth / cols;
-      const cellHeight: number = e.currentTarget.clientHeight / rows;
+    // if (isStrokeActive) {
+    //   const cellWidth: number = e.currentTarget.clientWidth / cols;
+    //   const cellHeight: number = e.currentTarget.clientHeight / rows;
 
+    //   const touch: React.Touch = e.touches[0];
+    //   const row: number = Math.floor(touch.pageY / cellHeight);
+    //   const col: number = Math.floor(touch.pageX / cellWidth);
+
+    //   const id: string = `${row}-${col}`;
+    //   handleStroke(id);
+    // }
+    if (isStrokeActive) {
       const touch: React.Touch = e.touches[0];
-      const row: number = Math.floor(touch.pageY / cellHeight);
-      const col: number = Math.floor(touch.pageX / cellWidth);
+      const rect: DOMRect = e.currentTarget.getBoundingClientRect();
+      const offsetX: number = touch.clientX - rect.left;
+      const offsetY: number = touch.clientY - rect.top;
+
+      const cellWidth: number = rect.width / cols;
+      const cellHeight: number = rect.height / rows;
+
+      const col: number = Math.floor(offsetX / cellWidth);
+      const row: number = Math.floor(offsetY / cellHeight);
 
       const id: string = `${row}-${col}`;
       handleStroke(id);
