@@ -152,6 +152,7 @@ const Artboard = () => {
 
   return (
     <div
+      id="artboard"
       className="grid w-full h-full"
       style={{
         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
