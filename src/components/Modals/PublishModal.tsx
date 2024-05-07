@@ -9,22 +9,27 @@ const PublishModal = () => {
   const [tagInput, setTagInput] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (isPublishModalOpen) {
+    if (isPublishModalOpen && !imageSrc) {
       const artboard: HTMLElement | null = document.getElementById("artboard");
 
       if (artboard) {
-        toPng(artboard, {
+        toPng(artboard, { 
           cacheBust: true,
         })
           .then((dataUrl: string) => {
             setImageSrc(dataUrl);
+            setIsLoading(false);
           })
           .catch((err) => {
             console.error("Failed to capture screenshot", err);
             setImageSrc(null);
+            setIsLoading(false);
           });
+      } else {
+        setIsLoading(false);
       }
     }
   }, [isPublishModalOpen]);
@@ -76,15 +81,22 @@ const PublishModal = () => {
         >
           <h2 className="text-2xl font-semibold mb-2">Publish this prexel?</h2>
 
-          {imageSrc && (
-            <div className="border border-gray-400 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-3">
-              <img
-                src={imageSrc}
-                alt="Artboard Snapshot"
-                className="max-w-xs"
-              />
-            </div>
-          )}
+          <div
+            className="border border-gray-400 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-3"
+            style={{ minHeight: "240px" }}
+          >
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              imageSrc && (
+                <img
+                  src={imageSrc}
+                  alt="Artboard Snapshot"
+                  className="max-w-xs"
+                />
+              )
+            )}
+          </div>
 
           <span className="mb-2">
             <p>Title</p>
