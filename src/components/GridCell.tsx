@@ -58,8 +58,8 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
                 (activeControl === "FillControl" ||
                 activeControl === "PaintControl")
                   ? color
-                  : "#000000",
-              opacity: 0.3,
+                  : "#EEEEEE",
+              opacity: 0.9,
             }),
         }}
       ></span>

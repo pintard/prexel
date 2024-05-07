@@ -9,14 +9,15 @@ const PublishModal = () => {
   const [tagInput, setTagInput] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isPublishModalOpen && !imageSrc) {
+    if (isPublishModalOpen) {
+      setIsLoading(true);
       const artboard: HTMLElement | null = document.getElementById("artboard");
 
       if (artboard) {
-        toPng(artboard, { 
+        toPng(artboard, {
           cacheBust: true,
         })
           .then((dataUrl: string) => {
@@ -31,6 +32,8 @@ const PublishModal = () => {
       } else {
         setIsLoading(false);
       }
+    } else {
+      setImageSrc(null);
     }
   }, [isPublishModalOpen]);
 
@@ -69,6 +72,11 @@ const PublishModal = () => {
   };
 
   const publish = (): void => {
+    closeModal();
+  };
+
+  const closeModal = (): void => {
+    setImageSrc(null);
     setIsPublishModalOpen(false);
   };
 
@@ -128,7 +136,7 @@ const PublishModal = () => {
             </button>
             <button
               className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 outline outline-2 focus:outline-blue-400"
-              onClick={() => setIsPublishModalOpen(false)}
+              onClick={closeModal}
             >
               Cancel
             </button>
