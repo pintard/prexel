@@ -40,13 +40,13 @@ const MenuBar = () => {
       </div>
       <div>
         <IconButton
-          icon={CloudUploadIcon}
-          onClick={handlePublish}
+          icon={DiskIcon}
+          onClick={handleSave}
           isDisabled={!hasCellColors}
         />
         <IconButton
-          icon={DiskIcon}
-          onClick={handleSave}
+          icon={CloudUploadIcon}
+          onClick={handlePublish}
           isDisabled={!hasCellColors}
         />
       </div>

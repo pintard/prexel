@@ -31,6 +31,8 @@ const ControlBar = () => {
     setCellColors,
     isMenuBoxOpen,
     setIsMenuBoxOpen,
+    isKeybindBoxOpen,
+    setIsKeybindBoxOpen,
     isDimensionBoxOpen,
     setIsDimensionBoxOpen,
     isColorPickerBoxOpen,
@@ -101,6 +103,8 @@ const ControlBar = () => {
   const handleEscape = () => {
     if (isDimensionBoxOpen) {
       setIsDimensionBoxOpen(false);
+    } else if (isKeybindBoxOpen) {
+      setIsKeybindBoxOpen(false);
     } else if (isMenuBoxOpen) {
       setIsMenuBoxOpen(false);
     } else if (isColorPickerBoxOpen) {

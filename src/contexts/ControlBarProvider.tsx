@@ -38,7 +38,7 @@ export const ControlBarContext = createContext({
   isUploadModalOpen: false,
   setIsUploadModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isKeybindModalOpen: false,
-  setIsKeybindModalOpen: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  setIsKeybindModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isPublishModalOpen: false,
   setIsPublishModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDragging: false,
@@ -47,10 +47,12 @@ export const ControlBarContext = createContext({
   setIsStrokeActive: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isMenuBoxOpen: false,
   setIsMenuBoxOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isKeybindBoxOpen: false,
+  setIsKeybindBoxOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDimensionBoxOpen: false,
   setIsDimensionBoxOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isColorPickerBoxOpen: false,
-  setIsColorPickerBoxOpen: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  setIsColorPickerBoxOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isInputFocused: false,
   setIsInputFocused: (() => {}) as Dispatch<SetStateAction<boolean>>,
   historyIndex: 0,
@@ -109,6 +111,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const [isStrokeActive, setIsStrokeActive] = useState<boolean>(false);
 
   const [isMenuBoxOpen, setIsMenuBoxOpen] = useState<boolean>(false);
+  const [isKeybindBoxOpen, setIsKeybindBoxOpen] = useState<boolean>(false);
   const [isDimensionBoxOpen, setIsDimensionBoxOpen] = useState<boolean>(false);
   const [isColorPickerBoxOpen, setIsColorPickerBoxOpen] =
     useState<boolean>(false);
@@ -194,6 +197,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       setIsStrokeActive,
       isMenuBoxOpen,
       setIsMenuBoxOpen,
+      isKeybindBoxOpen,
+      setIsKeybindBoxOpen,
       isDimensionBoxOpen,
       setIsDimensionBoxOpen,
       isColorPickerBoxOpen,
@@ -222,6 +227,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       isDragging,
       isStrokeActive,
       isMenuBoxOpen,
+      isKeybindBoxOpen,
       isDimensionBoxOpen,
       isColorPickerBoxOpen,
       isInputFocused,

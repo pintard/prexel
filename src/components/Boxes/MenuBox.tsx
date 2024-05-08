@@ -24,14 +24,15 @@ const MenuBox = () => {
     setIsUploadModalOpen,
     setSwatchColors,
     isMenuBoxOpen,
+    setIsMenuBoxOpen,
     isDimensionBoxOpen,
     setIsDimensionBoxOpen,
     isInputFocused,
+    isKeybindBoxOpen,
+    setIsKeybindBoxOpen,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const { menuKeybinds, resetKeybinds } = useKeybindContext();
-
-  const [isKeybindBoxOpen, setIsKeybindBoxOpen] = useState(false);
 
   const handleReset = () => {
     setSwatchColors({});
@@ -46,41 +47,16 @@ const MenuBox = () => {
     setIsUploadModalOpen(true);
   };
 
-  const toggleKeybindBox = () => {
-    setIsKeybindBoxOpen((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (isInputFocused) return;
-
-      if (e.altKey) {
-        switch (e.code) {
-          case "KeyR":
-            handleResize();
-            break;
-          default:
-            break;
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, [isInputFocused, isDimensionBoxOpen]);
-
   if (isMenuBoxOpen) {
     return (
       <div className="absolute top-4 left-4 z-30 flex flex-row items-start gap-4">
-        <span className="bg-gray-100 rounded-xl shadow-dark overflow-hidden">
+        <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden">
           <ul className="w-full flex flex-col items-center">
             <MenuItem
               label="keybinds"
               value="keybinds"
               icon={KeysIcon}
-              onClick={toggleKeybindBox}
+              onClick={() => setIsKeybindBoxOpen(!isKeybindBoxOpen)}
             />
             <MenuItem
               label="resize"
@@ -108,8 +84,8 @@ const MenuBox = () => {
               onClick={handleReset}
             />
           </ul>
-        </span>
-        <KeybindBox isVisible={isKeybindBoxOpen} />
+        </div>
+        <KeybindBox />
       </div>
     );
   }

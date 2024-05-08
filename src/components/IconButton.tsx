@@ -22,19 +22,19 @@ const IconButton = ({
   return (
     <button
       className={`relative ${
-        isActive ? "bg-neutral-100 dark:bg-neutral-800" : "bg-transparent"
-      } rounded-lg p-2.5 hover:bg-blue-50 dark:hover:bg-neutral-700 focus:outline-none border-solid border border-transparent active:border-blue-200 select-none ${
+        isActive ? "bg-blue-100 dark:bg-neutral-800" : "bg-transparent"
+      } rounded-lg p-2.5 hover:bg-blue-200 hover:text-blue-300 dark:hover:bg-neutral-700 focus:outline-none border-solid border border-transparent active:border-blue-300 select-none ${
         isDisabled && "!cursor-not-allowed"
       }`}
       {...props}
     >
       <Icon
-        width={width ?? color ? 28 : 22}
-        height={height ?? color ? 28 : 22}
+        width={width ?? 24}
+        height={height ?? 24}
         className={`fill-current ${
-          isActive ? "text-active-blue" : "text-neutral-gray"
+          isActive ? "text-blue-400" : "text-blue-300"
         } dark:text-neutral-500`}
-        style={color ? { color } : undefined}
+        style={!isActive && color ? { color } : undefined}
       />
     </button>
   );
