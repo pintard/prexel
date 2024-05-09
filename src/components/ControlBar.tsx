@@ -87,6 +87,7 @@ const ControlBar = () => {
     isColorPickerBoxOpen,
     isMenuBoxOpen,
     isDimensionBoxOpen,
+    isKeybindBoxOpen,
     historyIndex,
   ]);
 

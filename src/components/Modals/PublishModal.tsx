@@ -58,12 +58,12 @@ const PublishModal = () => {
     return tags.map((tag: string, index: number) => (
       <div
         key={index}
-        className="bg-blue-100 rounded-lg px-3 py-1 mr-2 mb-2 flex items-center"
+        className="bg-blue-100 rounded-full px-4 py-1 mr-2 mb-2 flex items-center"
       >
         {tag}
         <button
           onClick={() => handleRemoveTag(index)}
-          className="ml-2 text-red-500 hover:text-red-700"
+          className="ml-3 text-red-500 hover:text-red-700"
         >
           &times;
         </button>
@@ -90,7 +90,7 @@ const PublishModal = () => {
           <h2 className="text-2xl font-semibold mb-2">Publish this prexel?</h2>
 
           <div
-            className="border border-gray-400 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-3"
+            className="border-2 border-blue-400 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-3"
             style={{ minHeight: "240px" }}
           >
             {isLoading ? (

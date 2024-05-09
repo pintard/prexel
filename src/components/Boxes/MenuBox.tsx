@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-  TrashIcon,
-  DownloadIcon,
   UploadIcon,
   GridIcon,
   MoonIcon,
   SunIcon,
   ResetIcon,
-  PaletteIcon,
-  EraserIcon,
-  PaintBucketIcon,
-  BrushIcon,
   KeysIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
@@ -32,7 +26,7 @@ const MenuBox = () => {
     setIsKeybindBoxOpen,
   } = useControlBarContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
-  const { menuKeybinds, resetKeybinds } = useKeybindContext();
+  const { resetKeybinds } = useKeybindContext();
 
   const handleReset = () => {
     setSwatchColors({});
