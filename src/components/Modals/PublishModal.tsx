@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { toPng } from "html-to-image";
+import useFetch from "../../hooks/useFetch";
 
 const PublishModal = () => {
   const { isPublishModalOpen, setIsPublishModalOpen } = useControlBarContext();
+  const { sendRequest } = useFetch();
 
   const [title, setTitle] = useState<string>("");
   const [tagInput, setTagInput] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isPublishModalOpen) {
-      setIsLoading(true);
+      setIsImageLoading(true);
       const artboard: HTMLElement | null = document.getElementById("artboard");
 
       if (artboard) {
@@ -22,15 +24,15 @@ const PublishModal = () => {
         })
           .then((dataUrl: string) => {
             setImageSrc(dataUrl);
-            setIsLoading(false);
+            setIsImageLoading(false);
           })
           .catch((err) => {
             console.error("Failed to capture screenshot", err);
             setImageSrc(null);
-            setIsLoading(false);
+            setIsImageLoading(false);
           });
       } else {
-        setIsLoading(false);
+        setIsImageLoading(false);
       }
     } else {
       setImageSrc(null);
@@ -72,7 +74,27 @@ const PublishModal = () => {
   };
 
   const publish = (): void => {
-    closeModal();
+    if (!title || !imageSrc || tags.length === 0) {
+      alert("Please ensure title, tags, and the artboard snapshot are set.");
+      return;
+    }
+
+    const payload = {
+      title,
+      tags,
+      image: imageSrc,
+    };
+
+    sendRequest("/prexel", {
+      method: "POST",
+      body: payload,
+    })
+      .then(() => {
+        closeModal();
+      })
+      .catch((error) => {
+        console.error("Publishing failed: ", error);
+      });
   };
 
   const closeModal = (): void => {
@@ -93,7 +115,7 @@ const PublishModal = () => {
             className="border-2 border-blue-400 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-3"
             style={{ minHeight: "240px" }}
           >
-            {isLoading ? (
+            {isImageLoading ? (
               <div>Loading...</div>
             ) : (
               imageSrc && (

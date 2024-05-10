@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Marketplace = () => {
   return (
     <div className="w-full h-full bg-gray-200 flex flex-col p-10">
-      <div className="w-full h-10 bg-gray-300">
+      <div className="w-full bg-gray-300">
         <Link to="/editor">
           <IconButton icon={WaffleIcon} />
         </Link>

@@ -14,7 +14,6 @@ import SaveModal from "../components/Modals/SaveModal";
 import UploadModal from "../components/Modals/UploadModal";
 import KeybindModal from "../components/Modals/KeybindModal";
 import PublishModal from "../components/Modals/PublishModal";
-import KeybindBox from "../components/Boxes/KeybindBox";
 
 const Editor = () => {
   return (
