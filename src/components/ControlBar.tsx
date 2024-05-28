@@ -38,11 +38,12 @@ const ControlBar = () => {
     isColorPickerBoxOpen,
     setIsColorPickerBoxOpen,
     isInputFocused,
-    setIsClearModalOpen,
+    isAnyModalOpen,
   } = useControlBarContext();
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
+      if (isAnyModalOpen) return;
       if (isInputFocused) return;
 
       switch (e.key) {
@@ -89,6 +90,7 @@ const ControlBar = () => {
     isDimensionBoxOpen,
     isKeybindBoxOpen,
     historyIndex,
+    isAnyModalOpen,
   ]);
 
   const handleHistory = (e: KeyboardEvent) => {

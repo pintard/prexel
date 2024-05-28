@@ -10,6 +10,7 @@ import {
 } from "react";
 import { StringHash as ColorGroup } from "../utils/constants";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { getCuteCode } from "../utils/generateUtils";
 
 export type ActiveControl = "PaintControl" | "FillControl" | "EraseControl";
 
@@ -30,7 +31,11 @@ export const ControlBarContext = createContext({
   swatchColors: {} as ColorGroup,
   setSwatchColors: (() => {}) as Dispatch<SetStateAction<ColorGroup>>,
   cellColors: {} as ColorGroup,
-  setCellColors: (() => {}) as Dispatch<SetStateAction<ColorGroup>>,
+  setCellColors: (() => { }) as Dispatch<SetStateAction<ColorGroup>>,
+  cuteCode: "",
+  setCuteCode: (() => { }) as Dispatch<SetStateAction<string>>,
+  isAnyModalOpen: false,
+  setIsAnyModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isClearModalOpen: false,
   setIsClearModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isSaveModalOpen: false,
@@ -102,6 +107,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
     {}
   );
   const [cellColors, setCellColors] = useState<ColorGroup>({});
+  const [cuteCode, setCuteCode] = useState<string>("");
+  const [isAnyModalOpen, setIsAnyModalOpen] = useState<boolean>(false);
   const [isClearModalOpen, setIsClearModalOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
@@ -120,6 +127,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
 
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const colorHistory = useRef<ColorHistory>([]);
+
+  useEffect(() => {
+    setCuteCode(getCuteCode(cellColors, rows, cols));
+  }, [cellColors, rows, cols]);
 
   useEffect(() => {
     console.log("Colors:", cellColors);
@@ -181,6 +192,10 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       setSwatchColors,
       cellColors,
       setCellColors,
+      cuteCode,
+      setCuteCode,
+      isAnyModalOpen,
+      setIsAnyModalOpen,
       isClearModalOpen,
       setIsClearModalOpen,
       isSaveModalOpen,
@@ -219,6 +234,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
       activeControl,
       swatchColors,
       cellColors,
+      cuteCode,
+      isAnyModalOpen,
       isClearModalOpen,
       isSaveModalOpen,
       isUploadModalOpen,

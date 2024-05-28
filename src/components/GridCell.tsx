@@ -39,7 +39,11 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
   return (
     <span
       id={id}
-      className={`relative z-10 select-none ${isEven && "bg-default-gray dark:bg-default-neutral"}`}
+      className={`grid-cell ${
+        isEven ? "is-even" : ""
+      } relative z-10 select-none ${
+        isEven && "bg-default-gray dark:bg-default-neutral"
+      }`}
       onClick={handleClick}
     >
       <span
@@ -55,8 +59,8 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
           ...(isHover &&
             !isDragging && {
               backgroundColor:
-                (activeControl === "FillControl" ||
-                activeControl === "PaintControl")
+                activeControl === "FillControl" ||
+                activeControl === "PaintControl"
                   ? color
                   : "#EEEEEE",
               opacity: 0.9,

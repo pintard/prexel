@@ -2,10 +2,19 @@ import { useEffect, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { toPng } from "html-to-image";
 import useFetch from "../../hooks/useFetch";
+import {
+  PrexelPostPayload,
+  PrexelPostResponse,
+} from "../../utils/apiConstants";
+import useModalState from "../../hooks/useModalState";
 
 const PublishModal = () => {
-  const { isPublishModalOpen, setIsPublishModalOpen } = useControlBarContext();
-  const { sendRequest } = useFetch();
+  const { isPublishModalOpen, setIsPublishModalOpen, cuteCode } =
+    useControlBarContext();
+
+  useModalState(isPublishModalOpen);
+
+  const { sendRequest } = useFetch<PrexelPostResponse, PrexelPostPayload>();
 
   const [title, setTitle] = useState<string>("");
   const [tagInput, setTagInput] = useState<string>("");
@@ -16,28 +25,46 @@ const PublishModal = () => {
   useEffect(() => {
     if (isPublishModalOpen) {
       setIsImageLoading(true);
-      const artboard: HTMLElement | null = document.getElementById("artboard");
-
-      if (artboard) {
-        toPng(artboard, {
-          cacheBust: true,
-        })
-          .then((dataUrl: string) => {
-            setImageSrc(dataUrl);
-            setIsImageLoading(false);
-          })
-          .catch((err) => {
-            console.error("Failed to capture screenshot", err);
-            setImageSrc(null);
-            setIsImageLoading(false);
-          });
-      } else {
-        setIsImageLoading(false);
-      }
+      captureImage();
     } else {
       setImageSrc(null);
     }
   }, [isPublishModalOpen]);
+
+  const captureImage = (): void => {
+    const artboard: HTMLElement | null = document.getElementById("artboard");
+    if (artboard) {
+      applyTransparentBackground();
+      toPng(artboard, { cacheBust: true })
+        .then((dataUrl: string) => {
+          setImageSrc(dataUrl);
+          revertBackground();
+          setIsImageLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to capture screenshot", err);
+          setImageSrc(null);
+          revertBackground();
+          setIsImageLoading(false);
+        });
+    }
+  };
+
+  const applyTransparentBackground = (): void => {
+    document.querySelectorAll(".grid-cell.is-even").forEach((cell: Element) => {
+      if (cell instanceof HTMLElement) {
+        cell.style.background = "transparent";
+      }
+    });
+  };
+
+  const revertBackground = (): void => {
+    document.querySelectorAll(".grid-cell.is-even").forEach((cell: Element) => {
+      if (cell instanceof HTMLElement) {
+        cell.style.background = "";
+      }
+    });
+  };
 
   const handleTagInputKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
@@ -79,26 +106,38 @@ const PublishModal = () => {
       return;
     }
 
-    const payload = {
-      title,
-      tags,
-      image: imageSrc,
-    };
+    fetch(imageSrc)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const fileName: string = `prexel_1_${Math.floor(
+          new Date().getTime() / 1000
+        )}.png`;
 
-    sendRequest("/prexel", {
-      method: "POST",
-      body: payload,
-    })
-      .then(() => {
-        closeModal();
-      })
-      .catch((error) => {
-        console.error("Publishing failed: ", error);
+        const formData = new FormData();
+        formData.append("user_id", "1");
+        formData.append("code", cuteCode);
+        formData.append("title", title);
+        formData.append("tags", tags.join(","));
+        formData.append("image", blob, fileName);
+
+        sendRequest("/posts", {
+          method: "POST",
+          body: formData,
+        })
+          .then(() => {
+            closeModal();
+          })
+          .catch((error) => {
+            console.error("Publishing failed: ", error);
+          });
       });
   };
 
   const closeModal = (): void => {
     setImageSrc(null);
+    setTitle("");
+    setTagInput("");
+    setTags([]);
     setIsPublishModalOpen(false);
   };
 

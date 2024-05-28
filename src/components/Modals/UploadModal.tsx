@@ -3,10 +3,13 @@ import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { getPrexel } from "../../utils/generateUtils";
 import { UploadIcon } from "../Icons";
 import { StringHash as ColorGroup } from "../../utils/constants";
+import useModalState from "../../hooks/useModalState";
 
 const UploadModal = () => {
   const { isUploadModalOpen, setIsUploadModalOpen, updateColors } =
     useControlBarContext();
+
+  useModalState(isUploadModalOpen);
 
   const [cuteCode, setCuteCode] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");

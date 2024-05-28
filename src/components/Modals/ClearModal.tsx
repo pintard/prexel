@@ -1,9 +1,12 @@
 import React from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
+import useModalState from "../../hooks/useModalState";
 
 const ClearModal = () => {
   const { updateColors, isClearModalOpen, setIsClearModalOpen } =
     useControlBarContext();
+
+  useModalState(isClearModalOpen);
 
   const handleClear = () => {
     updateColors({});

@@ -1,16 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import { getCuteCode } from "../../utils/generateUtils";
+import useModalState from "../../hooks/useModalState";
 
 const SaveModal = () => {
-  const { cellColors, rows, cols, isSaveModalOpen, setIsSaveModalOpen } =
+  const { cuteCode, isSaveModalOpen, setIsSaveModalOpen } =
     useControlBarContext();
-  const [cuteCode, setCuteCode] = useState<string>("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    setCuteCode(getCuteCode(cellColors, rows, cols));
-  }, [cellColors, rows, cols]);
+  useModalState(isSaveModalOpen);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const saveToFile = () => {
     const blob: Blob = new Blob([cuteCode], { type: "text/plain" });

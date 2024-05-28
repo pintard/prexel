@@ -8,11 +8,14 @@ import {
   MAC_KEY_MAP,
   StringHash,
 } from "../../utils/constants";
+import useModalState from "../../hooks/useModalState";
 
 const KeybindModal = () => {
   const { isKeybindModalOpen, setIsKeybindModalOpen } = useControlBarContext();
   const { keybindModalId, menuKeybinds, updateMenuKeybind } =
     useKeybindContext();
+
+  useModalState(isKeybindModalOpen);
 
   const [activeKeybind, setActiveKeybind] = useState("");
   const [initialKeybind, setInitialKeybind] = useState("");
