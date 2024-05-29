@@ -41,6 +41,9 @@ const ControlBar = () => {
     isAnyModalOpen,
   } = useControlBarContext();
 
+  const [isUndoActive, setIsUndoActive] = useState(false);
+  const [isRedoActive, setIsRedoActive] = useState(false);
+
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (isAnyModalOpen) return;
@@ -96,6 +99,7 @@ const ControlBar = () => {
   const handleHistory = (e: KeyboardEvent) => {
     if (e.ctrlKey || e.metaKey) {
       if (e.shiftKey) {
+        console.log("REDO EXECUTED");
         redo();
       } else {
         undo();
@@ -122,6 +126,8 @@ const ControlBar = () => {
       const index: number = historyIndex - 1;
       setHistoryIndex(index);
       setCellColors(colorHistory[index]);
+      setIsUndoActive(true);
+      setTimeout(() => setIsUndoActive(false), 200);
     }
   };
 
@@ -130,6 +136,8 @@ const ControlBar = () => {
       const index: number = historyIndex + 1;
       setHistoryIndex(index);
       setCellColors(colorHistory[index]);
+      setIsRedoActive(true);
+      setTimeout(() => setIsRedoActive(false), 200);
     }
   };
 
@@ -147,8 +155,8 @@ const ControlBar = () => {
         icon={MenuIcon}
         onClick={() => setIsMenuBoxOpen(!isMenuBoxOpen)}
       />
-      <IconButton icon={UndoIcon} onClick={undo} />
-      <IconButton icon={RedoIcon} onClick={redo} />
+      <IconButton isActive={isUndoActive} icon={UndoIcon} onClick={undo} />
+      <IconButton isActive={isRedoActive} icon={RedoIcon} onClick={redo} />
       <IconButton
         option={1}
         isActive={activeControl === "PaintControl"}

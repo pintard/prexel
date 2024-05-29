@@ -32,6 +32,7 @@ const MenuBox = () => {
   const handleReset = () => {
     setSwatchColors({});
     resetKeybinds();
+    alert("Swatch palette and keybinds have been reset.");
   };
 
   const handleResize = () => {
