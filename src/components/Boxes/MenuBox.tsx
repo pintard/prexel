@@ -6,6 +6,7 @@ import {
   SunIcon,
   ResetIcon,
   KeysIcon,
+  MinimizeIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 import { useDarkModeContext } from "../../hooks/useDarkModeContext";
@@ -44,18 +45,19 @@ const MenuBox = () => {
   if (isMenuBoxOpen) {
     return (
       <div className="absolute top-4 left-4 z-30 flex flex-row items-start gap-4">
-        <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden">
-          <ul className="w-full flex flex-col items-center">
+        <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden p-2">
+          <ul className="w-full flex flex-col gap-1 items-center">
             <MenuItem
               label="keybinds"
               value="keybinds"
-              icon={KeysIcon}
+              icon={GridIcon}
               onClick={() => setIsKeybindBoxOpen(!isKeybindBoxOpen)}
+              isActive={isKeybindBoxOpen}
             />
             <MenuItem
               label="resize"
               value="resize"
-              icon={GridIcon}
+              icon={MinimizeIcon}
               onClick={handleResize}
               isActive={isDimensionBoxOpen}
             />

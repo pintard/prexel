@@ -27,18 +27,17 @@ const MenuBar = () => {
 
   const handleClear = () => {
     setIsClearModalOpen(true);
-    // setIsDimensionBoxOpen(false);
   };
 
   return (
-    <div className="w-full p-1 pr-4 flex flex-row items-center justify-between gap-1 select-none pointer-events-auto">
-      <div>
+    <div className="w-full py-2 pr-6 flex flex-row items-center justify-between select-none pointer-events-auto">
+      <div className="flex flex-row gap-1">
         <Link to="/">
           <IconButton icon={HouseIcon} />
         </Link>
         <IconButton icon={TrashIcon} onClick={handleClear} />
       </div>
-      <div>
+      <div className="flex flex-row gap-1">
         <IconButton
           icon={DiskIcon}
           onClick={handleSave}

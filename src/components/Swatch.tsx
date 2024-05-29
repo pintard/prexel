@@ -48,8 +48,8 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
 
   return (
     <span
-      className={`relative w-10 h-10 rounded bg-default-gray dark:bg-default-neutral overflow-hidden select-none cursor-pointer dark:border-neutral-800 border-solid border-2 ${
-        isActive ? "border-blue-400" : ""
+      className={`relative w-10 h-10 rounded-xl bg-default-gray dark:bg-default-neutral overflow-hidden select-none cursor-pointer dark:border-neutral-800 border-solid border-2 ${
+        isActive ? "border-blue-300" : ""
       }`}
       onClick={handleClick}
     >
@@ -57,7 +57,7 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
         className="absolute w-full h-full"
         style={{ backgroundColor: swatchColor }}
       >
-        <span className={`absolute bottom-1 right-2 ${textColor} text-xxs`}>
+        <span className={`absolute top-1 left-2 ${textColor} text-xs`}>
           {id.toUpperCase()}
         </span>
       </span>

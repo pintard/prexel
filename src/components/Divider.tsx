@@ -1,5 +1,5 @@
 export const HorizontalDivider = () => {
-  return <span className="w-full h-px bg-slate-200 dark:bg-neutral-800"></span>;
+  return <span className="block w-full h-px bg-gray-200 dark:bg-neutral-800"></span>;
 };
 
 export const VerticalDivider = () => {

@@ -140,7 +140,7 @@ const ControlBar = () => {
   return (
     <div
       key="controlBar"
-      className="h-full p-1 flex flex-col items-center gap-1 select-none pointer-events-auto"
+      className="h-full p-2 flex flex-col items-center gap-1 select-none pointer-events-auto"
     >
       <IconButton
         isActive={isMenuBoxOpen}

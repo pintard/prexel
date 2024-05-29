@@ -7,6 +7,7 @@ type MenuItemValue =
   | "erase"
   | "fill"
   | "picker"
+  | "menu"
   | "reset"
   | "resize"
   | "clear"
@@ -48,31 +49,29 @@ const MenuItem = ({
   };
 
   return (
-    <>
-      <li
-        className={`px-4 py-2 w-full hover:bg-blue-100 dark:hover:bg-neutral-900 flex flex-row gap-4 items-center cursor-pointer select-none ${
-          isActive ? "bg-gray-100 dark:bg-neutral-800" : "bg-transparent"
-        } ${
-          isActive ? "text-active-blue" : "text-black dark:text-neutral-500"
-        } whitespace-nowrap ${isDisabled && "!cursor-not-allowed"}`}
-        {...props}
-      >
-        <span>
-          <Icon width={16} height={16} className={`fill-current`} />
-        </span>
-        <span>{label}</span>
-        {keybind && (
-          <span className="w-full text-end">
-            <span
-              onClick={openKeybindModal}
-              className="italic inline-block px-2 py-1 border border-gray-300 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded hover:bg-gray-200 dark:hover:bg-neutral-700 active:bg-gray-300 dark:active:bg-neutral-600"
-            >
-              {keybind}
-            </span>
+    <li
+      className={`px-4 py-2 w-full rounded-lg hover:bg-blue-200 active:bg-blue-100 dark:hover:bg-neutral-900 flex flex-row gap-4 items-center cursor-pointer select-none ${
+        isActive ? "bg-blue-100 dark:bg-neutral-800" : "bg-transparent"
+      } ${
+        isActive ? "text-blue-400" : "text-gray-600 dark:text-neutral-500"
+      } whitespace-nowrap ${isDisabled && "!cursor-not-allowed"}`}
+      {...props}
+    >
+      <span>
+        <Icon width={18} height={18} className={`fill-current`} />
+      </span>
+      <span className="text-lg">{label}</span>
+      {keybind && (
+        <span className="w-full text-end">
+          <span
+            onClick={openKeybindModal}
+            className="italic inline-block px-2 py-1 border border-gray-300 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 text-gray-500 dark:text-gray-300 text-xs rounded hover:bg-gray-200 dark:hover:bg-neutral-700 active:bg-gray-300 dark:active:bg-neutral-600"
+          >
+            {keybind}
           </span>
-        )}
-      </li>
-    </>
+        </span>
+      )}
+    </li>
   );
 };
 

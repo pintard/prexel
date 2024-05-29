@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DarkModeProvider from "../contexts/DarkModeProvider";
 import KeybindProvider from "../contexts/KeybindProvider";
 import ControlBarProvider from "../contexts/ControlBarProvider";
@@ -16,6 +16,17 @@ import KeybindModal from "../components/Modals/KeybindModal";
 import PublishModal from "../components/Modals/PublishModal";
 
 const Editor = () => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <DarkModeProvider>
       <KeybindProvider>
@@ -28,7 +39,7 @@ const Editor = () => {
               <div className="col-span-1">
                 <MenuBar />
               </div>
-              <div className="row-span-1 col-span-1 pr-4 pb-4">
+              <div className="row-span-1 col-span-1 pr-6 pb-6">
                 <div className="w-full h-full bg-gray-200 rounded-xl border-solid border border-gray-200 overflow-hidden relative">
                   <Artboard />
                   <MenuBox />

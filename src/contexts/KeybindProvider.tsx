@@ -45,6 +45,9 @@ const DEFAULT_MENU_KEYBINDS: KeybindMap = {
   picker: {
     keybind: "4",
   },
+  menu: {
+    keybind: "/",
+  },
   clear: {
     keybind: `${modifierKey} + shift + C`,
   },

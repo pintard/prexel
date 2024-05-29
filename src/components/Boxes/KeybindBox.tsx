@@ -5,6 +5,7 @@ import {
   BrushIcon,
   DiskIcon,
   EraserIcon,
+  MenuIcon,
   MoonIcon,
   PaintBucketIcon,
   PaletteIcon,
@@ -21,8 +22,8 @@ const KeybindBox = () => {
 
   if (isKeybindBoxOpen) {
     return (
-      <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden">
-        <ul className="w-full flex flex-col items-center">
+      <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden p-2">
+        <ul className="w-full flex flex-col gap-1 items-center">
           <MenuItem
             label="paint"
             value="paint"
@@ -46,6 +47,12 @@ const KeybindBox = () => {
             value="picker"
             keybind={menuKeybinds.picker.keybind}
             icon={PaletteIcon}
+          />
+          <MenuItem
+            label="menu"
+            value="menu"
+            keybind={menuKeybinds.menu.keybind}
+            icon={MenuIcon}
           />
           <MenuItem
             label="save"
