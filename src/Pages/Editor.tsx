@@ -18,6 +18,16 @@ import PublishModal from "../components/Modals/PublishModal";
 const Editor = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
+      const target = e.target as Element;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
       e.preventDefault();
     };
 

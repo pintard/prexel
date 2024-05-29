@@ -89,7 +89,7 @@ const UploadModal = () => {
               <textarea
                 ref={textareaRef}
                 placeholder="paste prexel code here..."
-                className="p-2 border-solid border-2 rounded-t-xl resize-none focus:outline-blue-400"
+                className="p-3 border-solid border-2 rounded-t-xl resize-none focus:outline-blue-400"
                 name="cuteCode"
                 id="cuteCode"
                 cols={30}
@@ -131,20 +131,18 @@ const UploadModal = () => {
               </span>
             </span>
 
-            <span>
-              <button
-                className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
-                onClick={loadBoard}
-              >
-                Load
-              </button>
-              <button
-                className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 outline outline-2 focus:outline-blue-300"
-                onClick={clearModal}
-              >
-                Cancel
-              </button>
-            </span>
+            <button
+              className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
+              onClick={loadBoard}
+            >
+              Load
+            </button>
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 outline outline-2 focus:outline-blue-300"
+              onClick={clearModal}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>

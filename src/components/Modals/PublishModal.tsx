@@ -7,6 +7,7 @@ import {
   PrexelPostResponse,
 } from "../../utils/apiConstants";
 import useModalState from "../../hooks/useModalState";
+import { HorizontalDivider } from "../Divider";
 
 const PublishModal = () => {
   const { isPublishModalOpen, setIsPublishModalOpen, cuteCode } =
@@ -102,7 +103,7 @@ const PublishModal = () => {
 
   const publish = (): void => {
     if (!title || !imageSrc || tags.length === 0) {
-      alert("Please ensure title, tags, and the artboard snapshot are set.");
+      alert("Please ensure you title and tag your prexel before publishing.");
       return;
     }
 
@@ -145,63 +146,72 @@ const PublishModal = () => {
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
         <div
-          className="bg-white rounded-lg p-6 flex flex-col"
+          className="bg-white rounded-2xl flex flex-col"
           style={{ width: "400px" }}
         >
-          <h2 className="text-2xl font-semibold mb-2">Publish this prexel?</h2>
-
-          <div
-            className="border-2 border-blue-400 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-3"
-            style={{ minHeight: "240px" }}
-          >
-            {isImageLoading ? (
-              <div>Loading...</div>
-            ) : (
-              imageSrc && (
-                <img
-                  src={imageSrc}
-                  alt="Artboard Snapshot"
-                  className="max-w-xs"
-                />
-              )
-            )}
+          <div className="pt-8 pb-6 px-8">
+            <h2 className="text-xl leading-4">Publish this prexel?</h2>
           </div>
+          <HorizontalDivider />
+          <div className="pt-5 pb-6 px-8">
+            <p className="text-gray-500 text-lg mb-5">
+              Share your prexel to the public by publishing it to the online
+              repository?
+            </p>
+            <div
+              className="border-2 border-blue-200 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-1"
+              style={{ minHeight: "220px" }}
+            >
+              {isImageLoading ? (
+                <div>Loading...</div>
+              ) : (
+                imageSrc && (
+                  <img
+                    src={imageSrc}
+                    alt="Artboard Snapshot"
+                    className="max-w-xs"
+                  />
+                )
+              )}
+            </div>
 
-          <span className="mb-2">
-            <p>Title</p>
+            <p className="text-gray-500 text-lg">Title</p>
             <input
               type="text"
+              placeholder="Title your prexel..."
               autoFocus={true}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="bg-white border-solid border-2 rounded-md p-2 w-full mb-2 outline-2 focus:outline-blue-400"
             />
 
-            <p>Tags</p>
-            <input
-              type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagInputKeyDown}
-              className="bg-white border-solid border-2 rounded-md p-2 w-full mb-2 outline-2 focus:outline-blue-400"
-            />
-            <div className="flex flex-wrap">{renderTags()}</div>
-          </span>
+            <p className="text-gray-500 text-lg">Tags</p>
 
-          <span>
+            <div className="mb-5">
+              <input
+                type="text"
+                placeholder="Use space key to enter tags... (max 5)"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagInputKeyDown}
+                className="bg-white border-solid border-2 rounded-md p-2 w-full mb-3 outline-2 focus:outline-blue-400"
+              />
+              <div className="flex flex-wrap">{renderTags()}</div>
+            </div>
+
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mr-4 outline outline-2 focus:outline-blue-400"
+              className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
               onClick={publish}
             >
               Publish
             </button>
             <button
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 outline outline-2 focus:outline-blue-400"
+              className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 outline outline-2 focus:outline-blue-300"
               onClick={closeModal}
             >
               Cancel
             </button>
-          </span>
+          </div>
         </div>
       </div>
     );

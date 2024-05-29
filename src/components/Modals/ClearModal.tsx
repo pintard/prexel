@@ -24,7 +24,7 @@ const ClearModal = () => {
           <HorizontalDivider />
           <div className="pt-5 pb-6 px-8">
             <p className="text-gray-500 text-lg mb-5">
-              You will <b>not</b> be able to retrieve your previous work.
+              You will <b>not</b> be able to retrieve your previous work
             </p>
             <button
               className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
