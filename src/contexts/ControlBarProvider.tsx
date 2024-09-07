@@ -31,9 +31,9 @@ export const ControlBarContext = createContext({
   swatchColors: {} as ColorGroup,
   setSwatchColors: (() => {}) as Dispatch<SetStateAction<ColorGroup>>,
   cellColors: {} as ColorGroup,
-  setCellColors: (() => { }) as Dispatch<SetStateAction<ColorGroup>>,
+  setCellColors: (() => {}) as Dispatch<SetStateAction<ColorGroup>>,
   cuteCode: "",
-  setCuteCode: (() => { }) as Dispatch<SetStateAction<string>>,
+  setCuteCode: (() => {}) as Dispatch<SetStateAction<string>>,
   isAnyModalOpen: false,
   setIsAnyModalOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isClearModalOpen: false,
@@ -133,8 +133,8 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   }, [cellColors, rows, cols]);
 
   useEffect(() => {
-    console.log("Colors:", cellColors);
-    console.log("History:", colorHistory.current);
+    // console.log("Colors:", cellColors);
+    // console.log("History:", colorHistory.current);
 
     // TODO diffrentiate from click, double trigger
     if (!isStrokeActive) {
@@ -151,7 +151,7 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
         typeof idOrColors === "string"
           ? { ...oldCellColors, [idOrColors]: color }
           : idOrColors;
-      console.log("Updating cell colors:", newColors);
+      // console.log("Updating cell colors:", newColors);
       return newColors;
     });
   };

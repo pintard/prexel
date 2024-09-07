@@ -1,4 +1,9 @@
-import { DEFAULT_KEY_MAP, MAC_KEY_MAP } from "./constants";
+import {
+  WINDOWS_KEY_MAP,
+  MAC_KEY_MAP,
+  StringHash,
+  LINUX_KEY_MAP,
+} from "./constants";
 
 export const getOperatingSystem = (): string => {
   const userAgent: string = window.navigator.userAgent;
@@ -15,13 +20,26 @@ export const getOperatingSystem = (): string => {
   }
 };
 
-export const getFriendlyKey = (code: string): string => {
-  const friendlyKey: string | undefined =
-    getOperatingSystem() === "Mac" ? MAC_KEY_MAP[code] : DEFAULT_KEY_MAP[code];
+export const getKeyMap = (): StringHash => {
+  return (
+    {
+      Mac: MAC_KEY_MAP,
+      Windows: WINDOWS_KEY_MAP,
+      Linux: LINUX_KEY_MAP,
+    }[getOperatingSystem()] || LINUX_KEY_MAP
+  );
+};
 
-  if (code.startsWith("Key")) {
-    return code.charAt(3);
+export const getFriendlyKey = (code: string): string => {
+  const keyMap: StringHash = getKeyMap();
+
+  if (keyMap[code]) {
+    return keyMap[code] as string;
   }
 
-  return friendlyKey || code;
+  if (code.startsWith("Key")) {
+    return code.charAt(3).toUpperCase();
+  }
+
+  return code;
 };

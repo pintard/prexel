@@ -74,6 +74,11 @@ const KeybindProvider = ({ children }: KeybindProviderProps) => {
   const [keybindModalId, setKeybindModalId] = useState<string>("");
 
   const updateMenuKeybind = (newKeybind: string) => {
+    if (!newKeybind) {
+      console.error("Cannot update keybind with an empty value.");
+      return;
+    }
+
     setMenuKeybinds((prevMenuKeybinds: KeybindMap) => ({
       ...prevMenuKeybinds,
       [keybindModalId]: {

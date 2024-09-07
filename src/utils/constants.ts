@@ -20,9 +20,20 @@ export const MAC_KEY_MAP: StringHash = {
   ShiftRight: "shift",
 };
 
-export const DEFAULT_KEY_MAP: StringHash = {
-  MetaLeft: "cmd",
-  MetaRight: "cmd",
+export const LINUX_KEY_MAP: StringHash = {
+  MetaLeft: "super",
+  MetaRight: "super",
+  AltLeft: "alt",
+  AltRight: "alt",
+  ControlLeft: "ctrl",
+  ControlRight: "ctrl",
+  ShiftLeft: "shift",
+  ShiftRight: "shift",
+};
+
+export const WINDOWS_KEY_MAP: StringHash = {
+  MetaLeft: "win",
+  MetaRight: "win",
   AltLeft: "alt",
   AltRight: "alt",
   ControlLeft: "ctrl",

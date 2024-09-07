@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import DarkModeProvider from "../contexts/DarkModeProvider";
+import ThemeProvider from "../contexts/ThemeProvider";
 import KeybindProvider from "../contexts/KeybindProvider";
 import ControlBarProvider from "../contexts/ControlBarProvider";
 import ColorPickerBoxProvider from "../contexts/ColorPickerBoxProvider";
@@ -16,32 +16,33 @@ import KeybindModal from "../components/Modals/KeybindModal";
 import PublishModal from "../components/Modals/PublishModal";
 
 const Editor = () => {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent): void => {
-      const target = e.target as Element;
-      if (
-        target instanceof HTMLElement &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
+  // useEffect(() => {
+  //   // TODO Why?
+  //   const handleKeyDown = (e: KeyboardEvent): void => {
+  //     const target = e.target as Element;
+  //     if (
+  //       target instanceof HTMLElement &&
+  //       (target.tagName === "INPUT" ||
+  //         target.tagName === "TEXTAREA" ||
+  //         target.isContentEditable)
+  //     ) {
+  //       return;
+  //     }
 
-      e.preventDefault();
-    };
+  //     e.preventDefault();
+  //   };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
 
   return (
-    <DarkModeProvider>
+    <ThemeProvider>
       <KeybindProvider>
         <ControlBarProvider>
-          <div className="h-full w-full grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] bg-gray-100">
+          <div className="h-full w-full grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] bg-gray-100 dark:bg-default-neutral">
             <ColorPickerBoxProvider>
               <div className="row-span-2">
                 <ControlBar />
@@ -50,7 +51,7 @@ const Editor = () => {
                 <MenuBar />
               </div>
               <div className="row-span-1 col-span-1 pr-6 pb-6">
-                <div className="w-full h-full bg-gray-200 rounded-xl border-solid border border-gray-200 overflow-hidden relative">
+                <div className="w-full h-full bg-gray-200 dark:bg-neutral-800 rounded-xl border-solid border border-gray-200 dark:border-neutral-700 overflow-hidden relative">
                   <Artboard />
                   <MenuBox />
                   <DimensionBox />
@@ -66,7 +67,7 @@ const Editor = () => {
           </div>
         </ControlBarProvider>
       </KeybindProvider>
-    </DarkModeProvider>
+    </ThemeProvider>
   );
 };
 

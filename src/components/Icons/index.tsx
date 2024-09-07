@@ -12,7 +12,6 @@ import { ReactComponent as HorizontalGripIcon } from "./grip-horz.svg";
 import { ReactComponent as MinimizeIcon } from "./minimize.svg";
 import { ReactComponent as UndoIcon } from "./undo.svg";
 import { ReactComponent as RedoIcon } from "./redo.svg";
-import { ReactComponent as CloudUploadIcon } from "./cloud-upload.svg";
 import { ReactComponent as MoonIcon } from "./moon.svg";
 import { ReactComponent as SunIcon } from "./sun.svg";
 import { ReactComponent as ResetIcon } from "./reset.svg";
@@ -22,6 +21,7 @@ import { ReactComponent as DiskIcon } from "./disk.svg";
 import { ReactComponent as KeysIcon } from "./keys.svg";
 import { ReactComponent as DropIcon } from "./drop.svg";
 import { ReactComponent as PencilIcon } from "./pencil.svg";
+import { ReactComponent as GlobeIcon } from "./globe.svg";
 
 export {
   BrushIcon,
@@ -38,7 +38,6 @@ export {
   MinimizeIcon,
   UndoIcon,
   RedoIcon,
-  CloudUploadIcon,
   MoonIcon,
   SunIcon,
   ResetIcon,
@@ -48,4 +47,5 @@ export {
   KeysIcon,
   DropIcon,
   PencilIcon,
+  GlobeIcon,
 };

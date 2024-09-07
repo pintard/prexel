@@ -9,7 +9,7 @@ import {
   MinimizeIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import { useDarkModeContext } from "../../hooks/useDarkModeContext";
+import { useTheme } from "../../hooks/useTheme";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
 import MenuItem from "./MenuItem";
 import KeybindBox from "./KeybindBox";
@@ -26,7 +26,7 @@ const MenuBox = () => {
     isKeybindBoxOpen,
     setIsKeybindBoxOpen,
   } = useControlBarContext();
-  const { darkMode, toggleDarkMode } = useDarkModeContext();
+  const { theme, toggleTheme } = useTheme();
   const { resetKeybinds } = useKeybindContext();
 
   const handleReset = () => {
@@ -46,7 +46,7 @@ const MenuBox = () => {
   if (isMenuBoxOpen) {
     return (
       <div className="absolute top-4 left-4 z-30 flex flex-row items-start gap-4">
-        <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden p-2">
+        <div className="bg-gray-100 dark:bg-neutral-800 rounded-xl shadow-dark overflow-hidden p-2 border border-gray-300 dark:border-neutral-600">
           <ul className="w-full flex flex-col gap-1 items-center">
             <MenuItem
               label="keybinds"
@@ -69,10 +69,10 @@ const MenuBox = () => {
               onClick={handleUpload}
             />
             <MenuItem
-              label={darkMode ? "dark mode" : "light mode"}
+              label={theme ? "dark mode" : "light mode"}
               value="darkLightToggle"
-              icon={darkMode ? MoonIcon : SunIcon}
-              onClick={toggleDarkMode}
+              icon={theme ? MoonIcon : SunIcon}
+              onClick={toggleTheme}
             />
             <MenuItem
               label="reset"

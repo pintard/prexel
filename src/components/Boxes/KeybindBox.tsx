@@ -4,31 +4,34 @@ import MenuItem from "./MenuItem";
 import {
   BrushIcon,
   DiskIcon,
+  DownloadIcon,
+  DropIcon,
   EraserIcon,
   MenuIcon,
   MoonIcon,
   PaintBucketIcon,
   PaletteIcon,
+  PencilIcon,
   SunIcon,
   TrashIcon,
 } from "../Icons";
-import { useDarkModeContext } from "../../hooks/useDarkModeContext";
+import { useTheme } from "../../hooks/useTheme";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
 
 const KeybindBox = () => {
   const { menuKeybinds } = useKeybindContext();
-  const { darkMode } = useDarkModeContext();
+  const { theme } = useTheme();
   const { isKeybindBoxOpen } = useControlBarContext();
 
   if (isKeybindBoxOpen) {
     return (
-      <div className="bg-gray-100 rounded-xl shadow-dark overflow-hidden p-2">
+      <div className="bg-gray-100 dark:bg-neutral-800 rounded-xl shadow-dark overflow-hidden p-2 border border-gray-300 dark:border-neutral-600">
         <ul className="w-full flex flex-col gap-1 items-center">
           <MenuItem
             label="paint"
             value="paint"
             keybind={menuKeybinds.paint.keybind}
-            icon={BrushIcon}
+            icon={PencilIcon}
           />
           <MenuItem
             label="erase"
@@ -46,7 +49,7 @@ const KeybindBox = () => {
             label="picker"
             value="picker"
             keybind={menuKeybinds.picker.keybind}
-            icon={PaletteIcon}
+            icon={DropIcon}
           />
           <MenuItem
             label="menu"
@@ -58,13 +61,13 @@ const KeybindBox = () => {
             label="save"
             value="save"
             keybind={menuKeybinds.save.keybind}
-            icon={DiskIcon}
+            icon={DownloadIcon}
           />
           <MenuItem
-            label={darkMode ? "dark mode" : "light mode"}
+            label={theme ? "dark mode" : "light mode"}
             value="darkLightToggle"
             keybind={menuKeybinds.darkLightToggle.keybind}
-            icon={darkMode ? MoonIcon : SunIcon}
+            icon={theme ? MoonIcon : SunIcon}
           />
           <MenuItem
             label="clear"

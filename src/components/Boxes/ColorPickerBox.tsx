@@ -75,7 +75,7 @@ const ColorPickerBox = () => {
   if (isColorPickerBoxOpen) {
     return (
       <span
-        className="absolute z-20 w-64 bg-gray-100 dark:bg-default-neutral rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden"
+        className="absolute z-20 w-64 bg-gray-100 dark:bg-neutral-800 rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden border border-gray-300 dark:border-neutral-600"
         ref={colorPickerRef}
         style={{
           left: colorPickerPosition.left,
@@ -100,7 +100,7 @@ const ColorPickerBox = () => {
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
             prefixed={true}
-            className="bg-white dark:bg-default-neutral dark:text-neutral-500 border-solid border-2 dark:border-neutral-800 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
+            className="bg-white dark:bg-neutral-800 dark:text-neutral-500 border-solid border-2 dark:border-neutral-700 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
           />
           <div className="w-full grid grid-rows-2 grid-cols-4 gap-4">
             {swatchHotKeys.map((swatchHotKeyId: string) => (

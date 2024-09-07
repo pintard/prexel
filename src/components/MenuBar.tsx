@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import IconButton from "./IconButton";
-import { CloudUploadIcon, DiskIcon, HouseIcon, TrashIcon } from "./Icons";
+import { DiskIcon, DownloadIcon, GlobeIcon, HouseIcon, TrashIcon } from "./Icons";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 
 const MenuBar = () => {
@@ -39,12 +39,12 @@ const MenuBar = () => {
       </div>
       <div className="flex flex-row gap-1">
         <IconButton
-          icon={DiskIcon}
+          icon={DownloadIcon}
           onClick={handleSave}
           isDisabled={!hasCellColors}
         />
         <IconButton
-          icon={CloudUploadIcon}
+          icon={GlobeIcon}
           onClick={handlePublish}
           isDisabled={!hasCellColors}
         />

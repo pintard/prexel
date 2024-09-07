@@ -24,3 +24,8 @@ body,
 .dark .react-colorful .react-colorful__pointer {
   border-color: #1b1b1b;
 }
+
+::selection {
+  background-color: #4a90e2;
+  color: white;
+}

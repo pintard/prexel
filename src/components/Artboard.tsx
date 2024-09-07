@@ -118,6 +118,50 @@ const Artboard = () => {
     const oldColor: string | undefined = cellColors[id];
     if (oldColor !== color) {
       paintFill(+row, +col, oldColor, new Set());
+      // paintFillQueue(+row, +col, oldColor);
+    }
+  };
+
+  const paintFillQueue = (
+    startRow: number,
+    startCol: number,
+    oldColor: string | undefined
+  ) => {
+    // If the old color matches the new one, there's no need to fill
+    if (oldColor === color || !oldColor) return;
+
+    const queue: [number, number][] = [[startRow, startCol]];
+    const visited: Set<string> = new Set();
+
+    // Helper function to check boundaries and color
+    const isValid = (row: number, col: number): boolean => {
+      const id = `${row}-${col}`;
+      return (
+        row >= 0 &&
+        row < rows &&
+        col >= 0 &&
+        col < cols &&
+        cellColors[id] === oldColor &&
+        !visited.has(id)
+      );
+    };
+
+    // Iterate through the queue until it is empty
+    while (queue.length > 0) {
+      const [row, col] = queue.shift()!;
+      const id: string = `${row}-${col}`;
+
+      if (!isValid(row, col)) continue;
+
+      // Mark the cell as visited and update its color
+      visited.add(id);
+      updateColors(id, color); // Update the cell color
+
+      // Add the neighboring cells to the queue for processing
+      if (isValid(row - 1, col)) queue.push([row - 1, col]); // Top
+      if (isValid(row + 1, col)) queue.push([row + 1, col]); // Bottom
+      if (isValid(row, col - 1)) queue.push([row, col - 1]); // Left
+      if (isValid(row, col + 1)) queue.push([row, col + 1]); // Right
     }
   };
 

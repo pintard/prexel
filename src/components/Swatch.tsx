@@ -48,7 +48,7 @@ const Swatch = ({ onClick, id, isActive }: SwatchProps) => {
 
   return (
     <span
-      className={`relative w-10 h-10 rounded-xl bg-default-gray dark:bg-default-neutral overflow-hidden select-none cursor-pointer dark:border-neutral-800 border-solid border-2 ${
+      className={`relative w-10 h-10 rounded-xl bg-default-gray dark:bg-neutral-800 overflow-hidden select-none cursor-pointer dark:border-neutral-700 border-solid border-2 ${
         isActive ? "border-blue-300" : ""
       }`}
       onClick={handleClick}

@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import { getFriendlyKey, getOperatingSystem } from "../../utils/platformUtils";
+import {
+  getFriendlyKey,
+  getKeyMap,
+  getOperatingSystem,
+} from "../../utils/platformUtils";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
 import {
-  DEFAULT_KEY_MAP,
+  WINDOWS_KEY_MAP,
   KeyArray,
   MAC_KEY_MAP,
   StringHash,
@@ -33,24 +37,57 @@ const KeybindModal = () => {
   const formatKeybind = (keys: KeyArray): string => {
     const modifiers: KeyArray = [];
     const regularKeys: KeyArray = [];
+
     keys.forEach((key: string) => {
-      if (key === "ctrl" || key === "alt" || key === "shift" || key === "cmd") {
+      if (
+        [
+          "MetaLeft",
+          "MetaRight",
+          "AltLeft",
+          "AltRight",
+          "ControlLeft",
+          "ControlRight",
+          "ShiftLeft",
+          "ShiftRight",
+        ].includes(key)
+      ) {
         modifiers.push(key);
       } else {
         regularKeys.push(key);
       }
     });
-    return [...modifiers, ...regularKeys].join(" + ");
+
+    const modifierOrder: string[] = [
+      "MetaLeft",
+      "MetaRight",
+      "AltLeft",
+      "AltRight",
+      "ControlLeft",
+      "ControlRight",
+      "ShiftLeft",
+      "ShiftRight",
+    ];
+    modifiers.sort((a: string, b: string) => {
+      console.log("trigger");
+      return modifierOrder.indexOf(a) - modifierOrder.indexOf(b);
+    });
+
+    const translatedModifiers: string[] = modifiers.map(getFriendlyKey);
+    const translatedRegulars: string[] = regularKeys.map(getFriendlyKey);
+
+    const result: string = [...translatedModifiers, ...translatedRegulars].join(
+      " + "
+    );
+    return result;
   };
+
   const handleFocus = (): void => {
     setActiveKeybind("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    const keyMap: StringHash =
-      getOperatingSystem() === "Mac" ? MAC_KEY_MAP : DEFAULT_KEY_MAP;
-    const friendlyKey: string = getFriendlyKey(e.code);
+    const keyMap: StringHash = getKeyMap();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -59,15 +96,25 @@ const KeybindModal = () => {
 
     if (keyMap[e.code] || (!keyMap[e.code] && e.code.startsWith("Key"))) {
       setActiveKeybind((prev) => {
-        const keys = new Set<string>(prev ? prev.split(" + ") : []);
-        keys.add(friendlyKey);
-        console.log("keys", keys);
-        return formatKeybind(Array.from(keys));
+        const keys: Set<string> = new Set<string>(
+          prev ? prev.split(" + ") : []
+        );
+
+        // const friendlyKey: string = getFriendlyKey(e.code);
+        keys.add(e.code);
+
+        const formattedKeybind: string = formatKeybind(Array.from(keys));
+        return formattedKeybind;
       });
     }
   };
 
   const handleSave = (): void => {
+    if (!activeKeybind) {
+      alert("Keybind cannot be empty.");
+      return;
+    }
+
     updateMenuKeybind(activeKeybind);
     setIsKeybindModalOpen(false);
   };
