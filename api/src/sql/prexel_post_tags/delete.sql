@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS prexel_post_tags CASCADE;

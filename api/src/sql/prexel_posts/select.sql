@@ -1,0 +1,1 @@
+SELECT * FROM prexel_posts ORDER BY create_date DESC;

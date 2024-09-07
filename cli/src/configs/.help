@@ -1,0 +1,7 @@
+cutescreen is a terminal diagnostic and welcome screen program.
+
+usages:
+  [1] cutescreen - will print the welcome screen to terminal
+  [2] cutescreen config - will open configuration file in preferred text editor
+  [3] cutescreen reset - will reset the program to factory settings
+  [4] cutescreen create - will open the cutescreen pixel editor in your default browser

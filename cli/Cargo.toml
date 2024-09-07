@@ -1,0 +1,21 @@
+[package]
+name = "cutescreen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+strum_macros = "0.25.1"
+strum = "0.25.0"
+serde = { version = "1.0.152", features = ["derive"] }
+serde_yaml = "0.9.11"
+os_info =  { version = "3.5.1", default-features = false }
+smart-default = "0.7.1"
+derivative = "2.2.0"
+whoami = "1.2.3"
+chrono = "0.4.23"
+psutil = "3.2.2"
+open = "5.0.0"
+regex = "1.9.1"
+yaml-rust = "0.4.5"
