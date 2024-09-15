@@ -1,17 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import {
-  getFriendlyKey,
-  getKeyMap,
-  getOperatingSystem,
-} from "../../utils/platformUtils";
+import { getFriendlyKey, getKeyMap } from "../../utils/platformUtils";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
-import {
-  WINDOWS_KEY_MAP,
-  KeyArray,
-  MAC_KEY_MAP,
-  StringHash,
-} from "../../utils/constants";
+import { KeyArray, StringHash } from "../../utils/constants";
 import useModalState from "../../hooks/useModalState";
 import { HorizontalDivider } from "../Divider";
 
@@ -67,6 +58,9 @@ const KeybindModal = () => {
       "ShiftLeft",
       "ShiftRight",
     ];
+
+    console.log("modifiers", modifiers, "regularKeys", regularKeys);
+
     modifiers.sort((a: string, b: string) => {
       console.log("trigger");
       return modifierOrder.indexOf(a) - modifierOrder.indexOf(b);
@@ -100,7 +94,6 @@ const KeybindModal = () => {
           prev ? prev.split(" + ") : []
         );
 
-        // const friendlyKey: string = getFriendlyKey(e.code);
         keys.add(e.code);
 
         const formattedKeybind: string = formatKeybind(Array.from(keys));
@@ -134,15 +127,21 @@ const KeybindModal = () => {
 
   if (isKeybindModalOpen && keybindModalId) {
     return (
-      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
-        <div className="bg-white rounded-2xl">
+      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30 backdrop-blur-sm">
+        <div className="bg-white dark:bg-zinc-800 rounded-2xl shadow-lg">
           <div className="pt-8 pb-6 px-8">
-            <h2 className="text-xl leading-4">Set a new keybind</h2>
+            <h2 className="text-xl leading-4 text-gray-900 dark:text-gray-400">
+              Set a new keybind
+            </h2>
           </div>
           <HorizontalDivider />
           <div className="pt-5 pb-6 px-8">
-            <p className="text-gray-500 text-lg mb-5">
-              Your current keybind is: <b>{initialKeybind}</b>
+            <p className="text-gray-500 dark:text-gray-400 text-lg mb-5">
+              Your current{" "}
+              <em>
+                <b>{keybindModalId}</b>
+              </em>{" "}
+              keybind is: <b>{initialKeybind}</b>
             </p>
             <input
               type="text"
@@ -152,21 +151,23 @@ const KeybindModal = () => {
               readOnly={true}
               onFocus={handleFocus}
               onClick={handleFocus}
-              className="bg-white border-solid border-2 rounded-md p-2 w-full mb-6 outline-2 focus:outline-blue-400"
+              className="border-solid border-2 rounded-md p-2 w-full mb-6 outline-2 focus:outline-blue-400 dark:bg-zinc-900 dark:text-gray-400 dark:border-zinc-700"
               onKeyDown={handleKeyDown}
             />
-            <button
-              className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
-              onClick={handleSave}
-            >
-              Save
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 outline outline-2 focus:outline-blue-300"
-              onClick={() => setIsKeybindModalOpen(false)}
-            >
-              Cancel
-            </button>
+            <div className="flex gap-3">
+              <button
+                className="px-4 py-2 bg-inherit text-green-600 dark:text-green-400 rounded-full border border-green-600 dark:border-green-400 hover:bg-green-50 dark:hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-300 dark:focus:ring-green-950 transition-colors"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 dark:focus:ring-red-950 transition-colors"
+                onClick={() => setIsKeybindModalOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

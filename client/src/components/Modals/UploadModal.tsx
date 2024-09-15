@@ -72,14 +72,16 @@ const UploadModal = () => {
 
   if (isUploadModalOpen) {
     return (
-      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
-        <div className="bg-white rounded-2xl flex flex-col">
+      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30 backdrop-blur-sm">
+        <div className="bg-white dark:bg-zinc-800 rounded-2xl flex flex-col shadow-lg">
           <div className="pt-8 pb-6 px-8">
-            <h2 className="text-xl leading-4">Upload a prexel?</h2>
+            <h2 className="text-xl leading-4 text-gray-900 dark:text-gray-400">
+              Upload a prexel?
+            </h2>
           </div>
           <HorizontalDivider />
           <div className="pt-5 pb-6 px-8">
-            <p className="text-gray-500 text-lg mb-4">
+            <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
               Upload a prexel from your device
               <br />
               or paste a prexel code
@@ -89,7 +91,7 @@ const UploadModal = () => {
               <textarea
                 ref={textareaRef}
                 placeholder="paste prexel code here..."
-                className="p-3 border-solid border-2 rounded-t-xl resize-none focus:outline-blue-400"
+                className="p-3 border-solid border-2 border-b-0 rounded-t-xl resize-none focus:outline-blue-400 dark:bg-zinc-900 dark:text-gray-400 dark:border-zinc-700"
                 name="cuteCode"
                 id="cuteCode"
                 cols={30}
@@ -100,7 +102,7 @@ const UploadModal = () => {
 
               <span className="flex flex-row">
                 <button
-                  className="w-full px-4 py-2 bg-blue-400 text-white rounded-b-xl hover:bg-blue-500 active:bg-blue-400 focus:outline-blue-200 flex flex-row items-center justify-center"
+                  className="w-full px-4 py-3 bg-blue-400 text-white rounded-b-xl hover:bg-blue-500 active:bg-blue-400 focus:outline-blue-200 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-blue-500 transition-colors flex flex-row items-center justify-center"
                   onClick={readFromFile}
                   autoFocus={true}
                 >
@@ -120,7 +122,7 @@ const UploadModal = () => {
                   onChange={handleFileChange}
                 />
                 <a
-                  className="text-blue-600 underline truncate"
+                  className="underline truncate"
                   download={fileName}
                   href={`data:text/plain;charset=utf-8,${encodeURIComponent(
                     cuteCode
@@ -131,18 +133,20 @@ const UploadModal = () => {
               </span>
             </span>
 
-            <button
-              className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
-              onClick={loadBoard}
-            >
-              Load
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 outline outline-2 focus:outline-blue-300"
-              onClick={clearModal}
-            >
-              Cancel
-            </button>
+            <div className="flex gap-3">
+              <button
+                className="px-4 py-2 bg-inherit text-green-600 dark:text-green-400 rounded-full border border-green-600 dark:border-green-400 hover:bg-green-50 dark:hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-300 dark:focus:ring-green-950 transition-colors"
+                onClick={loadBoard}
+              >
+                Load
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 dark:focus:ring-red-950 transition-colors"
+                onClick={clearModal}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -75,14 +75,14 @@ const ColorPickerBox = () => {
   if (isColorPickerBoxOpen) {
     return (
       <span
-        className="absolute z-20 w-64 bg-gray-100 dark:bg-neutral-800 rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden border border-gray-300 dark:border-neutral-600"
+        className="absolute z-20 w-64 bg-neutral-100 dark:bg-neutral-900 rounded-lg shadow-dark dark:shadow-light flex flex-col items-center overflow-hidden border border-gray-300 dark:border-neutral-600"
         ref={colorPickerRef}
         style={{
           left: colorPickerPosition.left,
           top: colorPickerPosition.top,
         }}
       >
-        <div className="bg-slate-50 dark:bg-neutral-900 w-full flex justify-center">
+        <div className="bg-neutral-50 dark:bg-neutral-950 w-full flex justify-center border-b border-b-neutral-200 dark:border-b-neutral-800">
           <DragHandle
             icon={HorizontalGripIcon}
             width={30}
@@ -100,7 +100,7 @@ const ColorPickerBox = () => {
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
             prefixed={true}
-            className="bg-white dark:bg-neutral-800 dark:text-neutral-500 border-solid border-2 dark:border-neutral-700 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
+            className="bg-white dark:bg-neutral-950 dark:text-neutral-500 border border-neutral-300 dark:border-neutral-700 rounded-md p-2 w-full outline-2 focus:outline-blue-400"
           />
           <div className="w-full grid grid-rows-2 grid-cols-4 gap-4">
             {swatchHotKeys.map((swatchHotKeyId: string) => (

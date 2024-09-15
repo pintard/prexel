@@ -46,7 +46,7 @@ const MenuBox = () => {
   if (isMenuBoxOpen) {
     return (
       <div className="absolute top-4 left-4 z-30 flex flex-row items-start gap-4">
-        <div className="bg-gray-100 dark:bg-neutral-800 rounded-xl shadow-dark overflow-hidden p-2 border border-gray-300 dark:border-neutral-600">
+        <div className="bg-neutral-100 dark:bg-neutral-900 rounded-xl shadow-dark overflow-hidden p-2 border border-gray-300 dark:border-neutral-600">
           <ul className="w-full flex flex-col gap-1 items-center">
             <MenuItem
               label="keybinds"

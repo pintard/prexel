@@ -19,8 +19,15 @@ const Artboard = () => {
   } = useControlBarContext();
 
   const emptyGrid: Grid = Array.from(Array(rows), () => Array(cols).fill(null));
-
   const [grid, setGrid] = useState<Grid>(emptyGrid);
+
+  const [tooltip, setTooltip] = useState<{
+    visible: boolean;
+    row: number;
+    col: number;
+    x: number;
+    y: number;
+  }>({ visible: false, row: 0, col: 0, x: 0, y: 0 });
 
   useEffect(() => {
     setGrid(emptyGrid);
@@ -43,7 +50,6 @@ const Artboard = () => {
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setIsStrokeActive(true);
     handleTouchMove(e);
-    // TODO diffrentiate from click, double trigger
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -64,17 +70,6 @@ const Artboard = () => {
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    // if (isStrokeActive) {
-    //   const cellWidth: number = e.currentTarget.clientWidth / cols;
-    //   const cellHeight: number = e.currentTarget.clientHeight / rows;
-
-    //   const touch: React.Touch = e.touches[0];
-    //   const row: number = Math.floor(touch.pageY / cellHeight);
-    //   const col: number = Math.floor(touch.pageX / cellWidth);
-
-    //   const id: string = `${row}-${col}`;
-    //   handleStroke(id);
-    // }
     if (isStrokeActive) {
       const touch: React.Touch = e.touches[0];
       const rect: DOMRect = e.currentTarget.getBoundingClientRect();
@@ -118,50 +113,6 @@ const Artboard = () => {
     const oldColor: string | undefined = cellColors[id];
     if (oldColor !== color) {
       paintFill(+row, +col, oldColor, new Set());
-      // paintFillQueue(+row, +col, oldColor);
-    }
-  };
-
-  const paintFillQueue = (
-    startRow: number,
-    startCol: number,
-    oldColor: string | undefined
-  ) => {
-    // If the old color matches the new one, there's no need to fill
-    if (oldColor === color || !oldColor) return;
-
-    const queue: [number, number][] = [[startRow, startCol]];
-    const visited: Set<string> = new Set();
-
-    // Helper function to check boundaries and color
-    const isValid = (row: number, col: number): boolean => {
-      const id = `${row}-${col}`;
-      return (
-        row >= 0 &&
-        row < rows &&
-        col >= 0 &&
-        col < cols &&
-        cellColors[id] === oldColor &&
-        !visited.has(id)
-      );
-    };
-
-    // Iterate through the queue until it is empty
-    while (queue.length > 0) {
-      const [row, col] = queue.shift()!;
-      const id: string = `${row}-${col}`;
-
-      if (!isValid(row, col)) continue;
-
-      // Mark the cell as visited and update its color
-      visited.add(id);
-      updateColors(id, color); // Update the cell color
-
-      // Add the neighboring cells to the queue for processing
-      if (isValid(row - 1, col)) queue.push([row - 1, col]); // Top
-      if (isValid(row + 1, col)) queue.push([row + 1, col]); // Bottom
-      if (isValid(row, col - 1)) queue.push([row, col - 1]); // Left
-      if (isValid(row, col + 1)) queue.push([row, col + 1]); // Right
     }
   };
 
@@ -194,10 +145,18 @@ const Artboard = () => {
     paintFill(row, col + 1, oldColor, visited);
   };
 
+  const handleMouseEnter = (row: number, col: number, x: number, y: number) => {
+    setTooltip({ visible: true, row, col, x: x + 10, y: y - 30 });
+  };
+
+  const handleMouseLeave = () => {
+    setTooltip((prev) => ({ ...prev, visible: false }));
+  };
+
   return (
     <div
       id="artboard"
-      className="grid w-full h-full"
+      className="grid w-full h-full relative"
       style={{
         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
@@ -214,11 +173,27 @@ const Artboard = () => {
             <GridCell
               key={cellId}
               id={cellId}
+              row={rowIndex}
+              col={colIndex}
               isEven={(rowIndex + colIndex) % 2 === 0}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               onClick={handlePaintFill}
             />
           );
         })
+      )}
+
+      {tooltip.visible && (
+        <div
+          className="fixed z-50 pointer-events-none px-2 py-1 rounded-xl text-xs bg-black text-white opacity-75"
+          style={{
+            top: `${tooltip.y}px`,
+            left: `${tooltip.x}px`,
+          }}
+        >
+          [{tooltip.row}, {tooltip.col}]
+        </div>
       )}
     </div>
   );

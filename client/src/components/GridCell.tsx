@@ -4,10 +4,22 @@ import { useControlBarContext } from "../hooks/useControlBarContext";
 interface GridCellProps {
   isEven: boolean;
   id: string;
+  row: number;
+  col: number;
   onClick: (id: string) => void;
+  onMouseEnter: (row: number, col: number, x: number, y: number) => void;
+  onMouseLeave: () => void;
 }
 
-const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
+const GridCell = ({
+  isEven,
+  id,
+  row,
+  col,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+}: GridCellProps) => {
   const { cellColors, color, activeControl, updateColors, isDragging } =
     useControlBarContext();
 
@@ -36,24 +48,28 @@ const GridCell = ({ isEven, id, onClick }: GridCellProps) => {
     }
   };
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    onMouseEnter(row, col, e.clientX, e.clientY);
+  };
+
   return (
     <span
       id={id}
-      className={`grid-cell ${
-        isEven ? "is-even" : ""
-      } relative z-10 select-none ${
-        isEven && "bg-default-gray dark:bg-default-neutral"
+      className={`grid-cell relative select-none z-10 ${
+        isEven ? "bg-default-gray dark:bg-default-neutral" : ""
       }`}
       onClick={handleClick}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => {
+        setIsHover(true);
+      }}
+      onMouseLeave={() => {
+        setIsHover(false);
+        onMouseLeave();
+      }}
     >
       <span
         className="absolute w-full h-full cursor-cell select-none active:!opacity-40"
-        onMouseEnter={() => {
-          setIsHover(true);
-        }}
-        onMouseLeave={() => {
-          setIsHover(false);
-        }}
         style={{
           backgroundColor: cellColor,
           ...(isHover &&

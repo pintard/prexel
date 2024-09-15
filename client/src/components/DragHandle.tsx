@@ -111,8 +111,10 @@ const DragHandle = ({
         width={width}
         height={height}
         className={`fill-current ${
-          isDragging ? "text-blue-400" : "text-neutral-gray"
-        } dark:text-neutral-500`}
+          isDragging
+            ? "text-blue-400"
+            : "text-neutral-300 dark:text-neutral-800"
+        }`}
       />
     </span>
   );

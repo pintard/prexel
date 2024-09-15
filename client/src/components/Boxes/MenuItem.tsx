@@ -50,12 +50,12 @@ const MenuItem = ({
 
   return (
     <li
-      className={`px-4 py-2 w-full rounded-lg hover:bg-blue-200 active:bg-blue-100 dark:hover:bg-[rgba(80,107,175,0.2)] flex flex-row gap-4 items-center cursor-pointer select-none ${
-        isActive
-          ? "bg-blue-100 dark:bg-[rgba(124,146,203,0.2)]" // light blue overlay in dark mode
-          : "bg-transparent"
+      className={`px-4 py-2 w-full rounded-lg hover:bg-blue-200 dark:hover:bg-blue-700 active:bg-blue-100 dark:active:bg-blue-900 flex flex-row gap-4 items-center cursor-pointer select-none ${
+        isActive ? "bg-blue-100 dark:bg-blue-900" : "bg-transparent"
       } ${
-        isActive ? "text-blue-400" : "text-gray-600 dark:text-neutral-500"
+        isActive
+          ? "text-blue-400 dark:text-blue-400"
+          : "text-gray-600 dark:text-gray-400"
       } whitespace-nowrap ${isDisabled && "!cursor-not-allowed"}`}
       {...props}
     >

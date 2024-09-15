@@ -73,7 +73,23 @@ const PublishModal = () => {
     if (event.key === " ") {
       event.preventDefault();
       const newTag: string = tagInput.trim();
-      if (newTag !== "" && tags.length < 6 && !tags.includes(newTag)) {
+
+      if (tags.length === 5) {
+        alert("You can only add up to 5 tags.");
+        return;
+      }
+
+      if (newTag === "") {
+        alert("Tag cannot be empty.");
+        return;
+      }
+
+      if (tags.includes(newTag)) {
+        alert("Tag already exists.");
+        return;
+      }
+
+      if (newTag !== "" && !tags.includes(newTag) && tags.length < 5) {
         setTags([...tags, tagInput.trim()]);
         setTagInput("");
       }
@@ -144,22 +160,24 @@ const PublishModal = () => {
 
   if (isPublishModalOpen) {
     return (
-      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30">
+      <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-900 bg-opacity-30 z-30 backdrop-blur-sm">
         <div
-          className="bg-white rounded-2xl flex flex-col"
+          className="bg-white dark:bg-zinc-800 rounded-2xl flex flex-col shadow-lg"
           style={{ width: "400px" }}
         >
           <div className="pt-8 pb-6 px-8">
-            <h2 className="text-xl leading-4">Publish this prexel?</h2>
+            <h2 className="text-xl leading-4 text-gray-900 dark:text-gray-400">
+              Publish this prexel?
+            </h2>
           </div>
           <HorizontalDivider />
           <div className="pt-5 pb-6 px-8">
-            <p className="text-gray-500 text-lg mb-5">
+            <p className="text-gray-500 dark:text-gray-400 text-lg mb-5">
               Share your prexel to the public by publishing it to the online
               repository?
             </p>
             <div
-              className="border-2 border-blue-200 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-1"
+              className="border-2 border-blue-200 dark:border-blue-600 mb-4 flex items-center justify-center rounded-lg overflow-hidden p-1"
               style={{ minHeight: "220px" }}
             >
               {isImageLoading ? (
@@ -175,42 +193,44 @@ const PublishModal = () => {
               )}
             </div>
 
-            <p className="text-gray-500 text-lg">Title</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">Title</p>
             <input
               type="text"
               placeholder="Title your prexel..."
               autoFocus={true}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-white border-solid border-2 rounded-md p-2 w-full mb-2 outline-2 focus:outline-blue-400"
+              className="border-solid border-2 rounded-md p-2 w-full mb-2 outline-2 focus:outline-blue-400 dark:bg-zinc-900 dark:text-gray-400 dark:border-zinc-700"
             />
 
-            <p className="text-gray-500 text-lg">Tags</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">Tags</p>
 
             <div className="mb-5">
               <input
                 type="text"
-                placeholder="Use space key to enter tags... (max 5)"
+                placeholder="Press space to enter tags..."
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleTagInputKeyDown}
-                className="bg-white border-solid border-2 rounded-md p-2 w-full mb-3 outline-2 focus:outline-blue-400"
+                className="border-solid border-2 rounded-md p-2 w-full mb-3 outline-2 focus:outline-blue-400 dark:bg-zinc-900 dark:text-gray-400 dark:border-zinc-700"
               />
               <div className="flex flex-wrap">{renderTags()}</div>
             </div>
 
-            <button
-              className="px-4 py-2 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 mr-3 outline outline-1 focus:bg-green-50"
-              onClick={publish}
-            >
-              Publish
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 outline outline-2 focus:outline-blue-300"
-              onClick={closeModal}
-            >
-              Cancel
-            </button>
+            <div className="flex gap-3">
+              <button
+                className="px-4 py-2 bg-inherit text-green-600 dark:text-green-400 rounded-full border border-green-600 dark:border-green-400 hover:bg-green-50 dark:hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-300 dark:focus:ring-green-950 transition-colors"
+                onClick={publish}
+              >
+                Publish
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 dark:focus:ring-red-950 transition-colors"
+                onClick={closeModal}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

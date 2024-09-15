@@ -38,11 +38,22 @@ const Editor = () => {
   //   };
   // }, []);
 
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent): void => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("contextmenu", handleContextMenu);
+    return () => {
+      window.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
   return (
     <ThemeProvider>
       <KeybindProvider>
         <ControlBarProvider>
-          <div className="h-full w-full grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] bg-gray-100 dark:bg-default-neutral">
+          <div className="h-full w-full grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] bg-neutral-100 dark:bg-neutral-900">
             <ColorPickerBoxProvider>
               <div className="row-span-2">
                 <ControlBar />
