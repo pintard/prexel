@@ -1,8 +1,9 @@
 import {
   WINDOWS_KEY_MAP,
   MAC_KEY_MAP,
-  StringHash,
   LINUX_KEY_MAP,
+  StringHash,
+  PUNCTUATION_MAP,
 } from "./constants";
 
 export const getOperatingSystem = (): string => {
@@ -37,8 +38,16 @@ export const getFriendlyKey = (code: string): string => {
     return keyMap[code] as string;
   }
 
+  if (code.startsWith("Digit")) {
+    return code.charAt(5);
+  }
+
   if (code.startsWith("Key")) {
     return code.charAt(3).toUpperCase();
+  }
+
+  if (PUNCTUATION_MAP[code]) {
+    return PUNCTUATION_MAP[code] as string;
   }
 
   return code;

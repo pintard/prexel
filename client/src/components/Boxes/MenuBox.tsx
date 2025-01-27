@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   UploadIcon,
   GridIcon,
   MoonIcon,
   SunIcon,
   ResetIcon,
-  KeysIcon,
   MinimizeIcon,
 } from "../Icons";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
@@ -19,19 +18,38 @@ const MenuBox = () => {
     setIsUploadModalOpen,
     setSwatchColors,
     isMenuBoxOpen,
-    setIsMenuBoxOpen,
     isDimensionBoxOpen,
     setIsDimensionBoxOpen,
-    isInputFocused,
     isKeybindBoxOpen,
     setIsKeybindBoxOpen,
   } = useControlBarContext();
   const { theme, toggleTheme } = useTheme();
-  const { resetKeybinds } = useKeybindContext();
+  const { resetKeybinds, onKeybindTriggered, triggeredAction } =
+    useKeybindContext();
+
+  useEffect(() => {
+    onKeybindTriggered((action: string) => {
+      handleCustomKeybindAction(action);
+    });
+  }, [triggeredAction]);
+
+  const handleCustomKeybindAction = (action: string) => {
+    switch (action) {
+      case "darkLightToggle":
+        toggleTheme();
+        break;
+      case "reset":
+        handleReset();
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleReset = () => {
     setSwatchColors({});
     resetKeybinds();
+    // TODO color picker box location
     alert("Swatch palette and keybinds have been reset.");
   };
 

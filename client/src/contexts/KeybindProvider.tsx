@@ -3,11 +3,13 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
-import { getOperatingSystem } from "../utils/platformUtils";
+import { getFriendlyKey, getOperatingSystem } from "../utils/platformUtils";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { swatchHotKeys } from "./ControlBarProvider";
 
 export interface KeybindMap {
   [label: string]: {
@@ -22,12 +24,20 @@ export const KeybindContext = createContext({
   setKeybindModalId: (() => {}) as Dispatch<SetStateAction<string>>,
   updateMenuKeybind: (() => {}) as (newKeybind: string) => void,
   resetKeybinds: (() => {}) as () => void,
+  onKeybindTriggered: (() => {}) as (
+    callback: (action: string) => void
+  ) => void,
+  triggeredAction: "",
 });
 
 type ModifierKey = "\u2318" | "ctrl";
+type SecondaryModifierKey = "\u2325" | "alt";
 
 const modifierKey: ModifierKey =
   getOperatingSystem() === "Mac" ? "\u2318" : "ctrl";
+
+const secondaryModifierKey: SecondaryModifierKey =
+  getOperatingSystem() === "Mac" ? "\u2325" : "alt";
 
 const DEFAULT_MENU_KEYBINDS: KeybindMap = {
   reset: {
@@ -49,7 +59,7 @@ const DEFAULT_MENU_KEYBINDS: KeybindMap = {
     keybind: "/",
   },
   clear: {
-    keybind: `${modifierKey} + shift + C`,
+    keybind: `${modifierKey} + ${secondaryModifierKey} + C`,
   },
   save: {
     keybind: `${modifierKey} + S`,
@@ -57,8 +67,14 @@ const DEFAULT_MENU_KEYBINDS: KeybindMap = {
   darkLightToggle: {
     keybind: `${modifierKey} + D`,
   },
-  minimize: {
-    keybind: `${modifierKey} + M`,
+  undo: {
+    keybind: `${modifierKey} + Z`,
+  },
+  redo: {
+    keybind: `${modifierKey} + shift + Z`,
+  },
+  escape: {
+    keybind: "Escape",
   },
 };
 
@@ -72,6 +88,7 @@ const KeybindProvider = ({ children }: KeybindProviderProps) => {
     DEFAULT_MENU_KEYBINDS
   );
   const [keybindModalId, setKeybindModalId] = useState<string>("");
+  const [triggeredAction, setTriggeredAction] = useState<string>("");
 
   const updateMenuKeybind = (newKeybind: string) => {
     if (!newKeybind) {
@@ -91,6 +108,77 @@ const KeybindProvider = ({ children }: KeybindProviderProps) => {
     setMenuKeybinds(DEFAULT_MENU_KEYBINDS);
   };
 
+  useEffect(() => {
+    const swatchKeybinds: KeybindMap = swatchHotKeys.reduce((acc, key) => {
+      acc[`swatch${key.toUpperCase()}`] = { keybind: key };
+      return acc;
+    }, {} as KeybindMap);
+
+    setMenuKeybinds((prev) => ({ ...prev, ...swatchKeybinds }));
+  }, []);
+
+  const isKeybindMatch = (keybind: string, event: KeyboardEvent) => {
+    const keys: string[] = keybind.split(" + ");
+    const modifiers: string[] = keys.filter((key) =>
+      [
+        "super",
+        "win",
+        "ctrl",
+        "alt",
+        "shift",
+        "\u2318",
+        "\u2325",
+        "\u2303",
+      ].includes(key)
+    );
+    const regularKeys: string[] = keys.filter(
+      (key: string) => !modifiers.includes(key)
+    );
+
+    const isModifierMatch: boolean = modifiers.every((key) => {
+      return (
+        ((key === "\u2318" || key === "super" || key === "win") &&
+          event.metaKey) ||
+        ((key === "\u2325" || key === "alt") && event.altKey) ||
+        ((key === "\u2303" || key === "ctrl") && event.ctrlKey) ||
+        (key === "shift" && event.shiftKey)
+      );
+    });
+
+    const isRegularKeyMatch: boolean = regularKeys.some((key) => {
+      return getFriendlyKey(event.code).toLowerCase() === key.toLowerCase();
+    });
+
+    return isModifierMatch && isRegularKeyMatch;
+  };
+
+  useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      Object.keys(menuKeybinds).forEach((action: string) => {
+        const keybind: string = menuKeybinds[action].keybind;
+
+        if (isKeybindMatch(keybind, event)) {
+          console.log(`Keybind triggered: ${action}`);
+          event.preventDefault();
+          setTriggeredAction(action);
+        }
+      });
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [menuKeybinds]);
+
+  const onKeybindTriggered = (callback: (action: string) => void) => {
+    if (triggeredAction) {
+      callback(triggeredAction);
+      setTriggeredAction("");
+    }
+  };
+
   const value = useMemo(
     () => ({
       menuKeybinds,
@@ -99,8 +187,10 @@ const KeybindProvider = ({ children }: KeybindProviderProps) => {
       setKeybindModalId,
       updateMenuKeybind,
       resetKeybinds,
+      onKeybindTriggered,
+      triggeredAction,
     }),
-    [menuKeybinds, keybindModalId]
+    [menuKeybinds, keybindModalId, triggeredAction]
   );
 
   return (

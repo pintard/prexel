@@ -74,21 +74,21 @@ interface ControlBarProviderProps {
   children: ReactNode;
 }
 
+export const swatchHotKeys: string[] = new Array<string>(
+  "q",
+  "w",
+  "e",
+  "r",
+  "a",
+  "s",
+  "d",
+  "f"
+);
+
 const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   const DEFAULT_ROWS: number = 12;
   const DEFAULT_COLS: number = 40;
   const DEFAULT_COLOR: string = "#ff0000";
-
-  const swatchHotKeys: string[] = new Array<string>(
-    "q",
-    "w",
-    "e",
-    "r",
-    "a",
-    "s",
-    "d",
-    "f"
-  );
 
   const [color, setColor] = useState<string>(DEFAULT_COLOR);
   const [rows, setRows] = useLocalStorage<number>(
@@ -133,9 +133,6 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
   }, [cellColors, rows, cols]);
 
   useEffect(() => {
-    // console.log("Colors:", cellColors);
-    // console.log("History:", colorHistory.current);
-
     // TODO diffrentiate from click, double trigger
     if (!isStrokeActive) {
       updateHistory(cellColors);
@@ -151,7 +148,6 @@ const ControlBarProvider = ({ children }: ControlBarProviderProps) => {
         typeof idOrColors === "string"
           ? { ...oldCellColors, [idOrColors]: color }
           : idOrColors;
-      // console.log("Updating cell colors:", newColors);
       return newColors;
     });
   };

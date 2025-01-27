@@ -1,10 +1,41 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useControlBarContext } from "../../hooks/useControlBarContext";
-import { getFriendlyKey, getKeyMap } from "../../utils/platformUtils";
+import { getFriendlyKey } from "../../utils/platformUtils";
 import { useKeybindContext } from "../../hooks/useKeybindContext";
-import { KeyArray, StringHash } from "../../utils/constants";
+import { KeyArray } from "../../utils/constants";
 import useModalState from "../../hooks/useModalState";
 import { HorizontalDivider } from "../Divider";
+
+const BLACKLIST: string[] = [
+  "KeyQ",
+  "KeyW",
+  "KeyE",
+  "KeyR",
+  "KeyA",
+  "KeyS",
+  "KeyD",
+  "KeyF",
+  "KeyZ",
+  "Backspace",
+  "Enter",
+  "Escape",
+];
+
+const MODIFIERS: string[] = [
+  "MetaLeft",
+  "MetaRight",
+  "AltLeft",
+  "AltRight",
+  "ControlLeft",
+  "ControlRight",
+  "ShiftLeft",
+  "ShiftRight",
+];
+
+const isAlphaKey = (key: string): boolean => /^[A-Z]$/.test(key);
+const isDigitKey = (key: string): boolean => /^\d$/.test(key);
+const isPunctuationKey = (key: string): boolean =>
+  [",", ".", "/", ";", "'", "[", "]", "\\", "=", "-", "`"].includes(key);
 
 const KeybindModal = () => {
   const { isKeybindModalOpen, setIsKeybindModalOpen } = useControlBarContext();
@@ -13,15 +44,30 @@ const KeybindModal = () => {
 
   useModalState(isKeybindModalOpen);
 
-  const [activeKeybind, setActiveKeybind] = useState("");
-  const [initialKeybind, setInitialKeybind] = useState("");
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [activeKeybind, setActiveKeybind] = useState<string>("");
+  const [initialKeybind, setInitialKeybind] = useState<string>("");
+  const pressedKeys = useRef<Set<string>>(new Set());
+  const isAlphanumericInSequence = useRef<{
+    hasAlpha: boolean;
+    hasDigit: boolean;
+    hasPunctuation: boolean;
+  }>({
+    hasAlpha: false,
+    hasDigit: false,
+    hasPunctuation: false,
+  });
 
   useEffect(() => {
     if (keybindModalId) {
       const initial: string = menuKeybinds[keybindModalId]?.keybind || "";
       setInitialKeybind(initial);
       setActiveKeybind("");
+      pressedKeys.current.clear();
+      isAlphanumericInSequence.current = {
+        hasAlpha: false,
+        hasDigit: false,
+        hasPunctuation: false,
+      };
     }
   }, [keybindModalId, menuKeybinds]);
 
@@ -30,76 +76,100 @@ const KeybindModal = () => {
     const regularKeys: KeyArray = [];
 
     keys.forEach((key: string) => {
-      if (
-        [
-          "MetaLeft",
-          "MetaRight",
-          "AltLeft",
-          "AltRight",
-          "ControlLeft",
-          "ControlRight",
-          "ShiftLeft",
-          "ShiftRight",
-        ].includes(key)
-      ) {
+      if (MODIFIERS.includes(key)) {
         modifiers.push(key);
       } else {
         regularKeys.push(key);
       }
     });
 
-    const modifierOrder: string[] = [
-      "MetaLeft",
-      "MetaRight",
-      "AltLeft",
-      "AltRight",
-      "ControlLeft",
-      "ControlRight",
-      "ShiftLeft",
-      "ShiftRight",
-    ];
-
-    console.log("modifiers", modifiers, "regularKeys", regularKeys);
-
-    modifiers.sort((a: string, b: string) => {
-      console.log("trigger");
-      return modifierOrder.indexOf(a) - modifierOrder.indexOf(b);
-    });
+    modifiers.sort((a, b) => MODIFIERS.indexOf(a) - MODIFIERS.indexOf(b));
 
     const translatedModifiers: string[] = modifiers.map(getFriendlyKey);
     const translatedRegulars: string[] = regularKeys.map(getFriendlyKey);
-
-    const result: string = [...translatedModifiers, ...translatedRegulars].join(
-      " + "
-    );
-    return result;
-  };
-
-  const handleFocus = (): void => {
-    setActiveKeybind("");
+    return [...translatedModifiers, ...translatedRegulars].join(" + ");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    const keyMap: StringHash = getKeyMap();
+    const key: string = e.code;
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
+    if (pressedKeys.current.has(key)) return;
+
+    if (BLACKLIST.includes(key)) {
+      alert(`${getFriendlyKey(key)} is a forbidden key.`);
+      return;
     }
 
-    if (keyMap[e.code] || (!keyMap[e.code] && e.code.startsWith("Key"))) {
-      setActiveKeybind((prev) => {
-        const keys: Set<string> = new Set<string>(
-          prev ? prev.split(" + ") : []
-        );
-
-        keys.add(e.code);
-
-        const formattedKeybind: string = formatKeybind(Array.from(keys));
-        return formattedKeybind;
-      });
+    if (pressedKeys.current.size === 0) {
+      setActiveKeybind("");
+      isAlphanumericInSequence.current = {
+        hasAlpha: false,
+        hasDigit: false,
+        hasPunctuation: false,
+      };
     }
+
+    const friendlyKey: string = getFriendlyKey(key);
+
+    if (isAlphaKey(friendlyKey)) {
+      if (isAlphanumericInSequence.current.hasAlpha) {
+        alert("Cannot combine multiple alpha keys.");
+        return;
+      }
+      if (isAlphanumericInSequence.current.hasDigit) {
+        alert("Cannot combine alpha keys with digits.");
+        return;
+      }
+      if (isAlphanumericInSequence.current.hasPunctuation) {
+        alert("Cannot combine alpha keys with punctuation.");
+        return;
+      }
+      isAlphanumericInSequence.current.hasAlpha = true;
+    }
+
+    if (isDigitKey(friendlyKey)) {
+      if (isAlphanumericInSequence.current.hasAlpha) {
+        alert("Cannot combine digits with alpha keys.");
+        return;
+      }
+      if (isAlphanumericInSequence.current.hasDigit) {
+        alert("Cannot combine multiple digit keys.");
+        return;
+      }
+      if (isAlphanumericInSequence.current.hasPunctuation) {
+        alert("Cannot combine digits with punctuation.");
+        return;
+      }
+      isAlphanumericInSequence.current.hasDigit = true;
+    }
+
+    if (isPunctuationKey(friendlyKey)) {
+      if (
+        isAlphanumericInSequence.current.hasAlpha ||
+        isAlphanumericInSequence.current.hasDigit
+      ) {
+        alert("Cannot combine punctuation with alphanumeric keys.");
+        return;
+      }
+      if (isAlphanumericInSequence.current.hasPunctuation) {
+        alert("Cannot combine multiple punctuation keys.");
+        return;
+      }
+      isAlphanumericInSequence.current.hasPunctuation = true;
+    }
+
+    pressedKeys.current.add(key);
+
+    setActiveKeybind((prev) => {
+      const keys: Set<string> = new Set<string>(prev ? prev.split(" + ") : []);
+      keys.add(key);
+      return formatKeybind(Array.from(keys));
+    });
+  };
+
+  const handleKeyUp = () => {
+    pressedKeys.current.clear();
   };
 
   const handleSave = (): void => {
@@ -112,18 +182,15 @@ const KeybindModal = () => {
     setIsKeybindModalOpen(false);
   };
 
-  useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveKeybind("");
-      console.log("Keybind reset due to inactivity.");
-    }, 3000);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+  const handleFocus = (): void => {
+    setActiveKeybind("");
+    pressedKeys.current.clear();
+    isAlphanumericInSequence.current = {
+      hasAlpha: false,
+      hasDigit: false,
+      hasPunctuation: false,
     };
-  }, [activeKeybind]);
+  };
 
   if (isKeybindModalOpen && keybindModalId) {
     return (
@@ -137,11 +204,8 @@ const KeybindModal = () => {
           <HorizontalDivider />
           <div className="pt-5 pb-6 px-8">
             <p className="text-gray-500 dark:text-gray-400 text-lg mb-5">
-              Your current{" "}
-              <em>
-                <b>{keybindModalId}</b>
-              </em>{" "}
-              keybind is: <b>{initialKeybind}</b>
+              Your current <u>{keybindModalId}</u> keybind is:{" "}
+              <em>{initialKeybind}</em>
             </p>
             <input
               type="text"
@@ -150,9 +214,9 @@ const KeybindModal = () => {
               value={activeKeybind}
               readOnly={true}
               onFocus={handleFocus}
-              onClick={handleFocus}
               className="border-solid border-2 rounded-md p-2 w-full mb-6 outline-2 focus:outline-blue-400 dark:bg-zinc-900 dark:text-gray-400 dark:border-zinc-700"
               onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
             />
             <div className="flex gap-3">
               <button

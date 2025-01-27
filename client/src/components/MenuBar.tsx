@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import IconButton from "./IconButton";
-import { DiskIcon, DownloadIcon, GlobeIcon, HouseIcon, TrashIcon } from "./Icons";
+import { DownloadIcon, GlobeIcon, HouseIcon, TrashIcon } from "./Icons";
 import { useControlBarContext } from "../hooks/useControlBarContext";
+import { useKeybindContext } from "../hooks/useKeybindContext";
+import { useEffect } from "react";
 
 const MenuBar = () => {
   const {
@@ -10,8 +12,28 @@ const MenuBar = () => {
     setIsPublishModalOpen,
     setIsClearModalOpen,
   } = useControlBarContext();
+  const { onKeybindTriggered, triggeredAction } = useKeybindContext();
 
   const hasCellColors: boolean = Object.keys(cellColors).length > 0;
+
+  useEffect(() => {
+    onKeybindTriggered((action: string) => {
+      handleCustomKeybindAction(action);
+    });
+  }, [triggeredAction]);
+
+  const handleCustomKeybindAction = (action: string) => {
+    switch (action) {
+      case "save":
+        handleSave();
+        break;
+      case "clear":
+        handleClear();
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleSave = () => {
     if (hasCellColors) {

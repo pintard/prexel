@@ -1,21 +1,17 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useControlBarContext } from "../hooks/useControlBarContext";
 import {
-  BrushIcon,
   EraserIcon,
   PaintBucketIcon,
-  PaletteIcon,
   MenuIcon,
   UndoIcon,
   RedoIcon,
-  TrashIcon,
   DropIcon,
   PencilIcon,
 } from "./Icons";
-
 import IconButton from "./IconButton";
-
 import { ActiveControl } from "../contexts/ControlBarProvider";
+import { useKeybindContext } from "../hooks/useKeybindContext";
 
 const ControlBar = () => {
   const {
@@ -24,7 +20,6 @@ const ControlBar = () => {
     color,
     setColor,
     swatchColors,
-    swatchHotKeys,
     historyIndex,
     setHistoryIndex,
     colorHistory,
@@ -41,69 +36,58 @@ const ControlBar = () => {
     isAnyModalOpen,
   } = useControlBarContext();
 
-  const [isUndoActive, setIsUndoActive] = useState(false);
-  const [isRedoActive, setIsRedoActive] = useState(false);
+  const { onKeybindTriggered, triggeredAction } = useKeybindContext();
+  const [isUndoActive, setIsUndoActive] = useState<boolean>(false);
+  const [isRedoActive, setIsRedoActive] = useState<boolean>(false);
+
+  const shouldIgnoreKeybinds = (): boolean => isAnyModalOpen || isInputFocused;
 
   useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (isAnyModalOpen) return;
-      if (isInputFocused) return;
-
-      switch (e.key) {
-        case "1":
-          toggleActiveControl("PaintControl");
-          break;
-        case "2":
-          toggleActiveControl("EraseControl");
-          break;
-        case "3":
-          toggleActiveControl("FillControl");
-          break;
-        case "4":
-          setIsColorPickerBoxOpen(!isColorPickerBoxOpen);
-          break;
-        case "/":
-          setIsMenuBoxOpen(!isMenuBoxOpen);
-          break;
-        case "z":
-          handleHistory(e);
-          break;
-        case "Escape":
-          handleEscape();
-          break;
-        default:
-          if (swatchHotKeys.includes(e.key)) {
-            setColor(swatchColors[e.key] ?? color);
-          }
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
+    if (shouldIgnoreKeybinds()) return;
+    onKeybindTriggered((action: string) => {
+      handleCustomKeybindAction(action);
+    });
   }, [
     color,
     isInputFocused,
-    swatchColors,
     activeControl,
-    isColorPickerBoxOpen,
-    isMenuBoxOpen,
-    isDimensionBoxOpen,
-    isKeybindBoxOpen,
     historyIndex,
     isAnyModalOpen,
+    triggeredAction,
   ]);
 
-  const handleHistory = (e: KeyboardEvent) => {
-    if (e.ctrlKey || e.metaKey) {
-      if (e.shiftKey) {
-        console.log("REDO EXECUTED");
-        redo();
-      } else {
+  const handleCustomKeybindAction = (action: string) => {
+    switch (action) {
+      case "paint":
+        toggleActiveControl("PaintControl");
+        break;
+      case "erase":
+        toggleActiveControl("EraseControl");
+        break;
+      case "fill":
+        toggleActiveControl("FillControl");
+        break;
+      case "picker":
+        setIsColorPickerBoxOpen(!isColorPickerBoxOpen);
+        break;
+      case "menu":
+        setIsMenuBoxOpen(!isMenuBoxOpen);
+        break;
+      case "undo":
         undo();
-      }
+        break;
+      case "redo":
+        redo();
+        break;
+      case "escape":
+        handleEscape();
+        break;
+      default:
+        if (action.startsWith("swatch")) {
+          const key: string = action.charAt(action.length - 1).toLowerCase();
+          setColor(swatchColors[key] ?? color);
+        }
+        break;
     }
   };
 

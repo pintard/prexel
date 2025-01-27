@@ -10,13 +10,13 @@ export interface StringHash {
 export type KeyArray = string[];
 
 export const MAC_KEY_MAP: StringHash = {
-  MetaLeft: "\u2318",
+  MetaLeft: "\u2318", // Command (⌘)
   MetaRight: "\u2318",
-  AltLeft: "\u2325",
+  AltLeft: "\u2325", // Option (⌥)
   AltRight: "\u2325",
-  ControlLeft: "\u2303",
+  ControlLeft: "\u2303", // Control (⌃)
   ControlRight: "\u2303",
-  ShiftLeft: "shift",
+  ShiftLeft: "shift", // Shift
   ShiftRight: "shift",
 };
 
@@ -40,4 +40,18 @@ export const WINDOWS_KEY_MAP: StringHash = {
   ControlRight: "ctrl",
   ShiftLeft: "shift",
   ShiftRight: "shift",
+};
+
+export const PUNCTUATION_MAP: StringHash = {
+  Comma: ",",
+  Period: ".",
+  Slash: "/",
+  Quote: "'",
+  Semicolon: ";",
+  BracketLeft: "[",
+  BracketRight: "]",
+  Backslash: "\\",
+  Equal: "=",
+  Minus: "-",
+  Backquote: "`",
 };

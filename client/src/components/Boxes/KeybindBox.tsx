@@ -12,6 +12,7 @@ import {
   PaintBucketIcon,
   PaletteIcon,
   PencilIcon,
+  ResetIcon,
   SunIcon,
   TrashIcon,
 } from "../Icons";
@@ -68,6 +69,12 @@ const KeybindBox = () => {
             value="darkLightToggle"
             keybind={menuKeybinds.darkLightToggle.keybind}
             icon={theme ? MoonIcon : SunIcon}
+          />
+          <MenuItem
+            label="reset"
+            value="reset"
+            keybind={menuKeybinds.reset.keybind}
+            icon={ResetIcon}
           />
           <MenuItem
             label="clear"

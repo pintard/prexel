@@ -15,7 +15,6 @@ type MenuItemValue =
   | "save"
   | "publish"
   | "darkLightToggle"
-  | "minimize"
   | "keybinds";
 
 interface MenuItemProps {
@@ -67,7 +66,7 @@ const MenuItem = ({
         <span className="w-full text-end">
           <span
             onClick={openKeybindModal}
-            className="italic inline-block px-2 py-1 border border-gray-300 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 text-gray-500 dark:text-gray-300 text-xs rounded hover:bg-gray-200 dark:hover:bg-neutral-700 active:bg-gray-300 dark:active:bg-neutral-600"
+            className="italic inline-block px-2 py-1 border border-gray-300 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 text-gray-500 dark:text-gray-300 text-xs rounded hover:bg-gray-200 dark:hover:bg-neutral-900 active:bg-gray-300 dark:active:bg-neutral-600"
           >
             {keybind}
           </span>
