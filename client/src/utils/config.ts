@@ -7,7 +7,7 @@ const development: Config = {
 };
 
 const production: Config = {
-  apiUrl: "https://your-production-url.com/api/v1",
+  apiUrl: "https://prexel.com/api/v1",
 };
 
 const config: Config =
